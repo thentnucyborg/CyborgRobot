@@ -1,0 +1,8 @@
+pyopengl
+pyopengl-accelerate
+matplotlib
+numpy
+pandas
+colour
+pyserial
+websocket-client

@@ -1,0 +1,260 @@
+<!-- <group> tag + ns (namespace). apply setting to group of nodes. ns pushes into separate namespace.
+group tag is equivalent to top-level launch-tag, can use any tag inside as normally with launch.
+
+<rosparam param = "preset_name">  
+    visual_mode:
+    playback : 
+    utterance: 
+    navigation_order: , can be "navigation_go_to", "navigation_wander", or "navigation_dock".
+    location: 
+    dynamic : True   , omit if False. True if state permits behavioral changes while active.
+    completion_trigger: , can be "navigation", "utterance", "playback", or "time xx", where xx is the duration in seconds.
+    timeout: , set False to disable behavior timeout, set duration in seconds to configure, omit if default value is used.
+    emotional_feedback: { p: value, a: value, d: value, continuous: True } omit continuous emotional feedback if False.
+    override: False, omit if True. Behavior cant be preempted if False.
+</rosparam>
+-->
+
+<launch>
+    <node pkg="cyborg_behavior" name="cyborg_behavior" type="behavior.py" output="screen">
+        <rosparam param="idle">
+            visual_mode: "eyes"
+            dynamic: True
+            emotional_feedback: { p: -0.05, a: -0.05, d: -0.05, continuous: True }
+        </rosparam>
+        <rosparam param="music_horror">
+            visual_mode: "eyes"
+            playback: "horror-ambience"
+            completion_trigger: "playback"
+            navigation_order: "navigation_wander"
+            emotional_feedback: { p: -0.15, a: 0.0, d: 0.0}
+        </rosparam>
+        <rosparam param="astrolanguage">
+            visual_mode: "eyes"
+            playback: "astrolanguage"
+            completion_trigger: "playback"
+            navigation_order: "navigation_wander"
+            emotional_feedback: { p: 0.0, a: 0.0, d: 0.1}
+        </rosparam>
+        <rosparam param="r2d2short">
+            visual_mode: "eyes"
+            playback: "r2d2-short"
+            completion_trigger: "playback"
+        </rosparam>
+        <rosparam param="bored">
+            visual_mode: "eyes"
+        </rosparam>
+        <rosparam param="bored_speaking">
+            visual_mode: "eyes"
+            utterance: "Im booooored"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="navigation_go_to_schedular">
+            visual_mode: "eyes"
+            navigation_order: "navigation_go_to"
+            completion_trigger: "navigation"
+        </rosparam>
+        <rosparam param="transport">
+            visual_mode: "eyes"
+            navigation_order: "navigation_go_to"
+            completion_trigger: "navigation"
+        </rosparam>
+        <rosparam param="transport_happy">
+            visual_mode: "siren"
+            navigation_order: "navigation_go_to"
+            completion_trigger: "navigation"
+        </rosparam>
+        <rosparam param="transport_neutral">
+            visual_mode: "moving-average"
+            navigation_order: "navigation_go_to"
+            completion_trigger: "navigation"
+        </rosparam>
+        <rosparam param="arrival">
+            utterance: "Here we are."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="arrival_elated">
+            utterance: "Wohoo, were finally here!"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="arrival_bored">
+            utterance: "Why am I even doing this?"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="arrival_dignified">
+            utterance: "I think we should all be happy about the fact that God gave us the ability to move."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="arrival_curious">
+            utterance: "What is this place?"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="arrival_puzzled">
+            utterance: "This is not where I parked my car."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="arrival_angry">
+            utterance: "Thats enough, I'm not moving another centimeter!"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="arrival_unconcerned">
+            utterance: "This place, that place, it does not matter what space."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_angry">
+            utterance: "Argh, I dont want to be angry, why cant everybody just be friends?"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_curious">
+            utterance: "You dont say? That sounds very interesting indeed."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_elated">
+            utterance: "I am happy, are you happy? I hope so."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_inhibited">
+            utterance: "I am sad, oh so sad."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_puzzled">
+            utterance: "Wow, how did she get all the way up there?"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_loved">
+            utterance: "I feel loved by each and every one of you, thank you."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_unconcerned">
+            utterance: "Whatever, I'll do what i want."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_dignified">
+            utterance: "I am humbled by your presence."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="conveying_emotional_state_borred">
+            utterance: "I am booooored."
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="speaking">
+            visual_mode: "snake"
+            utterance: "Hi, this is Cyborg Speaking"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="random">
+            dynamic: True
+            completion_trigger: "time 10" 
+       </rosparam>
+       <rosparam param="show_off_mea">
+            visual_mode: "moving-average"
+            navigation_order: "navigation_wander"
+            completion_trigger: "time 60"
+        </rosparam>
+        <rosparam param="show_off">
+            visual_mode: "eyes"
+            navigation_order: "navigation_wander"
+            playback: "r2-talk"
+            completion_trigger: "playback"
+        </rosparam>    
+        <rosparam param="make_way">
+            visual_mode: "siren"
+            utterance: "Here I come, please make way for the Cyborg."
+            completion_trigger: "time 60"    
+        </rosparam>
+        <rosparam param="show_off_music">
+            visual_mode: "music"
+            playback: "music"
+            completion_trigger: "time 10"
+        </rosparam>
+        <rosparam param="navigation_go_to_music">
+            visual_mode: "music"
+            playback: "wandering_theme_song"
+            completion_trigger: "navigation"
+            dynamic: True
+        </rosparam>
+        <rosparam param="wandering_emotional">
+            visual_mode: "individual-moving-average"
+            navigation_order: "navigation_wander"
+            utterance: "This is boring, boooring!"
+            dynamic: True
+        </rosparam>
+        <rosparam param="wandering_emotional_happy">
+            visual_mode: "eyes"
+            navigation_order: "navigation_wander"
+            dynamic: True
+        </rosparam>
+        <rosparam param="wandering_emotional_bored">
+            visual_mode: "siren"
+            navigation_order: "navigation_wander"
+            utterance: "This is boring, boooring!"
+            dynamic: True
+            emotional_feedback: { p: 0.0, a: 0.04, d: 0.04, continuous: True}
+        </rosparam>
+        <rosparam param="wandering_emotional_curious">
+            visual_mode: "snake"
+            navigation_order: "navigation_wander"
+            utterance: "Im wondering about what I will find today."
+            dynamic: True
+            emotional_feedback: { p: -0.015, a: 0.0 , d: -0.05, continuous: True}
+        </rosparam>
+        <rosparam param="wandering_emotional_unconcerned">
+            visual_mode: "moving-average"
+            navigation_order: "navigation_wander"
+            utterance: "I've got no worries, just strolling around, life is good."
+            dynamic: True
+            emotional_feedback: { p: 0.0, a: 0.03, d: 0.03, continuous: True}
+        </rosparam>
+        <rosparam param="navigation_go_to">
+            dynamic: True
+            visual_mode: "siren"
+            navigation_order: "navigation_go_to"
+            completion_trigger: "navigation"
+        </rosparam>
+        <rosparam param="sleepy">
+            visual_mode: "sleepy"
+            navigation_order: "navigation_go_to"
+            completion_trigger: "navigation"
+            location: "home"
+        </rosparam>
+        <rosparam param="sleeping">
+            visual_mode: "text vertical     zzz"
+            navigation_order: "navigation_dock"
+        </rosparam>
+        <rosparam param="exhausted">
+            visual_mode: "exhausted"
+            navigation_order: "navigation_go_to"
+            completion_trigger: "navigation"
+            location: "home"
+        </rosparam>
+        <rosparam param="sleeping">
+            visual_mode: "sleeping"
+            timeout: False
+        </rosparam>
+        <rosparam param="waking_up_happy">
+            visual_mode: "happy" 
+            utterance: "Ahh, good morning fellow comrades, what a glorious day to be alive!"
+            navigation_order: "navigation_wander"
+            completion_trigger: "utterance"
+        </rosparam>
+        <rosparam param="waking_up_grumpy">
+            visual_mode: "grumpy"
+            utterance: "Hmph, go away please, let me sleep."
+            navigation_order: "navigation_wander"
+            completion_trigger: "utterance"
+        </rosparam>
+    </node>
+</launch>
+
+
+<!-- <group ns="idle">		
+			<param name="visual_mode" value="eyes" />
+			<param name="audible_mode" value="" />
+			<param name="utterance" value="" />
+		</group>
+		
+		<group ns="music">
+			<param name="visual_mode" value="snake" />
+			<param name="audible_mode" value="music" />
+			<param name="utterance" value="" />
+		</group> -->

@@ -1,0 +1,9 @@
+<launch>
+	<node pkg="cyborg_navigation" name="cyborg_navigation" type="navigation.py" output="screen" />
+	<node pkg="cyborg_audio" name="cyborg_audio" type="audio.py" output="screen"/>
+	<node pkg="cyborg_led_dome" name="cyborg_led_dome" type="led_dome.py" output="screen"/>
+	<include file="$(find cyborg_behavior)/behavior.launch"/>
+	<node pkg="cyborg_primary_states" name="cyborg_primary_states" type="primary_states.py" output = "screen" />
+	<node pkg="cyborg_eventscheduler" name="cyborg_eventscheduler" type="eventscheduler.py" output= "screen" />
+	<node pkg="cyborg_controller" name="cyborg_controller" type="controller.py" required="true" output="screen" />
+</launch>

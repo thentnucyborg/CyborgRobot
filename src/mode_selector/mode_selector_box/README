@@ -1,0 +1,12 @@
+//
+// Written by Waloen for the NTNU Cyborg Spring 2017
+// Modified by Babayan for the NTNU Cyborg Spring 2019
+// Code is for the Mode Selector box
+//
+
+To compile and upload to the start box, run the following command in this folder:
+./flash
+
+If that does not work you probably need to change the port number in the make file.
+On the Cyborg it should be /dev/ttyUSB12
+Use "ls /dev/ttyUSB*" before and after removing the Start Box to find which port is correct.

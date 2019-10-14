@@ -1,0 +1,6 @@
+string nothing
+---
+string emotional_state
+float32 current_pleasure
+float32 current_arousal
+float32 current_dominance

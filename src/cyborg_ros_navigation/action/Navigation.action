@@ -1,0 +1,9 @@
+#goal definition
+string order
+string location_name
+---
+#result definition
+string status
+---
+#feedback
+string status

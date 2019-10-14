@@ -1,0 +1,62 @@
+###################################
+# Makefile, for AVR Programming
+# From http://omegav.no/wiki/index.php/AVR_on_linux
+# Modified by Waloen 2017
+
+LIBS = -lprintf_flt -lm
+
+# Target name:
+TARGET = output
+
+# Target type
+MCU=atmega328p
+PROGRAMMER=arduino
+F_CPU=16000000UL
+
+# Port number, Change to correct arduino port - Waloen 2017
+PORT=/dev/ttyUSB0 # Was 12
+
+
+SRC = main.c USART.c oled.c font8x8.c spi.c cyborg_menu.c
+OBJ = $(SRC:.c=.o)
+
+
+# Compiler / Linker flags:
+CFLAGS = -mmcu=$(MCU) -Wall -Os -std=gnu99 -D F_CPU=$(F_CPU) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+LDFLAGS = -mmcu=$(MCU) -Wl,-u,vfprintf,-Map=$(TARGET).map
+
+
+
+###################################
+# Makerules:
+
+
+.PHONY: compile flash clean
+
+compile: $(TARGET).hex $(TARGET).eep $(TARGET).lss
+
+flash: compile
+	avrdude -c $(PROGRAMMER) -P $(PORT) -p $(MCU) -b 57600 -D -U flash:w:$(TARGET).hex  # by Waloen 2017
+
+clean:
+	rm -f $(OBJ) $(TARGET).{elf,hex,lss,map,eep}
+
+
+
+###################################
+# Psudorules:
+
+%.eep: %.hex
+	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 --no-change-warnings -O ihex $< $@
+
+%.hex: %.elf
+	avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature $< $@
+
+%.lss: %.elf
+	avr-objdump -h -S $< > $@
+
+%.elf: $(OBJ)
+	avr-gcc $^ $(LDFLAGS) $(LIBS) -o $@
+
+%.o : %.c
+	avr-gcc $(CFLAGS) -c $< -o $@
