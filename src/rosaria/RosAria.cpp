@@ -301,7 +301,7 @@ RosAriaNode::RosAriaNode(ros::NodeHandle nh) :
   n.param( "aria_log_filename", aria_log_filename, std::string("Aria.log") );
 
   // whether to connect to lasers using aria
-  n.param("publish_aria_lasers", publish_aria_lasers, false);
+  n.param("publish_aria_lasers", publish_aria_lasers, true);
 
   // Get frame_ids to use.
   n.param("odom_frame", frame_id_odom, std::string("odom"));
