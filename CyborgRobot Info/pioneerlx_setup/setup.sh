@@ -1,6 +1,8 @@
 #!/bin/bash
 echo "Setup script running..."
 
+### NEEDS TO HAVE THE RIGHT VERSIONS IN THE INSTALL COMMANDS ###
+
 # Exit if failure
 set -e
 

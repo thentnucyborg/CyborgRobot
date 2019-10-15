@@ -3,8 +3,15 @@ cmake_minimum_required(VERSION 2.8.3)
 project(rosaria)
 # Load catkin and all dependencies required for this package
 # TODO: remove all from COMPONENTS that are not catkin packages.
-find_package(catkin REQUIRED COMPONENTS message_generation roscpp nav_msgs geometry_msgs sensor_msgs tf
-  dynamic_reconfigure)
+find_package(catkin REQUIRED COMPONENTS 
+  message_generation 
+  roscpp 
+  nav_msgs 
+  geometry_msgs 
+  sensor_msgs 
+  tf
+  dynamic_reconfigure
+  )
 
 # Set the build type.  Options are:
 #  Coverage       : w/ debug symbols, w/o optimization, w/ code-coverage
@@ -82,7 +89,7 @@ catkin_package(
 ## Mark executables and/or libraries for installation
 install(
   TARGETS 
-    RosAria
+  RosAria
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
