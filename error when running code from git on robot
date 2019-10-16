@@ -1,0 +1,300 @@
+### Se her: https://answers.ros.org/question/34458/goal-status-in-callback-in-actionserver-in-c/ ###
+
+
+
+
+cyborg@cyborgbase:~/catkin_ws$ roslaunch cyborg_controller controller.launch 
+... logging to /home/cyborg/.ros/log/cf1e2fdc-ef62-11e9-8866-b4b67639d8de/roslaunch-cyborgbase-32150.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+
+started roslaunch server http://cyborgbase:45809/
+
+SUMMARY
+========
+
+PARAMETERS
+ * /cyborg_behavior/arrival/completion_trigger: utterance
+ * /cyborg_behavior/arrival/utterance: Here we are.
+ * /cyborg_behavior/arrival_angry/completion_trigger: utterance
+ * /cyborg_behavior/arrival_angry/utterance: Thats enough, I'm...
+ * /cyborg_behavior/arrival_bored/completion_trigger: utterance
+ * /cyborg_behavior/arrival_bored/utterance: Why am I even doi...
+ * /cyborg_behavior/arrival_curious/completion_trigger: utterance
+ * /cyborg_behavior/arrival_curious/utterance: What is this place?
+ * /cyborg_behavior/arrival_dignified/completion_trigger: utterance
+ * /cyborg_behavior/arrival_dignified/utterance: I think we should...
+ * /cyborg_behavior/arrival_elated/completion_trigger: utterance
+ * /cyborg_behavior/arrival_elated/utterance: Wohoo, were final...
+ * /cyborg_behavior/arrival_puzzled/completion_trigger: utterance
+ * /cyborg_behavior/arrival_puzzled/utterance: This is not where...
+ * /cyborg_behavior/arrival_unconcerned/completion_trigger: utterance
+ * /cyborg_behavior/arrival_unconcerned/utterance: This place, that ...
+ * /cyborg_behavior/astrolanguage/completion_trigger: playback
+ * /cyborg_behavior/astrolanguage/emotional_feedback/a: 0.0
+ * /cyborg_behavior/astrolanguage/emotional_feedback/d: 0.1
+ * /cyborg_behavior/astrolanguage/emotional_feedback/p: 0.0
+ * /cyborg_behavior/astrolanguage/navigation_order: navigation_wander
+ * /cyborg_behavior/astrolanguage/playback: astrolanguage
+ * /cyborg_behavior/astrolanguage/visual_mode: eyes
+ * /cyborg_behavior/bored/visual_mode: eyes
+ * /cyborg_behavior/bored_speaking/completion_trigger: utterance
+ * /cyborg_behavior/bored_speaking/utterance: Im booooored
+ * /cyborg_behavior/bored_speaking/visual_mode: eyes
+ * /cyborg_behavior/conveying_emotional_state_angry/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_angry/utterance: Argh, I dont want...
+ * /cyborg_behavior/conveying_emotional_state_borred/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_borred/utterance: I am booooored.
+ * /cyborg_behavior/conveying_emotional_state_curious/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_curious/utterance: You dont say? Tha...
+ * /cyborg_behavior/conveying_emotional_state_dignified/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_dignified/utterance: I am humbled by y...
+ * /cyborg_behavior/conveying_emotional_state_elated/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_elated/utterance: I am happy, are y...
+ * /cyborg_behavior/conveying_emotional_state_inhibited/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_inhibited/utterance: I am sad, oh so sad.
+ * /cyborg_behavior/conveying_emotional_state_loved/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_loved/utterance: I feel loved by e...
+ * /cyborg_behavior/conveying_emotional_state_puzzled/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_puzzled/utterance: Wow, how did she ...
+ * /cyborg_behavior/conveying_emotional_state_unconcerned/completion_trigger: utterance
+ * /cyborg_behavior/conveying_emotional_state_unconcerned/utterance: Whatever, I'll do...
+ * /cyborg_behavior/exhausted/completion_trigger: navigation
+ * /cyborg_behavior/exhausted/location: home
+ * /cyborg_behavior/exhausted/navigation_order: navigation_go_to
+ * /cyborg_behavior/exhausted/visual_mode: exhausted
+ * /cyborg_behavior/idle/dynamic: True
+ * /cyborg_behavior/idle/emotional_feedback/a: -0.05
+ * /cyborg_behavior/idle/emotional_feedback/continuous: True
+ * /cyborg_behavior/idle/emotional_feedback/d: -0.05
+ * /cyborg_behavior/idle/emotional_feedback/p: -0.05
+ * /cyborg_behavior/idle/visual_mode: eyes
+ * /cyborg_behavior/make_way/completion_trigger: time 60
+ * /cyborg_behavior/make_way/utterance: Here I come, plea...
+ * /cyborg_behavior/make_way/visual_mode: siren
+ * /cyborg_behavior/music_horror/completion_trigger: playback
+ * /cyborg_behavior/music_horror/emotional_feedback/a: 0.0
+ * /cyborg_behavior/music_horror/emotional_feedback/d: 0.0
+ * /cyborg_behavior/music_horror/emotional_feedback/p: -0.15
+ * /cyborg_behavior/music_horror/navigation_order: navigation_wander
+ * /cyborg_behavior/music_horror/playback: horror-ambience
+ * /cyborg_behavior/music_horror/visual_mode: eyes
+ * /cyborg_behavior/navigation_go_to/completion_trigger: navigation
+ * /cyborg_behavior/navigation_go_to/dynamic: True
+ * /cyborg_behavior/navigation_go_to/navigation_order: navigation_go_to
+ * /cyborg_behavior/navigation_go_to/visual_mode: siren
+ * /cyborg_behavior/navigation_go_to_music/completion_trigger: navigation
+ * /cyborg_behavior/navigation_go_to_music/dynamic: True
+ * /cyborg_behavior/navigation_go_to_music/playback: wandering_theme_song
+ * /cyborg_behavior/navigation_go_to_music/visual_mode: music
+ * /cyborg_behavior/navigation_go_to_schedular/completion_trigger: navigation
+ * /cyborg_behavior/navigation_go_to_schedular/navigation_order: navigation_go_to
+ * /cyborg_behavior/navigation_go_to_schedular/visual_mode: eyes
+ * /cyborg_behavior/r2d2short/completion_trigger: playback
+ * /cyborg_behavior/r2d2short/playback: r2d2-short
+ * /cyborg_behavior/r2d2short/visual_mode: eyes
+ * /cyborg_behavior/random/completion_trigger: time 10
+ * /cyborg_behavior/random/dynamic: True
+ * /cyborg_behavior/show_off/completion_trigger: playback
+ * /cyborg_behavior/show_off/navigation_order: navigation_wander
+ * /cyborg_behavior/show_off/playback: r2-talk
+ * /cyborg_behavior/show_off/visual_mode: eyes
+ * /cyborg_behavior/show_off_mea/completion_trigger: time 60
+ * /cyborg_behavior/show_off_mea/navigation_order: navigation_wander
+ * /cyborg_behavior/show_off_mea/visual_mode: moving-average
+ * /cyborg_behavior/show_off_music/completion_trigger: time 10
+ * /cyborg_behavior/show_off_music/playback: music
+ * /cyborg_behavior/show_off_music/visual_mode: music
+ * /cyborg_behavior/sleeping/navigation_order: navigation_dock
+ * /cyborg_behavior/sleeping/timeout: False
+ * /cyborg_behavior/sleeping/visual_mode: sleeping
+ * /cyborg_behavior/sleepy/completion_trigger: navigation
+ * /cyborg_behavior/sleepy/location: home
+ * /cyborg_behavior/sleepy/navigation_order: navigation_go_to
+ * /cyborg_behavior/sleepy/visual_mode: sleepy
+ * /cyborg_behavior/speaking/completion_trigger: utterance
+ * /cyborg_behavior/speaking/utterance: Hi, this is Cybor...
+ * /cyborg_behavior/speaking/visual_mode: snake
+ * /cyborg_behavior/transport/completion_trigger: navigation
+ * /cyborg_behavior/transport/navigation_order: navigation_go_to
+ * /cyborg_behavior/transport/visual_mode: eyes
+ * /cyborg_behavior/transport_happy/completion_trigger: navigation
+ * /cyborg_behavior/transport_happy/navigation_order: navigation_go_to
+ * /cyborg_behavior/transport_happy/visual_mode: siren
+ * /cyborg_behavior/transport_neutral/completion_trigger: navigation
+ * /cyborg_behavior/transport_neutral/navigation_order: navigation_go_to
+ * /cyborg_behavior/transport_neutral/visual_mode: moving-average
+ * /cyborg_behavior/waking_up_grumpy/completion_trigger: utterance
+ * /cyborg_behavior/waking_up_grumpy/navigation_order: navigation_wander
+ * /cyborg_behavior/waking_up_grumpy/utterance: Hmph, go away ple...
+ * /cyborg_behavior/waking_up_grumpy/visual_mode: grumpy
+ * /cyborg_behavior/waking_up_happy/completion_trigger: utterance
+ * /cyborg_behavior/waking_up_happy/navigation_order: navigation_wander
+ * /cyborg_behavior/waking_up_happy/utterance: Ahh, good morning...
+ * /cyborg_behavior/waking_up_happy/visual_mode: happy
+ * /cyborg_behavior/wandering_emotional/dynamic: True
+ * /cyborg_behavior/wandering_emotional/navigation_order: navigation_wander
+ * /cyborg_behavior/wandering_emotional/utterance: This is boring, b...
+ * /cyborg_behavior/wandering_emotional/visual_mode: individual-moving...
+ * /cyborg_behavior/wandering_emotional_bored/dynamic: True
+ * /cyborg_behavior/wandering_emotional_bored/emotional_feedback/a: 0.04
+ * /cyborg_behavior/wandering_emotional_bored/emotional_feedback/continuous: True
+ * /cyborg_behavior/wandering_emotional_bored/emotional_feedback/d: 0.04
+ * /cyborg_behavior/wandering_emotional_bored/emotional_feedback/p: 0.0
+ * /cyborg_behavior/wandering_emotional_bored/navigation_order: navigation_wander
+ * /cyborg_behavior/wandering_emotional_bored/utterance: This is boring, b...
+ * /cyborg_behavior/wandering_emotional_bored/visual_mode: siren
+ * /cyborg_behavior/wandering_emotional_curious/dynamic: True
+ * /cyborg_behavior/wandering_emotional_curious/emotional_feedback/a: 0.0
+ * /cyborg_behavior/wandering_emotional_curious/emotional_feedback/continuous: True
+ * /cyborg_behavior/wandering_emotional_curious/emotional_feedback/d: -0.05
+ * /cyborg_behavior/wandering_emotional_curious/emotional_feedback/p: -0.015
+ * /cyborg_behavior/wandering_emotional_curious/navigation_order: navigation_wander
+ * /cyborg_behavior/wandering_emotional_curious/utterance: Im wondering abou...
+ * /cyborg_behavior/wandering_emotional_curious/visual_mode: snake
+ * /cyborg_behavior/wandering_emotional_happy/dynamic: True
+ * /cyborg_behavior/wandering_emotional_happy/navigation_order: navigation_wander
+ * /cyborg_behavior/wandering_emotional_happy/visual_mode: eyes
+ * /cyborg_behavior/wandering_emotional_unconcerned/dynamic: True
+ * /cyborg_behavior/wandering_emotional_unconcerned/emotional_feedback/a: 0.03
+ * /cyborg_behavior/wandering_emotional_unconcerned/emotional_feedback/continuous: True
+ * /cyborg_behavior/wandering_emotional_unconcerned/emotional_feedback/d: 0.03
+ * /cyborg_behavior/wandering_emotional_unconcerned/emotional_feedback/p: 0.0
+ * /cyborg_behavior/wandering_emotional_unconcerned/navigation_order: navigation_wander
+ * /cyborg_behavior/wandering_emotional_unconcerned/utterance: I've got no worri...
+ * /cyborg_behavior/wandering_emotional_unconcerned/visual_mode: moving-average
+ * /rosdistro: kinetic
+ * /rosversion: 1.12.14
+
+NODES
+  /
+    cyborg_audio (cyborg_audio/audio.py)
+    cyborg_behavior (cyborg_behavior/behavior.py)
+    cyborg_controller (cyborg_controller/controller.py)
+    cyborg_eventscheduler (cyborg_eventscheduler/eventscheduler.py)
+    cyborg_led_dome (cyborg_led_dome/led_dome.py)
+    cyborg_navigation (cyborg_navigation/navigation.py)
+    cyborg_primary_states (cyborg_primary_states/primary_states.py)
+
+auto-starting new master
+process[master]: started with pid [32160]
+ROS_MASTER_URI=http://localhost:11311
+
+setting /run_id to cf1e2fdc-ef62-11e9-8866-b4b67639d8de
+process[rosout-1]: started with pid [32173]
+started core service [/rosout]
+process[cyborg_navigation-2]: started with pid [32190]
+process[cyborg_audio-3]: started with pid [32191]
+process[cyborg_led_dome-4]: started with pid [32192]
+process[cyborg_behavior-5]: started with pid [32193]
+process[cyborg_primary_states-6]: started with pid [32194]
+process[cyborg_eventscheduler-7]: started with pid [32195]
+process[cyborg_controller-8]: started with pid [32196]
+Cyborg Behavior: Starting Program
+Cyborg Primary States: Starting Program
+Cyborg Behavior: Starting Program
+[INFO] [1571154336.786618]: Cyborg Audio: Playback initialized
+[INFO] [1571154337.176407]: Cyborg Audio: Text to Speech Activated.
+[INFO] [1571154337.850322]: PrimaryStatesServer: Initiated
+[INFO] [1571154338.391170]: BehaviorServer: Activated
+[INFO] [1571154339.307357]: EventScheduler: Activated.
+Cyborg Controller: Starting Program...
+[INFO] [1571154341.480769]: EmotionSystem: Activated...
+Traceback (most recent call last):
+  File "/home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/navigation.py", line 10, in <module>
+    from navigationserver import NavigationServer
+  File "/home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/navigationserver.py", line 21, in <module>
+    from rosarnl.srv import MakePlan
+ImportError: No module named srv
+[INFO] [1571154341.671687]: Motivator: Activated...
+[cyborg_navigation-2] process has died [pid 32190, exit code 1, cmd /home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/navigation.py __name:=cyborg_navigation __log:=/home/cyborg/.ros/log/cf1e2fdc-ef62-11e9-8866-b4b67639d8de/cyborg_navigation-2.log].
+log file: /home/cyborg/.ros/log/cf1e2fdc-ef62-11e9-8866-b4b67639d8de/cyborg_navigation-2*.log
+Cyborg LED Dome: Starting Program...
+[ERROR] [1571154344.853434]: Userdata key 'last_state' not available. Available keys are: []
+[INFO] [1571154344.855489]: Controller: Activated...
+[WARN] [1571154344.857460]: Attempting to copy input key 'last_state', but this key does not exist.
+[ERROR] [1571154344.861866]: Userdata key 'last_event' not available. Available keys are: []
+[WARN] [1571154344.864133]: Attempting to copy input key 'last_event', but this key does not exist.
+[ERROR] [1571154344.869830]: Userdata key 'state_machine_events' not available. Available keys are: []
+[WARN] [1571154344.872160]: Attempting to copy input key 'state_machine_events', but this key does not exist.
+[INFO] [1571154344.874302]: State machine starting in initial state 'idle' with userdata: 
+	['last_state', 'last_event', 'state_machine_events']
+[WARN] [1571154345.049313]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154345.127240]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154345.160506]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154345.257690]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154345.300808]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154345.385011]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154345.416796]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154345.512957]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154345.559605]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154345.647741]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154345.684614]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154345.751339]: State machine starting in initial state 'Startup' with userdata: 
+	['sm_current_interpreter', 'sm_mode', 'sm_led_colors', 'sm_interpreter', 'sm_text', 'sm_next_interpreter', 'sm_presenter']
+[INFO] [1571154345.777886]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154345.821007]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+LED-dome initiated - waiting for incoming message
+[INFO] [1571154345.915142]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154345.961221]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.046028]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154346.098428]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.192277]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154346.227105]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.321869]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154346.373570]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.455046]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154346.484685]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.579976]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154346.634138]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.713653]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154346.749263]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.842330]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154346.898687]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154346.987925]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154347.028358]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+
+### Hadde shitloads med samme (over + under) feilmelding/error. Klippet ut ~300 linjer med meldinger ###
+
+[INFO] [1571154368.720091]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154368.775439]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154368.845358]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154368.898438]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+^C[INFO] [1571154368.987474]: State machine transitioning 'idle':'aborted'-->'idle'
+[cyborg_controller-8] killing on exit
+[cyborg_led_dome-4] killing on exit
+[cyborg_behavior-5] killing on exit
+[cyborg_primary_states-6] killing on exit
+[cyborg_eventscheduler-7] killing on exit
+[WARN] [1571154369.087138]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[cyborg_audio-3] killing on exit
+[INFO] [1571154369.231432]: State machine transitioning 'idle':'aborted'-->'idle'
+[ERROR] [1571154369.388747]: InvalidTransitionError: Attempted to return outcome 'None' from state 'Startup' of type '<domecontrol.startup object at 0x7fc8f2465950>' which only has registered outcomes: ('text', 'nonmea', 'meafromfile')
+Exception in thread Thread-6:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "/usr/lib/python2.7/threading.py", line 754, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/smach/state_machine.py", line 359, in execute
+    container_outcome = self._update_once()
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/smach/state_machine.py", line 266, in _update_once
+    self._current_state.get_registered_outcomes()))
+InvalidTransitionError: Attempted to return outcome 'None' from state 'Startup' of type '<domecontrol.startup object at 0x7fc8f2465950>' which only has registered outcomes: ('text', 'nonmea', 'meafromfile')
+
+[WARN] [1571154369.410102]: Your executeCallback did not set the goal to a terminal status.  This is a bug in your ActionServer implementation. Fix your code!  For now, the ActionServer will set this goal to aborted
+[INFO] [1571154369.482829]: State machine transitioning 'idle':'aborted'-->'idle'
+[WARN] [1571154369.686308]: ERROR: Unable to connect to state server node for cyborg_primary_states.
+[INFO] [1571154369.687959]: State machine transitioning 'idle':'aborted'-->'idle'
+[INFO] [1571154369.720656]: Cyborg Audio: Text to Speech Deactivated
+Cyborg LED Dome: End of Program...
+Cyborg Behavior: Shutting Down
+[INFO] [1571154369.766287]: Controller: Terminated...
+Cyborg Controller: End of Program...
+Cyborg Behavior: Shutting Down
+Cyborg Primary States: Shutting Down
+[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete

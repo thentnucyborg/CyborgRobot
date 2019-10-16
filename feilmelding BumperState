@@ -1,0 +1,9 @@
+/home/cyborg/catkin_ws/src/rosaria_client/src/print_state.cpp:7:33: fatal error: rosaria/BumperState.h: No such file or directory
+compilation terminated.
+[ 54%] Built target cyborg_navigation_generate_messages_nodejs
+rosaria_client/CMakeFiles/print_state.dir/build.make:62: recipe for target 'rosaria_client/CMakeFiles/print_state.dir/src/print_state.cpp.o' failed
+make[2]: *** [rosaria_client/CMakeFiles/print_state.dir/src/print_state.cpp.o] Error 1
+CMakeFiles/Makefile2:5360: recipe for target 'rosaria_client/CMakeFiles/print_state.dir/all' failed
+make[1]: *** [rosaria_client/CMakeFiles/print_state.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+

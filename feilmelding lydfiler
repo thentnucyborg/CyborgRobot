@@ -1,0 +1,9 @@
+[INFO] [1571064293.156694]: Cyborg Audio: Executing Playback.
+[00007f0d70000e38] filesystem access error: cannot open file /home/cyborg/horror-ambience.mp3 (No such file or directory)
+[00007f0d70000e38] core access error: File reading failed
+[00007f0d70000e38] core access error: VLC could not open the file "/home/cyborg/horror-ambience.mp3" (No such file or directory).
+[00007f0da00db998] core input error: open of `file:///home/cyborg/horror-ambience.mp3' failed
+[00007f0da00db998] core input error: Your input can't be opened
+[00007f0da00db998] core input error: VLC is unable to open the MRL 'file:///home/cyborg/horror-ambience.mp3'. Check the log for details.
+DatabaseHandler: Unable to find_location()...
+
