@@ -21,3 +21,4 @@ You should now be abele to use the workspace and git without any problems.
 - sudo apt-get install libsdl-image1.2-dev
 - sudo apt-get install libbullet-dev
 - git clone https://github.com/ros-visualization/rviz.git -b kinetic-devel
+- git clone https://github.com/ros-planning/navigation.git -b kinetic-devel
