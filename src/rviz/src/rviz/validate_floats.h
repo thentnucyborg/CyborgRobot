@@ -46,7 +46,12 @@
 namespace rviz
 {
 
-inline bool validateFloats(Ogre::Real val)
+inline bool validateFloats(float val)
+{
+  return !(std::isnan(val) || std::isinf(val));
+}
+
+inline bool validateFloats(double val)
 {
   return !(std::isnan(val) || std::isinf(val));
 }

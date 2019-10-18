@@ -53,6 +53,9 @@ protected:
   /** @brief Overridden from MarkerDisplay.  Unsubscribes to the
    * marker array topic. */
   virtual void unsubscribe();
+
+private:
+  void handleMarkerArray( const visualization_msgs::MarkerArray::ConstPtr& array );
 };
 
 } // end namespace rviz

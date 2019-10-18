@@ -208,6 +208,7 @@ bool SelectionManager::getPatchDepthImage( Ogre::Viewport* viewport, int x, int 
     handler_it->second->preRenderPass(0);
   }
   
+  bool success = false;
   if( render( viewport, depth_render_texture_, x, y, x + width, 
               y + height, depth_pixel_box_, "Depth", depth_texture_width_, depth_texture_height_ ) )
   {
@@ -258,8 +259,8 @@ bool SelectionManager::get3DPatch( Ogre::Viewport* viewport, int x, int y, unsig
   Ogre::Matrix4 projection = camera_->getProjectionMatrix();
   float depth;
   
-  for(unsigned y_iter = 0; y_iter < height; ++y_iter)
-    for(unsigned x_iter = 0 ; x_iter < width; ++x_iter)
+  for(int y_iter = 0; y_iter < height; ++y_iter)
+    for(int x_iter = 0 ; x_iter < width; ++x_iter)
     {
       depth = depth_vector[pixel_counter];      
       
@@ -782,8 +783,6 @@ void SelectionManager::publishDebugImage( const Ogre::PixelBox& pixel_box, const
   int post_pixel_padding = 0;
   switch( pixel_box.format )
   {
-  case Ogre::PF_R8G8B8:
-    break;
   case Ogre::PF_A8R8G8B8:
   case Ogre::PF_X8R8G8B8:
     post_pixel_padding = 1;

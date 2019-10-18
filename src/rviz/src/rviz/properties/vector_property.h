@@ -32,12 +32,11 @@
 #include <OgreVector3.h>
 
 #include "rviz/properties/property.h"
-#include "rviz/rviz_export.h"
 
 namespace rviz
 {
 
-class RVIZ_EXPORT VectorProperty: public Property
+class VectorProperty: public Property
 {
 Q_OBJECT
 public:

@@ -40,6 +40,9 @@
 #include <OgreSubEntity.h>
 #include <OgreSharedPtr.h>
 
+#include <tf/tf.h>
+#include <tf/transform_listener.h>
+
 namespace rviz
 {
 

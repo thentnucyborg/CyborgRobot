@@ -30,7 +30,6 @@
 #include <QStringList>
 
 #include "rviz/properties/vector_property.h"
-#include "rviz/properties/property_tree_model.h"
 
 namespace rviz
 {
@@ -69,8 +68,6 @@ bool VectorProperty::setVector( const Ogre::Vector3& new_vector )
     ignore_child_updates_ = false;
     updateString();
     Q_EMIT changed();
-    if( model_ )
-      model_->emitDataChanged( this );
     return true;
   }
   return false;

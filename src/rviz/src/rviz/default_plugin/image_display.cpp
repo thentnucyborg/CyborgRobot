@@ -29,16 +29,6 @@
 
 #include <boost/bind.hpp>
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wpedantic"
-# ifdef __clang__
-#  pragma clang diagnostic ignored "-Wdeprecated-register"
-# endif
-# pragma GCC diagnostic ignored "-Woverloaded-virtual"
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-
 #include <OgreManualObject.h>
 #include <OgreMaterialManager.h>
 #include <OgreRectangle2D.h>
@@ -52,9 +42,7 @@
 #include <OgreTechnique.h>
 #include <OgreCamera.h>
 
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
+#include <tf/transform_listener.h>
 
 #include "rviz/display_context.h"
 #include "rviz/frame_manager.h"
@@ -163,7 +151,7 @@ void ImageDisplay::onDisable()
 {
   render_panel_->getRenderWindow()->setActive(false);
   ImageDisplayBase::unsubscribe();
-  reset();
+  clear();
 }
 
 void ImageDisplay::updateNormalizeOptions()
@@ -189,19 +177,18 @@ void ImageDisplay::updateNormalizeOptions()
   }
 }
 
-// TODO: In Noetic remove and integrate into reset()
 void ImageDisplay::clear()
 {
   texture_.clear();
 
   if( render_panel_->getCamera() )
+  {
     render_panel_->getCamera()->setPosition(Ogre::Vector3(999999, 999999, 999999));
+  }
 }
 
 void ImageDisplay::update( float wall_dt, float ros_dt )
 {
-  Q_UNUSED(wall_dt)
-  Q_UNUSED(ros_dt)
   try
   {
     texture_.update();
@@ -238,8 +225,8 @@ void ImageDisplay::update( float wall_dt, float ros_dt )
 
 void ImageDisplay::reset()
 {
-  clear();
   ImageDisplayBase::reset();
+  clear();
 }
 
 /* This is called by incomingMessage(). */

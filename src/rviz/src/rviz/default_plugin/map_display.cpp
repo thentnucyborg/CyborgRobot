@@ -39,6 +39,8 @@
 
 #include <ros/ros.h>
 
+#include <tf/transform_listener.h>
+
 #include "rviz/frame_manager.h"
 #include "rviz/ogre_helpers/custom_parameter_indices.h"
 #include "rviz/ogre_helpers/grid.h"
@@ -164,6 +166,9 @@ Swatch::~Swatch()
 
 void Swatch::updateAlpha(const Ogre::SceneBlendType sceneBlending, bool depthWrite, AlphaSetter* alpha_setter)
 {
+  Ogre::Pass* pass = material_->getTechnique( 0 )->getPass( 0 );
+  Ogre::TextureUnitState* tex_unit = NULL;
+
   material_->setSceneBlending( sceneBlending );
   material_->setDepthWriteEnabled( depthWrite );
   if( manual_object_ )
@@ -285,7 +290,7 @@ MapDisplay::~MapDisplay()
 
 unsigned char* makeMapPalette()
 {
-  unsigned char* palette = OGRE_ALLOC_T(unsigned char, 256*4, Ogre::MEMCATEGORY_GENERAL);
+  unsigned char* palette = new unsigned char[256*4];
   unsigned char* palette_ptr = palette;
   // Standard gray map palette values
   for( int i = 0; i <= 100; i++ )
@@ -323,7 +328,7 @@ unsigned char* makeMapPalette()
 
 unsigned char* makeCostmapPalette()
 {
-  unsigned char* palette = OGRE_ALLOC_T(unsigned char, 256*4, Ogre::MEMCATEGORY_GENERAL);
+  unsigned char* palette = new unsigned char[256*4];
   unsigned char* palette_ptr = palette;
 
   // zero values have alpha=0
@@ -378,7 +383,7 @@ unsigned char* makeCostmapPalette()
 
 unsigned char* makeRawPalette()
 {
-  unsigned char* palette = OGRE_ALLOC_T(unsigned char, 256*4, Ogre::MEMCATEGORY_GENERAL);
+  unsigned char* palette = new unsigned char[256*4];
   unsigned char* palette_ptr = palette;
   // Standard gray map palette values
   for( int i = 0; i < 256; i++ )
@@ -395,7 +400,7 @@ unsigned char* makeRawPalette()
 Ogre::TexturePtr makePaletteTexture( unsigned char *palette_bytes )
 {
   Ogre::DataStreamPtr palette_stream;
-  palette_stream.bind( new Ogre::MemoryDataStream( palette_bytes, 256*4, true ));
+  palette_stream.bind( new Ogre::MemoryDataStream( palette_bytes, 256*4 ));
 
   static int palette_tex_count = 0;
   std::stringstream ss;
@@ -701,7 +706,7 @@ void MapDisplay::showMap()
   }
 
   bool map_status_set = false;
-  if( width * height != static_cast<int>(current_map_.data.size()) )
+  if( width * height != current_map_.data.size() )
   {
     std::stringstream ss;
     ss << "Data size doesn't match width*height: width = " << width
@@ -710,7 +715,7 @@ void MapDisplay::showMap()
     map_status_set = true;
   }
 
-  for(size_t i=0;i<swatches.size();i++){
+  for(int i=0;i<swatches.size();i++){
     swatches[i]->updateData();
 
     Ogre::Pass* pass = swatches[i]->material_->getTechnique(0)->getPass(0);

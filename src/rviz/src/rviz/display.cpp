@@ -108,6 +108,16 @@ QVariant Display::getViewData( int column, int role ) const
 {
   switch( role )
   {
+  case Qt::BackgroundRole:
+  {
+    /*
+    QLinearGradient q( 0,0, 0,5 );
+    q.setColorAt( 0.0, QColor(230,230,230) );
+    q.setColorAt( 1.0, Qt::white );
+    return QBrush( q );
+    */
+    return QColor( Qt::white );
+  }
   case Qt::ForegroundRole:
   {
     // if we're item-enabled (not greyed out) and in warn/error state, set appropriate color
@@ -127,7 +137,7 @@ QVariant Display::getViewData( int column, int role ) const
       }
       else
       {
-        return QApplication::palette().color( QPalette::Text );
+        return QColor( Qt::black );
       }
     }
     break;
@@ -189,7 +199,7 @@ void Display::setStatusInternal( int level, const QString& name, const QString& 
     addChild( status_, 0 );
   }
   StatusProperty::Level old_level = status_->getLevel();
-
+  
   status_->setStatus( (StatusProperty::Level) level, name, text );
   if( model_ && old_level != status_->getLevel() )
   {
@@ -292,43 +302,24 @@ void Display::reset()
   clearStatuses();
 }
 
-static std::map<PanelDockWidget*, bool> associated_widgets_visibility;
-inline void setVisible(PanelDockWidget* widget, bool visible)
-{
-  associated_widgets_visibility[widget] = visible;
-}
-inline bool isVisible(PanelDockWidget* widget)
-{
-  auto it = associated_widgets_visibility.find(widget);
-  return it != associated_widgets_visibility.end() && it->second;
-}
-
 void Display::onEnableChanged()
 {
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   queueRender();
-  /* We get here, by two different routes:
-   * - First, we might have disabled the display.
-   *   In this case we want to close/hide the associated widget.
-   *   But there is an exception: tabbed DockWidgets shouldn't be hidden, because then we would loose the tab.
-   * - Second, the corresponding widget changed visibility and we got here via associatedPanelVisibilityChange().
-   *   In this case, it's usually counterproductive to show/hide the widget here.
-   *   Typical cases are: main window was minimized/unminimized, tab was switched.
-   */
   if( isEnabled() )
   {
     scene_node_->setVisible( true );
 
     if( associated_widget_panel_ )
     {
-      if (!isVisible(associated_widget_panel_))
-        associated_widget_panel_->show();
+      associated_widget_panel_->show();
     }
     else if( associated_widget_ )
+    {
       associated_widget_->show();
+    }
 
-    if( isEnabled() )  // status might have changed, e.g. if show() failed
-      onEnable();
+    onEnable();
   }
   else
   {
@@ -336,11 +327,15 @@ void Display::onEnableChanged()
 
     if( associated_widget_panel_ )
     {
-      if (isVisible(associated_widget_panel_))
+      if( associated_widget_panel_->isVisible() )
+      {
         associated_widget_panel_->hide();
+      }
     }
-    else if( associated_widget_ )
+    else if( associated_widget_ && associated_widget_->isVisible() )
+    {
       associated_widget_->hide();
+    }
 
     scene_node_->setVisible( false );
   }
@@ -374,7 +369,6 @@ void Display::setAssociatedWidget( QWidget* widget )
     if( wm )
     {
       associated_widget_panel_ = wm->addPane( getName(), associated_widget_ );
-      setVisible(associated_widget_panel_, true);
       connect( associated_widget_panel_, SIGNAL( visibilityChanged( bool ) ), this, SLOT( associatedPanelVisibilityChange( bool ) ));
       connect( associated_widget_panel_, SIGNAL( closed( ) ), this, SLOT( disable( )));
       associated_widget_panel_->setIcon( getIcon() );
@@ -393,11 +387,15 @@ void Display::setAssociatedWidget( QWidget* widget )
 
 void Display::associatedPanelVisibilityChange( bool visible )
 {
-  setVisible(associated_widget_panel_, visible);
-  // If something external makes the panel visible/invisible, make sure to enable/disable the display
-  setEnabled(visible);
-  // Remark: vice versa, in Display::onEnableChanged(),
-  //         the panel is made visible/invisible when the display is enabled/disabled
+  // if something external makes the panel visible, make sure we're enabled
+  if ( visible )
+  {
+    setEnabled( true );
+  }
+  else
+  {
+    setEnabled( false );
+  }
 }
 
 void Display::setIcon( const QIcon& icon )

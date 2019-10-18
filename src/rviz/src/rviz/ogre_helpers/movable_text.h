@@ -47,7 +47,6 @@
 #include <OgreVector3.h>
 #include <OgreQuaternion.h>
 #include <OgreSharedPtr.h>
-#include <OgreCamera.h>
 
 
 namespace Ogre
@@ -176,6 +175,7 @@ public:
     assert(!mpMaterial.isNull());
     return mpMaterial;
   }
+  ;
 
 
   /******************************** protected methods and overload **************/
@@ -191,38 +191,30 @@ protected:
   {
     return mRadius;
   }
-
+  ;
   Ogre::Real getSquaredViewDepth(const Ogre::Camera *cam) const
   {
     return 0;
   }
-
+  ;
   const Ogre::Quaternion &getWorldOrientation(void) const;
   const Ogre::Vector3 &getWorldPosition(void) const;
-
-  const Ogre::AxisAlignedBox &getBoundingBox() const
+  const Ogre::AxisAlignedBox &getBoundingBox(void) const
   {
-    if (!mpCam)
-      return mAABB;
-
-    Ogre::Matrix4 m;
-    m.makeTransform(mGlobalTranslation, Ogre::Vector3::UNIT_SCALE, mpCam->getDerivedOrientation());
-
-    mWorldAABB = mAABB;
-    mWorldAABB.transformAffine(m);
-    return mWorldAABB;
+    return mAABB;
   }
-
+  ;
   const Ogre::String &getName(void) const
   {
     return mName;
   }
-
+  ;
   const Ogre::String &getMovableType(void) const
   {
     static Ogre::String movType = "MovableText";
     return movType;
   }
+  ;
 
   void _notifyCurrentCamera(Ogre::Camera *cam);
   void _updateRenderQueue(Ogre::RenderQueue* queue);
@@ -233,6 +225,7 @@ protected:
   {
     return mLList;
   }
+  ;
 };
 
 }

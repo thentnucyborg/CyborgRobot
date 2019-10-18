@@ -50,7 +50,6 @@
 #include <OgreHardwareBufferManager.h>
 #include <OgreFontManager.h>
 #include <OgreFont.h>
-#include <OgreUTFString.h>
 
 #include <sstream>
 
@@ -116,8 +115,6 @@ void MovableText::setFontName(const String &fontName)
       throw Exception(Exception::ERR_ITEM_NOT_FOUND, "Could not find font "
           + fontName, "MovableText::setFontName");
 
-    // to support non-ascii letters, setup the codepoint range before loading
-    mpFont->addCodePointRange(std::make_pair<Ogre::Font::CodePoint>(0, 999));
     mpFont->load();
     if (!mpMaterial.isNull())
     {
@@ -221,17 +218,17 @@ void MovableText::showOnTop(bool show)
 
 void MovableText::_setupGeometry()
 {
-  Ogre::UTFString::utf32string utfCaption(Ogre::UTFString(mCaption).asUTF32());
-
   assert(mpFont);
   assert(!mpMaterial.isNull());
 
   unsigned int vertexCount = 0;
 
   //count letters to determine how many vertices are needed
-  for (auto ch : utfCaption)
+  std::string::iterator i = mCaption.begin();
+  std::string::iterator iend = mCaption.end();
+  for ( ; i != iend; ++i )
   {
-    if ((ch != ' ') && (ch != '\n'))
+    if ((*i != ' ') && (*i != '\n'))
     {
       vertexCount += 6;
     }
@@ -244,7 +241,7 @@ void MovableText::_setupGeometry()
     mUpdateColors = true;
   }
 
-  if (utfCaption.empty())
+  if (mCaption.empty())
   {
     return;
   }
@@ -296,14 +293,16 @@ void MovableText::_setupGeometry()
   Real spaceWidth = mSpaceWidth;
   // Derive space width from a capital A
   if (spaceWidth == 0)
-    spaceWidth = mpFont->getGlyphAspectRatio('A') * mCharHeight;
+    spaceWidth = mpFont->getGlyphAspectRatio('A') * mCharHeight * 2.0;
 
   float total_height = mCharHeight;
   float total_width = 0.0f;
   float current_width = 0.0f;
-  for (auto ch : utfCaption)
+  i = mCaption.begin();
+  iend = mCaption.end();
+  for ( ; i != iend; ++i )
   {
-    if (ch == '\n')
+    if (*i == '\n')
     {
       total_height += mCharHeight + mLineSpacing;
 
@@ -313,13 +312,13 @@ void MovableText::_setupGeometry()
       }
       current_width = 0.0;
     }
-    else if (ch == ' ')
+    else if (*i == ' ')
     {
       current_width += spaceWidth;
     }
     else
     {
-      current_width += mpFont->getGlyphAspectRatio(ch) * mCharHeight;
+      current_width += mpFont->getGlyphAspectRatio(*i) * mCharHeight * 2.0;
     }
   }
 
@@ -332,10 +331,10 @@ void MovableText::_setupGeometry()
   switch (mVerticalAlignment)
   {
   case MovableText::V_ABOVE:
-    top = total_height;
+    top = total_height * 2;
     break;
   case MovableText::V_CENTER:
-    top = 0.5 * total_height;
+    top = 0.5 * total_height * 2;
     break;
   case MovableText::V_BELOW:
     top = 0.0f;
@@ -355,17 +354,32 @@ void MovableText::_setupGeometry()
 
   float left = starting_left;
 
+  bool newLine = true;
+  Real len = 0.0f;
   // for calculation of AABB
-  Ogre::Vector3 currPos(0.0f);
-  Ogre::Vector3 min(starting_left, top - total_height, 0.0f);
-  Ogre::Vector3 max(starting_left + total_width, top, 0.0f);
-  auto iend = utfCaption.end();
-  for (auto i = utfCaption.begin(); i != iend; ++i)
+  Ogre::Vector3 min(9999999.0f), max(-9999999.0f), currPos(0.0f);
+  Ogre::Real maxSquaredRadius = -99999999.0f;
+  float largestWidth = 0.0f;
+  for (i = mCaption.begin(); i != iend; ++i)
   {
+    if (newLine)
+    {
+      len = 0.0f;
+      for (String::iterator j = i; j != iend && *j != '\n'; j++)
+      {
+        if (*j == ' ')
+          len += spaceWidth;
+        else
+          len += mpFont->getGlyphAspectRatio(*j) * mCharHeight * 2.0;
+      }
+      newLine = false;
+    }
+
     if (*i == '\n')
     {
       left = starting_left;
-      top -= mCharHeight + mLineSpacing;
+      top -= (mCharHeight + mLineSpacing) * 2.0;
+      newLine = true;
       continue;
     }
 
@@ -373,10 +387,14 @@ void MovableText::_setupGeometry()
     {
       // Just leave a gap, no tris
       left += spaceWidth;
+      currPos = Ogre::Vector3(left, top, 0.0);
+      min.makeFloor(currPos);
+      max.makeCeil(currPos);
+      maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
       continue;
     }
 
-    Real char_width = mpFont->getGlyphAspectRatio(*i) * mCharHeight;
+    Real horiz_height = mpFont->getGlyphAspectRatio(*i);
     Real u1, u2, v1, v2;
     Ogre::Font::UVRect utmp;
     utmp = mpFont->getGlyphTexCoords(*i);
@@ -398,7 +416,14 @@ void MovableText::_setupGeometry()
     *pPCBuff++ = u1;
     *pPCBuff++ = v1;
 
-    top -= mCharHeight;
+    // Deal with bounds
+
+
+    min.makeFloor(currPos);
+    max.makeCeil(currPos);
+    maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
+
+    top -= mCharHeight * 2.0;
 
     // Bottom left
     currPos = Ogre::Vector3(left, top, 0.0);
@@ -408,8 +433,13 @@ void MovableText::_setupGeometry()
     *pPCBuff++ = u1;
     *pPCBuff++ = v2;
 
-    top += mCharHeight;
-    left += char_width;
+    // Deal with bounds
+    min.makeFloor(currPos);
+    max.makeCeil(currPos);
+    maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
+
+    top += mCharHeight * 2.0;
+    left += horiz_height * mCharHeight * 2.0;
 
     // Top right
     currPos = Ogre::Vector3(left, top, 0.0);
@@ -418,6 +448,12 @@ void MovableText::_setupGeometry()
     *pPCBuff++ = currPos.z;
     *pPCBuff++ = u2;
     *pPCBuff++ = v1;
+    //-------------------------------------------------------------------------------------
+
+    // Deal with bounds
+    min.makeFloor(currPos);
+    max.makeCeil(currPos);
+    maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
 
     //-------------------------------------------------------------------------------------
     // Second tri
@@ -430,8 +466,12 @@ void MovableText::_setupGeometry()
     *pPCBuff++ = u2;
     *pPCBuff++ = v1;
 
-    top -= mCharHeight;
-    left -= char_width;
+    min.makeFloor(currPos);
+    max.makeCeil(currPos);
+    maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
+
+    top -= mCharHeight * 2.0;
+    left -= horiz_height * mCharHeight * 2.0;
 
     // Bottom left (again)
     currPos = Ogre::Vector3(left, top, 0.0);
@@ -441,7 +481,11 @@ void MovableText::_setupGeometry()
     *pPCBuff++ = u1;
     *pPCBuff++ = v2;
 
-    left += char_width;
+    min.makeFloor(currPos);
+    max.makeCeil(currPos);
+    maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
+
+    left += horiz_height * mCharHeight * 2.0;
 
     // Bottom right
     currPos = Ogre::Vector3(left, top, 0.0);
@@ -451,15 +495,32 @@ void MovableText::_setupGeometry()
     *pPCBuff++ = u2;
     *pPCBuff++ = v2;
     //-------------------------------------------------------------------------------------
+    min.makeFloor(currPos);
+    max.makeCeil(currPos);
+    maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
 
     // Go back up with top
-    top += mCharHeight;
+    top += mCharHeight * 2.0;
+
+    float currentWidth = (left + 1) / 2 - 0;
+    if (currentWidth > largestWidth)
+      largestWidth = currentWidth;
   }
+  // Taking empty last line into account for the AABB
+  if(newLine)
+  {
+    top -= mCharHeight * 2.0;
+    currPos = Ogre::Vector3(left, top, 0.0);
+    min.makeFloor(currPos);
+    max.makeCeil(currPos);
+    maxSquaredRadius = std::max(maxSquaredRadius, currPos.squaredLength());
+  }
+  // Unlock vertex buffer
   ptbuf->unlock();
 
   // update AABB/Sphere radius
   mAABB = Ogre::AxisAlignedBox(min, max);
-  mRadius =  Ogre::Math::Sqrt(std::max(mAABB.getMinimum().squaredLength(), mAABB.getMaximum().squaredLength()));
+  mRadius = Ogre::Math::Sqrt(maxSquaredRadius);
 
   if (mUpdateColors)
     this->_updateColors();
@@ -513,13 +574,14 @@ void MovableText::getWorldTransforms(Matrix4 *xform) const
     mpCam->getDerivedOrientation().ToRotationMatrix(rot3x3);
 
     // parent node position
-    Vector3 ppos = mParentNode->_getDerivedPosition() + mGlobalTranslation;
+    Vector3 ppos = mParentNode->_getDerivedPosition() + Vector3::UNIT_Y
+        * mGlobalTranslation;
     ppos += rot3x3 * mLocalTranslation;
 
     // apply scale
-    scale3x3[0][0] = mParentNode->_getDerivedScale().x;
-    scale3x3[1][1] = mParentNode->_getDerivedScale().y;
-    scale3x3[2][2] = mParentNode->_getDerivedScale().z;
+    scale3x3[0][0] = mParentNode->_getDerivedScale().x / 2;
+    scale3x3[1][1] = mParentNode->_getDerivedScale().y / 2;
+    scale3x3[2][2] = mParentNode->_getDerivedScale().z / 2;
 
     // apply all transforms to xform
     *xform = (rot3x3 * scale3x3);
@@ -559,3 +621,4 @@ void MovableText::_updateRenderQueue(RenderQueue* queue)
 }
 
 } // namespace rviz
+

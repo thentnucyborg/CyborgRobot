@@ -29,9 +29,11 @@
 
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
-#include <QTimer>
 
+#include <tinyxml.h>
 #include <urdf/model.h>
+
+#include <tf/transform_listener.h>
 
 #include "rviz/display_context.h"
 #include "rviz/robot/robot.h"
@@ -114,7 +116,10 @@ void RobotModelDisplay::updateAlpha()
 void RobotModelDisplay::updateRobotDescription()
 {
   if( isEnabled() )
+  {
     load();
+    context_->queueRender();
+  }
 }
 
 void RobotModelDisplay::updateVisualVisible()
@@ -138,7 +143,6 @@ void RobotModelDisplay::updateTfPrefix()
 void RobotModelDisplay::load()
 {
   clearStatuses();
-  context_->queueRender();
 
   std::string content;
   if( !update_nh_.getParam( robot_description_property_->getStdString(), content ))
@@ -154,8 +158,6 @@ void RobotModelDisplay::load()
       setStatus( StatusProperty::Error, "URDF",
                  "Parameter [" + robot_description_property_->getString()
                  + "] does not exist, and was not found by searchParam()" );
-      // try again in a second
-      QTimer::singleShot(1000, this, SLOT(updateRobotDescription()));
       return;
     }
   }
@@ -174,11 +176,20 @@ void RobotModelDisplay::load()
 
   robot_description_ = content;
 
-  urdf::Model descr;
-  if( !descr.initString(robot_description_))
+  TiXmlDocument doc;
+  doc.Parse( robot_description_.c_str() );
+  if( !doc.RootElement() )
   {
     clear();
-    setStatus( StatusProperty::Error, "URDF", "Failed to parse URDF model" );
+    setStatus( StatusProperty::Error, "URDF", "URDF failed XML parse" );
+    return;
+  }
+
+  urdf::Model descr;
+  if( !descr.initXml( doc.RootElement() ))
+  {
+    clear();
+    setStatus( StatusProperty::Error, "URDF", "URDF failed Model parse" );
     return;
   }
 

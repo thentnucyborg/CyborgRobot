@@ -46,11 +46,11 @@ namespace rviz
 
 ROSImageTexture::ROSImageTexture()
 : new_image_(false)
+, width_(0)
+, height_(0)
 , median_frames_(5)
 {
   empty_image_.load("no_image.png", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-  width_ = empty_image_.getWidth();
-  height_ = empty_image_.getHeight();
 
   static uint32_t count = 0;
   std::stringstream ss;
@@ -71,8 +71,6 @@ void ROSImageTexture::clear()
 
   texture_->unload();
   texture_->loadImage(empty_image_);
-  width_ = empty_image_.getWidth();
-  height_ = empty_image_.getHeight();
 
   new_image_ = false;
   current_image_.reset();
@@ -129,14 +127,6 @@ void ROSImageTexture::normalize( T* image_data, size_t image_data_size, std::vec
     maxValue = std::numeric_limits<T>::min();
     for( unsigned i = 0; i < image_data_size; ++i )
     {
-      if (*input_ptr == std::numeric_limits<double>::infinity() ||
-          *input_ptr == -std::numeric_limits<double>::infinity() ||
-          *input_ptr == std::numeric_limits<double>::quiet_NaN())
-      {
-        input_ptr++;
-        continue;
-      }
-
       minValue = std::min( minValue, *input_ptr );
       maxValue = std::max( maxValue, *input_ptr );
       input_ptr++;

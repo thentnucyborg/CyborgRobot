@@ -50,7 +50,6 @@
 #include "rviz/selection/forwards.h"
 #include "rviz/ogre_helpers/axes.h"
 
-#include "rviz/default_plugin/rviz_default_plugin_export.h"
 #include "rviz/default_plugin/interactive_markers/interactive_marker_control.h"
 #include "rviz/properties/status_property.h"
 
@@ -65,7 +64,7 @@ namespace rviz
 class DisplayContext;
 class InteractiveMarkerDisplay;
 
-class RVIZ_DEFAULT_PLUGIN_EXPORT InteractiveMarker : public QObject
+class InteractiveMarker : public QObject
 {
 Q_OBJECT
 public:

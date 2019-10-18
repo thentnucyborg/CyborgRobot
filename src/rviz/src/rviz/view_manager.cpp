@@ -53,7 +53,6 @@ ViewManager::ViewManager( DisplayContext* context )
 {
   property_model_->setDragDropClass( "view-controller" );
   connect( property_model_, SIGNAL( configChanged() ), this, SIGNAL( configChanged() ));
-  connect( this, SIGNAL( currentChanged() ), this, SIGNAL( configChanged() ));
 }
 
 ViewManager::~ViewManager()
@@ -146,8 +145,7 @@ void ViewManager::setCurrent( ViewController* new_current, bool mimic_view )
     // new one by this point.
     render_panel_->setViewController( new_current );
   }
-  if (current_ != previous)
-    Q_EMIT currentChanged();
+  Q_EMIT currentChanged();
 }
 
 void ViewManager::setCurrentViewControllerType( const QString& new_class_id )

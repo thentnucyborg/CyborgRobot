@@ -32,12 +32,11 @@
 #include <string>
 
 #include "rviz/properties/editable_enum_property.h"
-#include "rviz/rviz_export.h"
 
 namespace rviz
 {
 
-class RVIZ_EXPORT RosTopicProperty: public EditableEnumProperty
+class RosTopicProperty: public EditableEnumProperty
 {
 Q_OBJECT
 public:

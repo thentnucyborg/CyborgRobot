@@ -2,91 +2,21 @@
 Changelog for package rviz
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.13.5 (2019-09-29)
--------------------
-* [fix] ImageDisplay/CameraDisplay: fix status reporting / report frame issues (`#1425 <https://github.com/ros-visualization/rviz/issues/1425>`_)
-* [fix] Fix `#1422 <https://github.com/ros-visualization/rviz/issues/1422>`_: update recent config to actual filename
-* [fix] ImageDisplayBase/MarkerDisplay: increase subscriber queue size with filter queue size
-* [fix] Enable mouse tracking for RenderPanel (`#1433 <https://github.com/ros-visualization/rviz/issues/1433>`_)
-* Contributors: Robert Haschke, Simon Schmeisser
-
-1.13.4 (2019-09-20)
--------------------
-* [feature] Enable `rviz -d my_config` as shortcut for ~/.rviz/my_config.rviz (`#1422 <https://github.com/ros-visualization/rviz/issues/1422>`_)
-* [feature] Added --fullscreen cmdline option (`#1413 <https://github.com/ros-visualization/rviz/issues/1413>`_)
-* [feature] RobotModelDisplay: Poll robot_description at 1Hz until found
-* [feature] Use assimp to load STL files (`#1365 <https://github.com/ros-visualization/rviz/issues/1365>`_)
-* [feature] Added frame-aligned view controller (`#1405 <https://github.com/ros-visualization/rviz/issues/1405>`_)
-* [feature] Systematically check parameters of incoming marker messages (`#1275 <https://github.com/ros-visualization/rviz/issues/1275>`_, `#1400 <https://github.com/ros-visualization/rviz/issues/1400>`_)
-* [feature] MarkerDisplay: clear statuses on disable()
-* [feature] Increase zoom range in orbit view controllers (`#1373 <https://github.com/ros-visualization/rviz/issues/1373>`_)
-* [feature] Add shortcut "C" to the Publish Point tool (`#1321 <https://github.com/ros-visualization/rviz/issues/1321>`_)
-* [fix] ESC shortcut to leave fullscreen prevents canceling tools from working (`#1257 <https://github.com/ros-visualization/rviz/issues/1257>`_)
-* [fix] Fixed color tinting of mesh markers (`#1424 <https://github.com/ros-visualization/rviz/issues/1424>`_)
-* [fix] Fixed several issues with Camera and Image display (`#1409 <https://github.com/ros-visualization/rviz/issues/1409>`_)
-* [fix] Fixed several issues with view controllers, particularly FPS (`#1407 <https://github.com/ros-visualization/rviz/issues/1407>`_)
-* [fix] Fixed (small) memory leak in TFDisplay (`#1408 <https://github.com/ros-visualization/rviz/issues/1408>`_)
-* [fix] Fixed memory leak in PointCloud display in case of constant /clock (`#1412 <https://github.com/ros-visualization/rviz/issues/1412>`_)
-* [fix] Fixed memory leak in MapDisplay (`#1406 <https://github.com/ros-visualization/rviz/issues/1406>`_)
-* [fix] Properly resize RenderWidget on high-DPI displays (`#1263 <https://github.com/ros-visualization/rviz/issues/1263>`_)
-* [fix] Fixed opacity of Collada meshes (`#1387 <https://github.com/ros-visualization/rviz/issues/1387>`_)
-* [fix] Enable non-ascii chars for MovableText (`#1374 <https://github.com/ros-visualization/rviz/issues/1374>`_)
-* [fix] Ignore nan and inf values when normalizing images (`#1378 <https://github.com/ros-visualization/rviz/issues/1378>`_)
-* [fix] MovableText: consider full translation vector (`#1375 <https://github.com/ros-visualization/rviz/issues/1375>`_)
-* [maintanence] ToolManager: simplify key handling code
-* [maintanence] Move sip bindings' build directory into the build space. (`#1360 <https://github.com/ros-visualization/rviz/issues/1360>`_)
-* [maintanence] Use std random generators for portability on Windows (`#1356 <https://github.com/ros-visualization/rviz/issues/1356>`_)
-* [api] public CovarianceVisual (`#1410 <https://github.com/ros-visualization/rviz/issues/1410>`_)
-* [api] Properly override FailedDisplay::save (`#1402 <https://github.com/ros-visualization/rviz/issues/1402>`_)
-* [api] Removed extra wrapper MarkerArrayDisplay::handleMarkerArray (`#1401 <https://github.com/ros-visualization/rviz/issues/1401>`_)
-* Contributors: Robert Haschke, Daiki Maekawa, Jasper, Jeremie Deray, Mike Purvis, Ryan Lober, Sean Yen, Simon Schmeisser, Victor Lamoine, chapulina
-
-1.13.3 (2019-03-16)
--------------------
-* [fix] Fixed build issue on Debian Stretch, using tinyxml2 4.x only (`#1354 <https://github.com/ros-visualization/rviz/issues/1354>`_)
-* Contributors: Robert Haschke
-
-1.13.2 (2019-03-09)
--------------------
-* [feature] InitialPoseTool: allowed to configure initial std deviation (`#1255 <https://github.com/ros-visualization/rviz/issues/1255>`_)
+1.12.17 (2019-03-09)
+--------------------
 * [feature] Allowed OGRE_PLUGIN_PATH to be defined at cmake config time (`#1274 <https://github.com/ros-visualization/rviz/issues/1274>`_)
-* [feature] Improved color support for themes (`#1319 <https://github.com/ros-visualization/rviz/issues/1319>`_)
-* [feature] Various adaptions to support native Windows builds
-  * Removed support for yaml-cpp < 0.5, which is outdated since Ubuntu Trusty / ROS Indigo.
-  * Added DLL symbol exports (`#1335 <https://github.com/ros-visualization/rviz/issues/1335>`_)
 * [feature] EffortDisplay: fixed joint display hierarchy (`#1323 <https://github.com/ros-visualization/rviz/issues/1323>`_)
-* [feature] Configurable tool button style (`#1309 <https://github.com/ros-visualization/rviz/issues/1309>`_)
 * [feature] Publicly exposed VisualizationFrame::addPanelByName() (`#1303 <https://github.com/ros-visualization/rviz/issues/1303>`_)
+* [feature] Configurable tool button style (`#1309 <https://github.com/ros-visualization/rviz/issues/1309>`_)
 * [fix] Consider orientation of poses Path messages (`#1246 <https://github.com/ros-visualization/rviz/issues/1246>`_)
 * [fix] Don't hide the toolbar when pressing Esc (`#1256 <https://github.com/ros-visualization/rviz/issues/1256>`_)
 * [fix] Gracefully handle invalid DISPLAY variable (`#1282 <https://github.com/ros-visualization/rviz/issues/1282>`_)
 * [fix] Panels were sometimes hidden on startup (`#1348 <https://github.com/ros-visualization/rviz/issues/1348>`_)
 * [fix] Clear statuses in RobotModelDisplay when (re)loading a model (`#1296 <https://github.com/ros-visualization/rviz/issues/1296>`_)
-* [fix] Fixed XML parser / Collada loader (`#1341 <https://github.com/ros-visualization/rviz/issues/1341>`_ / `#1317 <https://github.com/ros-visualization/rviz/issues/1317>`_)
-* [fix] Fixed memory leak in material handling, simplified code (`#1294 <https://github.com/ros-visualization/rviz/issues/1294>`_)
-* [fix] Removed ICC profiles in PNG images to silent libpng errors (`#1304 <https://github.com/ros-visualization/rviz/issues/1304>`_)
-* [fix] Fixed memory leaks (`#1310 <https://github.com/ros-visualization/rviz/issues/1310>`_)
-* [maintenance] Code cleanup, fixed warnings and catkin issues (`#1245 <https://github.com/ros-visualization/rviz/issues/1245>`_, `#1346 <https://github.com/ros-visualization/rviz/issues/1346>`_, `#1295 <https://github.com/ros-visualization/rviz/issues/1295>`_)
-* [maintenance] Removed deprecated boost-signals1 (and thus support for tf < 1.11.3) (`#1344 <https://github.com/ros-visualization/rviz/issues/1344>`_)
-* [maintenance] Updated wiki URLs (`#1315 <https://github.com/ros-visualization/rviz/issues/1315>`_)
-* Contributors: Alexander Rössler, Chris Ratliff, G.A. vd. Hoorn, Joseph Duchesne, Rein Appeldoorn, Robert Haschke, Sean Yen, Sean Yen, Victor Lamoine, W. Nicholas Greene, d-walsh, ipa-fez, mutronics
-
-1.13.1 (2018-05-10)
--------------------
-* Added API option to disable keyboard focus being set on mouse move (`#1174 <https://github.com/ros-visualization/rviz/issues/1174>`_)
-* Deprecated tf API's in favor of new tf2 API alternatives (`#1236 <https://github.com/ros-visualization/rviz/issues/1236>`_)
-* Added a boolean property to the wrench visualization to make hiding small forces/torques optional (`#1196 <https://github.com/ros-visualization/rviz/issues/1196>`_)
-* Converted all of rviz to tinyxml2 from tinyxml, partially to avoid newly deprecated interfaces in urdf (`#1237 <https://github.com/ros-visualization/rviz/issues/1237>`_)
-* Added TF Prefix to effort plugin (`#1213 <https://github.com/ros-visualization/rviz/issues/1213>`_)
-* Contributors: Antoine Hoarau, Simon Schmeisser, William Woodall, jgueldenstein
-
-1.13.0 (2018-04-27)
--------------------
-* Created a new Preferences window, and added PromptSaveOnExit option (`#1216 <https://github.com/ros-visualization/rviz/issues/1216>`_)
-* Allowed classes inheriting from image display access to more state (`#1221 <https://github.com/ros-visualization/rviz/issues/1221>`_)
-* Updated additional include statement to use new pluginlib and class_loader headers (`#1231 <https://github.com/ros-visualization/rviz/issues/1231>`_)
-* Fixed crash when robot model not loaded before processing JointState msg (`#1229 <https://github.com/ros-visualization/rviz/issues/1229>`_)
-* Contributors: William Woodall, dhood, daiz, ahoarau, MasterEric
+* [fix] Ensure robot model has loaded before processing JointState msg (`#1229 <https://github.com/ros-visualization/rviz/issues/1229>`_)
+* [maintenance] Code cleanup (`#1245 <https://github.com/ros-visualization/rviz/issues/1245>`_)
+* [maintenance] Use non-deprecated pluginlib header (`#1232 <https://github.com/ros-visualization/rviz/issues/1232>`_, `#1248 <https://github.com/ros-visualization/rviz/issues/1248>`_)
+* Contributors: Alexander Rössler, Chris Ratliff, G.A. vd. Hoorn, Joseph Duchesne, Mikael Arguedas, Rein Appeldoorn, Robert Haschke, Sean Yen [MSFT], W. Nicholas Greene, d-walsh, dhood, ipa-fez
 
 1.12.16 (2018-04-26)
 --------------------

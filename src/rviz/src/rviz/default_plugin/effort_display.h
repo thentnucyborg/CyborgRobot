@@ -51,7 +51,11 @@ public:
 	typedef boost::shared_ptr<M const> MConstPtr;
 	typedef ros::MessageEvent<M const> MEvent;
 	typedef boost::function<void(const MConstPtr&, FilterFailureReason)> FailureCallback;
+#ifdef RVIZ_USE_BOOST_SIGNAL_1
+	typedef boost::signal<void(const MConstPtr&, FilterFailureReason)> FailureSignal;
+#else
 	typedef boost::signals2::signal<void(const MConstPtr&, FilterFailureReason)> FailureSignal;
+#endif
 
 	// If you hit this assert your message does not have a header, or does not have the HasHeader trait defined for it
 	ROS_STATIC_ASSERT(ros::message_traits::HasHeader<M>::value);
@@ -492,7 +496,11 @@ public:
 
 	ros::Duration time_tolerance_; ///< Provide additional tolerance on time for messages which are stamped but can have associated duration
 
+#ifdef RVIZ_USE_BOOST_SIGNAL_1
+	boost::signals::connection tf_connection_;
+#else
 	boost::signals2::connection tf_connection_;
+#endif
 	message_filters::Connection message_connection_;
 
 	FailureSignal failure_signal_;
@@ -536,33 +544,12 @@ public:
 
   virtual void onInitialize()
     {
-    	// TODO(wjwwood): remove this and use tf2 interface instead
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
-		  auto tf_client = context_->getTFClient();
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-      tf_filter_ = new tf::MessageFilterJointState( *tf_client,
+      tf_filter_ = new tf::MessageFilterJointState( *context_->getTFClient(),
                                                     fixed_frame_.toStdString(), 10, update_nh_ );
 
       tf_filter_->connectInput( sub_ );
       tf_filter_->registerCallback( boost::bind( &MessageFilterJointStateDisplay::incomingMessage, this, _1 ));
-     	// TODO(wjwwood): remove this and use tf2 interface instead
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
       context_->getFrameManager()->registerFilterForTransformStatusCheck( tf_filter_, this );
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
     }
 
   virtual ~MessageFilterJointStateDisplay()
@@ -705,7 +692,6 @@ namespace rviz
 	void updateColorAndAlpha();
         void updateHistoryLength();
         void updateRobotDescription();
-        void updateTfPrefix();
 
         JointInfo* getJointInfo( const std::string& joint);
         JointInfo* createJoint(const std::string &joint);
@@ -740,7 +726,6 @@ namespace rviz
 	rviz::IntProperty *history_length_property_;
 
         rviz::StringProperty *robot_description_property_;
-        rviz::StringProperty *tf_prefix_property_;
         rviz::Property *joints_category_;
         rviz::BoolProperty *all_enabled_property_;
     };

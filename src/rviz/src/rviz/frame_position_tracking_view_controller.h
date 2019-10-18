@@ -34,7 +34,6 @@
 #include <OgreVector3.h>
 
 #include "rviz/view_controller.h"
-#include "rviz/rviz_export.h"
 
 namespace rviz
 {
@@ -43,23 +42,23 @@ class TfFrameProperty;
 
 /** @brief Base class of ViewControllers which have a "Target Frame"
  * which is a TF frame whose position they track. */
-class RVIZ_EXPORT FramePositionTrackingViewController: public ViewController
+class FramePositionTrackingViewController: public ViewController
 {
 Q_OBJECT
 public:
   FramePositionTrackingViewController();
   virtual ~FramePositionTrackingViewController();
 
-  /** @brief Do subclass-specific initialization.
-   *
-   * Called by ViewController::initialize after context_, target_scene_node_,
-   * and camera_ are set. */
+  /** @brief Do subclass-specific initialization.  Called by
+   * ViewController::initialize after context_, target_scene_node_,
+   * and camera_ are set.  This version calls
+   * updateTargetSceneNode(). */
   virtual void onInitialize();
 
   /** @brief called by activate().
    *
-   * Override to implement view-specific activation.
-   * This version calls updateTargetSceneNode(). */
+   * Override to implement view-specific activation.  This version
+   * calls updateTargetSceneNode(). */
   virtual void onActivate();
 
   virtual void update(float dt, float ros_dt);

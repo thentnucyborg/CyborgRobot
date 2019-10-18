@@ -195,8 +195,7 @@ bool InteractiveMarker::processMessage( const visualization_msgs::InteractiveMar
     boost::make_shared<InteractiveMarkerControl>( context_,
                                                   reference_node_, this );
 
-  if (!message.description.empty())
-    description_control_->processMessage( interactive_markers::makeTitle( message ));
+  description_control_->processMessage( interactive_markers::makeTitle( message ));
 
   //create menu
   menu_entries_.clear();
@@ -316,18 +315,8 @@ void InteractiveMarker::updateReferencePose()
     else
     {
       std::string error;
-      // TODO(wjwwood): remove this and use tf2 interface instead
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
       int retval = context_->getFrameManager()->getTFClient()->getLatestCommonTime(
           reference_frame_, fixed_frame, reference_time_, &error );
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
       if ( retval != tf::NO_ERROR )
       {
         std::ostringstream s;

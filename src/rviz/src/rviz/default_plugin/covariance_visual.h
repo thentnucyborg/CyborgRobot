@@ -77,9 +77,11 @@ public:
     kNumOriShapes
   };
 
-public:
+private:
   /**
-   * \brief Constructor
+   * \brief Private Constructor
+   *
+   * CovarianceVisual can only be constructed by friend class CovarianceProperty.
    *
    * @param scene_manager The scene manager to use to construct any necessary objects
    * @param parent_object A rviz object that this covariance will be attached.
@@ -89,6 +91,7 @@ public:
    * @param ori_scale Scale of the orientation covariance
    */
   CovarianceVisual( Ogre::SceneManager* scene_manager, Ogre::SceneNode* parent_node, bool is_local_rotation, bool is_visible = true, float pos_scale = 1.0f, float ori_scale = 0.1f, float ori_offset = 0.1f);
+public:
   virtual ~CovarianceVisual();
 
   /**

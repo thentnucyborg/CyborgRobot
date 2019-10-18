@@ -47,12 +47,12 @@ namespace rviz
 RobotJoint::RobotJoint( Robot* robot, const urdf::JointConstSharedPtr& joint )
   : robot_( robot )
   , name_( joint->name )
-  , parent_link_name_( joint->parent_link_name )
   , child_link_name_( joint->child_link_name )
-  , has_decendent_links_with_geometry_( true )
-  , doing_set_checkbox_( false )
+  , parent_link_name_( joint->parent_link_name )
   , axes_( NULL )
   , axis_( NULL )
+  , has_decendent_links_with_geometry_( true )
+  , doing_set_checkbox_( false )
 {
   joint_property_ = new Property(
                               name_.c_str(),

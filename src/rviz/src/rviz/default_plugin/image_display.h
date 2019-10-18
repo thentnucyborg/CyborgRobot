@@ -83,19 +83,18 @@ protected:
   /* This is called by incomingMessage(). */
   virtual void processMessage(const sensor_msgs::Image::ConstPtr& msg);
 
-  Ogre::SceneManager* img_scene_manager_;
-
-  ROSImageTexture texture_;
-
-  RenderPanel* render_panel_;
-
 private:
   void clear();
   void updateStatus();
 
+  Ogre::SceneManager* img_scene_manager_;
   Ogre::SceneNode* img_scene_node_;
   Ogre::Rectangle2D* screen_rect_;
   Ogre::MaterialPtr material_;
+
+  ROSImageTexture texture_;
+
+  RenderPanel* render_panel_;
 
   BoolProperty* normalize_property_;
   FloatProperty* min_property_;

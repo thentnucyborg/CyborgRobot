@@ -117,21 +117,7 @@ public:
   boost::mutex render_mutex_;
 };
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-VisualizationManager::VisualizationManager(RenderPanel* render_panel, WindowManagerInterface * wm)
-: VisualizationManager(render_panel, wm, boost::shared_ptr<tf::TransformListener>())
-{}
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
-VisualizationManager::VisualizationManager(
-  RenderPanel* render_panel,
-  WindowManagerInterface* wm,
-  boost::shared_ptr<tf::TransformListener> tf)
+VisualizationManager::VisualizationManager( RenderPanel* render_panel, WindowManagerInterface* wm, boost::shared_ptr<tf::TransformListener> tf )
 : ogre_root_( Ogre::Root::getSingletonPtr() )
 , update_timer_(0)
 , shutting_down_(false)
@@ -146,16 +132,7 @@ VisualizationManager::VisualizationManager(
   // visibility_bit_allocator_ is listed after default_visibility_bit_ (and thus initialized later be default):
   default_visibility_bit_ = visibility_bit_allocator_.allocBit();
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
   frame_manager_ = new FrameManager(tf);
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
   render_panel->setAutoRender(false);
 
@@ -244,7 +221,6 @@ VisualizationManager::~VisualizationManager()
   delete tool_manager_;
   delete display_factory_;
   delete selection_manager_;
-  delete view_manager_;
 
   if(ogre_root_)
   {
@@ -417,14 +393,7 @@ void VisualizationManager::updateFrames()
 {
   typedef std::vector<std::string> V_string;
   V_string frames;
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   frame_manager_->getTFClient()->getFrameStrings( frames );
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
   // Check the fixed frame to see if it's ok
   std::string error;
@@ -452,32 +421,13 @@ void VisualizationManager::updateFrames()
 
 tf::TransformListener* VisualizationManager::getTFClient() const
 {
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   return frame_manager_->getTFClient();
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-}
-
-std::shared_ptr<tf2_ros::Buffer> VisualizationManager::getTF2BufferPtr() const
-{
-  return frame_manager_->getTF2BufferPtr();
 }
 
 void VisualizationManager::resetTime()
 {
   root_display_group_->reset();
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   frame_manager_->getTFClient()->clear();
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
   ros_time_begin_ = ros::Time();
   wall_clock_begin_ = ros::WallTime();
@@ -618,8 +568,6 @@ void VisualizationManager::handleMouseEvent( const ViewportMouseEvent& vme )
 
 void VisualizationManager::handleChar( QKeyEvent* event, RenderPanel* panel )
 {
-  if (event->key() == Qt::Key_Escape)
-    Q_EMIT escapePressed();
   tool_manager_->handleChar( event, panel );
 }
 

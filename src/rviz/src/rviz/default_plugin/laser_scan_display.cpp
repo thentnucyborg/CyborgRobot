@@ -94,18 +94,7 @@ void LaserScanDisplay::processMessage( const sensor_msgs::LaserScanConstPtr& sca
 
   try
   {
-    // TODO(wjwwood): remove this and use tf2 interface instead
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
-    auto tf_client = context_->getTFClient();
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-    projector_->transformLaserScanToPointCloud( fixed_frame_.toStdString(), *scan, *cloud, *tf_client,
+    projector_->transformLaserScanToPointCloud( fixed_frame_.toStdString(), *scan, *cloud, *context_->getTFClient(),
                                                 laser_geometry::channel_option::Intensity );
   }
   catch (tf::TransformException& e)

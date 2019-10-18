@@ -13,7 +13,7 @@ void emitRow(const std::string type_name, uint32_t type, int32_t x_pos, float r,
     float sx = 1.0, float sy = 1.0, float sz = 1.0)
 {
   static uint32_t count = 0;
-  for (int i = -5; i <= 5; ++i)
+  for (int i = -5; i < 5; ++i)
   {
     visualization_msgs::Marker marker;
     marker.header.frame_id = frame_id;
@@ -41,20 +41,9 @@ void emitRow(const std::string type_name, uint32_t type, int32_t x_pos, float r,
 
     marker.lifetime = lifetime;
     marker.frame_locked = frame_locked;
-    if (type == visualization_msgs::Marker::TEXT_VIEW_FACING)
-    {
-      marker.text = "This is some text\nthis is a new line\nthis is another line\nand another with utf8 symbols: äöüÄÖÜ\na really really really really really really really really really really long one";
-      marker.scale.x = marker.scale.y = 0.0;
-    }
-    else if (type == visualization_msgs::Marker::POINTS)
-    {
-      marker.scale.z = 0.0;
-    }
-    else if (type == visualization_msgs::Marker::MESH_RESOURCE)
-    {
-      marker.mesh_resource = "package://pr2_description/meshes/base_v0/base.dae";
-      marker.mesh_use_embedded_materials = (i > int((count / 12) % 5));
-    }
+    marker.text = "This is some text\nthis is a new line\nthis is another line\nand another     adfoije    owijeoiwej\na really really really really really really really really really really long one";
+    marker.mesh_resource = "package://pr2_description/meshes/base_v0/base.dae";
+    marker.mesh_use_embedded_materials = (i > int((count / 12) % 5));
     pub.publish(marker);
   }
 
@@ -100,7 +89,7 @@ void publishCallback(const ros::TimerEvent&)
   x_pos += 3;
 
   {
-    for (int i = -5; i <= 5; ++i)
+    for (int i = -5; i < 5; ++i)
     {
       visualization_msgs::Marker marker;
       marker.header.frame_id = "/base_link";
@@ -125,7 +114,10 @@ void publishCallback(const ros::TimerEvent&)
 
       if (counter % 2 == 0)
       {
-        marker.points.resize(0);
+        marker.points.resize(1);
+        marker.points[0].x = 0.0f;
+        marker.points[0].y = 0.0f;
+        marker.points[0].z = 0.0f;
       }
       else
       {
@@ -260,8 +252,6 @@ void publishCallback(const ros::TimerEvent&)
       marker.id = type;
       marker.pose.position.x += 0.5;
       marker.type = type;
-      if (type == visualization_msgs::Marker::POINTS)
-        marker.scale.z = 0.0;
 
       for (int y = 0; y < 10; ++y)
       {
@@ -349,7 +339,7 @@ void publishCallback(const ros::TimerEvent&)
     marker.pose.position.x = x_pos;
     marker.scale.x = 0.02;
     marker.scale.y = 0.02;
-    marker.scale.z = 0.0;
+    marker.scale.z = 0.02;
     marker.color.r = 1.0;
     marker.color.g = 0.0;
     marker.color.b = 1.0;
@@ -391,7 +381,7 @@ void publishCallback(const ros::TimerEvent&)
     marker.pose.position.x = x_pos;
     marker.scale.x = 0.02;
     marker.scale.y = 0.02;
-    marker.scale.z = 0.0;
+    marker.scale.z = 0.02;
     marker.color.r = 1.0;
     marker.color.g = 0.0;
     marker.color.b = 1.0;
@@ -447,7 +437,7 @@ void publishCallback(const ros::TimerEvent&)
     marker.color.a = 1.0;
     marker.frame_locked = true;
 
-    for (int i = 0; i <= count; ++i)
+    for (int i = 0; i < count; ++i)
     {
       geometry_msgs::Point p1, p2;
       p1.x = 0;
@@ -486,7 +476,7 @@ void publishCallback(const ros::TimerEvent&)
     marker.color.a = 1.0;
     marker.frame_locked = true;
 
-    for (int i = 0; i <= count; ++i)
+    for (int i = 0; i < count; ++i)
     {
       geometry_msgs::Point p1, p2;
       p1.x = 0;
@@ -534,7 +524,7 @@ void publishCallback(const ros::TimerEvent&)
     marker.color.a = 1.0;
     marker.frame_locked = true;
 
-    for (int i = -5; i <= 5; ++i)
+    for (int i = -5; i < 5; ++i)
     {
       geometry_msgs::Point p;
       p.x = 1 + (i % 2);

@@ -92,8 +92,6 @@ public:
   virtual void setTopic( const QString &topic, const QString &datatype );
 
 protected:
-  void deleteMarkerInternal(MarkerID id);
-
   virtual void onEnable();
   virtual void onDisable();
 

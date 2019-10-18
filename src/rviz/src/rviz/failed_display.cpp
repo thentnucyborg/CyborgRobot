@@ -51,6 +51,7 @@ QVariant FailedDisplay::getViewData( int column, int role ) const
   {
     switch( role )
     {
+    case Qt::BackgroundRole: return QColor( Qt::white );
     case Qt::ForegroundRole: return StatusProperty::statusColor( StatusProperty::Error );
     default: break;
     }
@@ -70,11 +71,6 @@ void FailedDisplay::load( const Config& config )
 }
 
 void FailedDisplay::save( Config config )
-{
-  const_cast<const FailedDisplay*>(this)->save(config);
-}
-
-void FailedDisplay::save( Config config ) const
 {
   if( saved_config_.isValid() )
   {

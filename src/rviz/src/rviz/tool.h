@@ -36,7 +36,6 @@
 #include <QObject>
 
 #include "rviz/config.h"
-#include "rviz/rviz_export.h"
 
 class QMouseEvent;
 class QKeyEvent;
@@ -53,7 +52,7 @@ class Property;
 class RenderPanel;
 class ViewportMouseEvent;
 
-class RVIZ_EXPORT Tool : public QObject
+class Tool : public QObject
 {
 Q_OBJECT
 public:

@@ -70,8 +70,6 @@
 #include "rviz/help_panel.h"
 #include "rviz/loading_dialog.h"
 #include "rviz/new_object_dialog.h"
-#include "rviz/preferences.h"
-#include "rviz/preferences_dialog.h"
 #include "rviz/panel_dock_widget.h"
 #include "rviz/panel_factory.h"
 #include "rviz/render_panel.h"
@@ -114,7 +112,6 @@ VisualizationFrame::VisualizationFrame( QWidget* parent )
   , app_(NULL)
   , render_panel_(NULL)
   , show_help_action_(NULL)
-  , preferences_( new Preferences() )
   , file_menu_(NULL)
   , recent_configs_menu_(NULL)
   , toolbar_(NULL)
@@ -333,7 +330,6 @@ void VisualizationFrame::initialize(const QString& display_config_file )
 
   manager_ = new VisualizationManager( render_panel_, this );
   manager_->setHelpPath( help_path_ );
-  connect(manager_, SIGNAL(escapePressed()), this, SLOT(exitFullScreen()));
 
   // Periodically process events for the splash screen.
   if (app_) app_->processEvents();
@@ -469,7 +465,6 @@ void VisualizationFrame::initMenus()
     file_menu_->addAction( "Change &Master", this, SLOT( changeMaster() ));
   }
   file_menu_->addSeparator();
-  file_menu_->addAction( "&Preferences", this, SLOT( openPreferencesDialog() ), QKeySequence( "Ctrl+P" ));
 
   QAction * file_menu_quit_action = file_menu_->addAction( "&Quit", this, SLOT( close() ), QKeySequence( "Ctrl+Q" ));
   this->addAction(file_menu_quit_action);
@@ -483,6 +478,7 @@ void VisualizationFrame::initMenus()
   fullscreen_action->setCheckable(true);
   this->addAction(fullscreen_action); // Also add to window, or the shortcut doest work when the menu is hidden.
   connect(this, SIGNAL( fullScreenChange( bool ) ), fullscreen_action, SLOT( setChecked( bool ) ) );
+  new QShortcut(Qt::Key_Escape, this, SLOT( exitFullScreen() ));
   view_menu_->addSeparator();
 
   QMenu* help_menu = menuBar()->addMenu( "&Help" );
@@ -516,7 +512,7 @@ void VisualizationFrame::initToolbars()
   toolbar_->addWidget( add_tool_button );
   connect(add_tool_button, SIGNAL(clicked()), this, SLOT(openNewToolDialog()));
 
-  remove_tool_menu_ = new QMenu(toolbar_);
+  remove_tool_menu_ = new QMenu();
   QToolButton* remove_tool_button = new QToolButton();
   remove_tool_button->setMenu( remove_tool_menu_ );
   remove_tool_button->setPopupMode( QToolButton::InstantPopup );
@@ -610,20 +606,6 @@ void VisualizationFrame::onDockPanelVisibilityChange( bool visible )
     }
   }
 
-}
-
-void VisualizationFrame::openPreferencesDialog()
-{
-  Preferences temp_preferences( *preferences_.get() );
-  PreferencesDialog* dialog = new PreferencesDialog( panel_factory_,
-                                                 &temp_preferences,
-                                                 this );
-  manager_->stopUpdate();
-  if( dialog->exec() == QDialog::Accepted ) {
-    // Apply preferences.
-    preferences_ = boost::make_shared<Preferences>( temp_preferences );
-  }
-  manager_->startUpdate();
 }
 
 void VisualizationFrame::openNewPanelDialog()
@@ -720,29 +702,16 @@ void VisualizationFrame::markRecentConfig( const std::string& path )
 void VisualizationFrame::loadDisplayConfig( const QString& qpath )
 {
   std::string path = qpath.toStdString();
-  fs::path actual_load_path = path;
-  bool valid_load_path = (fs::is_regular_file(actual_load_path) || fs::is_symlink(actual_load_path));
-
-  if( !valid_load_path && fs::portable_posix_name(path) )
+  std::string actual_load_path = path;
+  if( !fs::exists( path ) || fs::is_directory( path ) || fs::is_empty( path ))
   {
-    if (actual_load_path.extension() != "." CONFIG_EXTENSION)
-      actual_load_path += "." CONFIG_EXTENSION;
-    actual_load_path = fs::path(config_dir_) / actual_load_path;
-    if (valid_load_path = (fs::is_regular_file(actual_load_path) || fs::is_symlink(actual_load_path)))
-      path = actual_load_path.string();
-  }
-
-  if( !valid_load_path )
-  {
-    actual_load_path = (fs::path(package_path_) / "default.rviz");
-    if (!(valid_load_path = (fs::is_regular_file(actual_load_path) || fs::is_symlink(actual_load_path))))
+    actual_load_path = (fs::path(package_path_) / "default.rviz").BOOST_FILE_STRING();
+    if( !fs::exists( actual_load_path ))
     {
-      ROS_ERROR( "Default display config '%s' not found.  RViz will be very empty at first.",
-                 actual_load_path.BOOST_FILE_STRING().c_str() );
+      ROS_ERROR( "Default display config '%s' not found.  RViz will be very empty at first.", actual_load_path.c_str() );
       return;
     }
   }
-  assert( valid_load_path );
 
   // Check if we have unsaved changes to the current config the same
   // as we do during exit, with the same option to cancel.
@@ -764,7 +733,7 @@ void VisualizationFrame::loadDisplayConfig( const QString& qpath )
 
   YamlConfigReader reader;
   Config config;
-  reader.readFile( config, QString::fromStdString( actual_load_path.BOOST_FILE_STRING() ));
+  reader.readFile( config, QString::fromStdString( actual_load_path ));
   if( !reader.error() )
   {
     load( config );
@@ -845,7 +814,6 @@ void VisualizationFrame::save( Config config )
   manager_->save( config.mapMakeChild( "Visualization Manager" ));
   savePanels( config.mapMakeChild( "Panels" ));
   saveWindowGeometry( config.mapMakeChild( "Window Geometry" ));
-  savePreferences( config.mapMakeChild( "Preferences" ));
   saveToolbars( config.mapMakeChild( "Toolbars" ));
 }
 
@@ -854,7 +822,6 @@ void VisualizationFrame::load( const Config& config )
   manager_->load( config.mapGetChild( "Visualization Manager" ));
   loadPanels( config.mapGetChild( "Panels" ));
   loadWindowGeometry( config.mapGetChild( "Window Geometry" ));
-  loadPreferences( config.mapGetChild( "Preferences" ));
   configureToolbars( config.mapGetChild( "Toolbars" ));
 }
 
@@ -893,7 +860,7 @@ void VisualizationFrame::loadWindowGeometry( const Config& config )
     }
   }
 
-  bool b = false;
+  bool b;
   config.mapGetBool( "Hide Left Dock", &b );
   hide_left_dock_button_->setChecked( b );
   hideLeftDock(b);
@@ -987,16 +954,6 @@ void VisualizationFrame::savePanels( Config config )
   }
 }
 
-void VisualizationFrame::loadPreferences( const Config& config )
-{
-  config.mapGetBool( "PromptSaveOnExit", &(preferences_->prompt_save_on_exit) );
-}
-
-void VisualizationFrame::savePreferences( Config config )
-{
-  config.mapSetValue( "PromptSaveOnExit", preferences_->prompt_save_on_exit );
-}
-
 bool VisualizationFrame::prepareToExit()
 {
   if( !initialized_ )
@@ -1006,7 +963,7 @@ bool VisualizationFrame::prepareToExit()
 
   savePersistentSettings();
 
-  if( isWindowModified() && preferences_->prompt_save_on_exit )
+  if( isWindowModified() )
   {
     QMessageBox box( this );
     box.setText( "There are unsaved changes." );
@@ -1267,7 +1224,7 @@ void VisualizationFrame::onHelpDestroyed()
 
 void VisualizationFrame::onHelpWiki()
 {
-  QDesktopServices::openUrl( QUrl( "http://wiki.ros.org/rviz" ));
+  QDesktopServices::openUrl( QUrl( "http://www.ros.org/wiki/rviz" ));
 }
 
 void VisualizationFrame::onHelpAbout()
@@ -1293,10 +1250,20 @@ void VisualizationFrame::onHelpAbout()
 
 void VisualizationFrame::onDockPanelChange()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   QList<QTabBar *> tab_bars = findChildren<QTabBar *>(QString(), Qt::FindDirectChildrenOnly);
+#else
+  QList<QTabBar *> tab_bars = findChildren<QTabBar *>(QString());
+#endif
+
   for ( QList<QTabBar *>::iterator it = tab_bars.begin(); it != tab_bars.end(); it++ )
   {
-    (*it)->setElideMode( Qt::ElideNone );
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	if((*it)->parent() == this)
+#endif
+	{
+		(*it)->setElideMode( Qt::ElideNone );
+	}
   }
 }
 

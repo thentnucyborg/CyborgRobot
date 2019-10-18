@@ -29,21 +29,8 @@
 #ifndef RENDER_SYSTEM_H
 #define RENDER_SYSTEM_H
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# ifdef __clang__
-#  pragma clang diagnostic ignored "-W#warnings"
-# endif
-#endif
-
 #include <OgreRoot.h>
 #include <stdint.h>
-
-#include "rviz/rviz_export.h"
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
 namespace Ogre
 {
@@ -54,7 +41,7 @@ namespace Ogre
 namespace rviz
 {
 
-class RVIZ_EXPORT RenderSystem
+class RenderSystem
 {
 public:
 

@@ -33,6 +33,8 @@
 #include <OgreSceneManager.h>
 #include <OgreEntity.h>
 
+#include <tf/transform_listener.h>
+
 #include "rviz/default_plugin/marker_display.h"
 #include "rviz/default_plugin/markers/marker_selection_handler.h"
 #include "rviz/display_context.h"
@@ -66,7 +68,14 @@ void ArrowMarker::setDefaultProportions()
 void ArrowMarker::onNewMessage(const MarkerConstPtr& old_message, const MarkerConstPtr& new_message)
 {
   ROS_ASSERT(new_message->type == visualization_msgs::Marker::ARROW);
-  ROS_ASSERT(new_message->points.empty() || new_message->points.size() >= 2);
+
+  if (!new_message->points.empty() && new_message->points.size() < 2)
+  {
+    delete arrow_;
+    arrow_ = 0;
+
+    return;
+  }
 
   if (!arrow_)
   {

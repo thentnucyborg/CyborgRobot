@@ -65,15 +65,11 @@ set(SOURCE_FILES
   view_controllers/third_person_follower_view_controller.cpp
   view_controllers/fixed_orientation_ortho_view_controller.cpp
   view_controllers/fps_view_controller.cpp
-  view_controllers/frame_view_controller.cpp
   wrench_display.cpp
   wrench_visual.cpp
 )
 
 add_library(${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME} ${SOURCE_FILES})
-include(GenerateExportHeader)
-generate_export_header(${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME} EXPORT_FILE_NAME rviz/default_plugin/${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME}_export.h)
-target_include_directories(${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME} INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
 if(NOT WIN32)
   set_target_properties(${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME}
     PROPERTIES COMPILE_FLAGS "-std=c++11")
@@ -86,21 +82,15 @@ target_link_libraries(${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME}
   ${QT_LIBRARIES}
 )
 
-install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/rviz/default_plugin/${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME}_export.h
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}/default_plugin/)
-
 install(TARGETS ${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
 # Generate to the devel space so the extras file can include it from the devel space.
 file(GENERATE
   OUTPUT "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/cmake/default_plugin_location.cmake"
-  CONTENT "set(rviz_DEFAULT_PLUGIN_FILE_NAME $<TARGET_LINKER_FILE_NAME:${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME}>)"
+  CONTENT "set(rviz_DEFAULT_PLUGIN_FILE_NAME $<TARGET_FILE_NAME:${rviz_DEFAULT_PLUGIN_LIBRARY_TARGET_NAME}>)"
 )
-#catkin_lint: ignore_once external_file
 # Install from the devel space to the install space.
 install(FILES "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/cmake/default_plugin_location.cmake"
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/cmake

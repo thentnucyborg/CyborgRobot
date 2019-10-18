@@ -559,7 +559,8 @@ void TopicDisplayWidget::fill( DisplayFactory *factory )
   for ( int i = 0; i < unvisualizable.size(); ++i )
   {
     const ros::master::TopicInfo &ti = unvisualizable.at( i );
-    insertItem( QString::fromStdString( ti.name ), true );
+    QTreeWidgetItem *item = insertItem( QString::fromStdString( ti.name ),
+                                        true );
   }
 
   // Hide unvisualizable topics if necessary

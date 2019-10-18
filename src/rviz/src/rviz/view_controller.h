@@ -35,7 +35,6 @@
 #include <QCursor>
 
 #include "rviz/properties/property.h"
-#include "rviz/rviz_export.h"
 
 class QKeyEvent;
 
@@ -56,7 +55,7 @@ class ViewportMouseEvent;
 class FloatProperty;
 class BoolProperty;
 
-class RVIZ_EXPORT ViewController: public Property
+class ViewController: public Property
 {
 Q_OBJECT
 public:

@@ -34,7 +34,7 @@
 
 #include <QMoveEvent>
 
-#if !defined(Q_OS_MAC) && !defined(Q_OS_WIN)
+#ifndef Q_OS_MAC
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GL/glx.h>
@@ -50,21 +50,10 @@
 #include <ros/package.h> // This dependency should be moved out of here, it is just used for a search path.
 #include <ros/console.h>
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# ifdef __clang__
-#  pragma clang diagnostic ignored "-W#warnings"
-# endif
-#endif
-
 #include <OgreRenderWindow.h>
 #include <OgreSceneManager.h>
 #if ((OGRE_VERSION_MAJOR == 1 && OGRE_VERSION_MINOR >= 9) || OGRE_VERSION_MAJOR >= 2 )
 #include <OgreOverlaySystem.h>
-#endif
-
-#ifndef _WIN32
-# pragma GCC diagnostic pop
 #endif
 
 #include "rviz/env_config.h"
@@ -141,7 +130,7 @@ void RenderSystem::prepareOverlays(Ogre::SceneManager* scene_manager)
 
 void RenderSystem::setupDummyWindowId()
 {
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+#ifdef Q_OS_MAC
   dummy_window_id_ = 0;
 #else
   Display *display = XOpenDisplay(0);

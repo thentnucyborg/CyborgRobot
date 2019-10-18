@@ -49,23 +49,18 @@ RenderPanel::RenderPanel( QWidget* parent )
   : QtOgreRenderWindow( parent )
   , mouse_x_( 0 )
   , mouse_y_( 0 )
-  , focus_on_mouse_move_( true )
   , context_( 0 )
   , scene_manager_( 0 )
   , view_controller_( 0 )
   , context_menu_visible_(false)
-  //TODO(simonschmeisser) remove this in noetic
   , fake_mouse_move_event_timer_( new QTimer() )
   , default_camera_(0)
 {
-  setFocusPolicy(Qt::WheelFocus);
   setFocus( Qt::OtherFocusReason );
-  setMouseTracking(true);
 }
 
 RenderPanel::~RenderPanel()
 {
-    //TODO(simonschmeisser) remove this in noetic
   delete fake_mouse_move_event_timer_;
   if( scene_manager_ && default_camera_ )
   {
@@ -92,9 +87,11 @@ void RenderPanel::initialize(Ogre::SceneManager* scene_manager, DisplayContext* 
   default_camera_->lookAt(0, 0, 0);
 
   setCamera( default_camera_ );
+
+  connect( fake_mouse_move_event_timer_, SIGNAL( timeout() ), this, SLOT( sendMouseMoveEvent() ));
+  fake_mouse_move_event_timer_->start( 33 /*milliseconds*/ );
 }
 
-//TODO(simonschmeisser) remove this in noetic
 void RenderPanel::sendMouseMoveEvent()
 {
   QPoint cursor_pos = QCursor::pos();
@@ -121,11 +118,10 @@ void RenderPanel::sendMouseMoveEvent()
                             mouse_rel_widget,
                             Qt::NoButton,
                             QApplication::mouseButtons(),
-                            QApplication::queryKeyboardModifiers() );
+                            QApplication::keyboardModifiers() );
     onRenderWindowMouseEvents( &fake_event );
   }
 }
-
 void RenderPanel::leaveEvent ( QEvent * event )
 {
   setCursor( Qt::ArrowCursor );
@@ -145,9 +141,7 @@ void RenderPanel::onRenderWindowMouseEvents( QMouseEvent* event )
 
   if (context_)
   {
-    if (focus_on_mouse_move_) {
-      setFocus( Qt::MouseFocusReason );
-    }
+    setFocus( Qt::MouseFocusReason );
 
     ViewportMouseEvent vme(this, getViewport(), event, last_x, last_y);
     context_->handleMouseEvent(vme);
@@ -165,6 +159,8 @@ void RenderPanel::wheelEvent( QWheelEvent* event )
 
   if (context_)
   {
+    setFocus( Qt::MouseFocusReason );
+
     ViewportMouseEvent vme(this, getViewport(), event, last_x, last_y);
     context_->handleMouseEvent(vme);
     event->accept();
@@ -236,16 +232,6 @@ void RenderPanel::sceneManagerDestroyed( Ogre::SceneManager* destroyed_scene_man
     default_camera_ = NULL;
     setCamera( NULL );
   }
-}
-
-bool RenderPanel::getFocusOnMouseMove() const
-{
-  return focus_on_mouse_move_;
-}
-
-void RenderPanel::setFocusOnMouseMove(bool enabled)
-{
-  focus_on_mouse_move_ = enabled;
 }
 
 } // namespace rviz

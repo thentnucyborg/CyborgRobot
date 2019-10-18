@@ -35,6 +35,8 @@
 #include <OgreBillboardSet.h>
 #include <OgreMatrix4.h>
 
+#include <tf/transform_listener.h>
+
 #include "rviz/display_context.h"
 #include "rviz/frame_manager.h"
 #include "rviz/properties/enum_property.h"
