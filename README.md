@@ -15,6 +15,7 @@ You should now be abele to use the workspace and git without any problems.
 - Run: "find <path-to-catkin_ws/src/> -name '*.py' -exec chmod +x {} \;"  to make all python files executable to be able to run them. Might need to do it with .sh files too (also catkin_ws/src/rosaria/cfg/RosAria.cfg)
 
 ### Installs for navigation ###
+- sudo apt-get install ros-kinetic-navigation
 - sudo apt-get install ros-kinetic-tf2-sensor-msgs
 - sudo apt-get install libsdl-dev
 - sudo apt-get install libsdl-image1.2-dev
