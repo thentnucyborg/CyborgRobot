@@ -46,7 +46,6 @@ class startup(smach.State):
             
         return self.update_visualization_mode()
 
-
 #currently not implemented, included as a placeholder
 class meafromserver(smach.State):
     def __init__(self):
@@ -57,7 +56,6 @@ class meafromserver(smach.State):
         global _source
         _source.loop() """
         #return "transition"
-
         
 class meafromfile(smach.State):
     def __init__(self, loopfunction, return_interpreter,update_visualization_mode):
@@ -79,8 +77,6 @@ class meafromfile(smach.State):
         #execute visualization and wait for message
         source.loop()
         return self.update_visualization_mode()
-
-
 
 class nonmea(smach.State):
     def __init__(self, loopfunction, return_interpreter,update_visualization_mode):
@@ -129,7 +125,6 @@ class text(smach.State):
                 userdata.presenter.refresh(data)
                 userdata.text = None
         return self.update_visualization_mode()
-
 
 def domecontrol():
     #create a SMACH state machine

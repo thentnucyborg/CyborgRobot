@@ -51,14 +51,12 @@ class BehaviorServer():
         self.server_behavior.start()
         rospy.loginfo("BehaviorServer: Activated" )
 
-
     def emotional_callback(self, message):
         self.current_emotional_state = message.to_emotional_state
 
     def callback_command_location(self, message):
         if message.data != None:
             self.command_location = message.data
-
 
 
     def server_behavior_callback(self, goal):
@@ -113,7 +111,6 @@ class BehaviorServer():
                     self.playback, self.visual_mode, self.utterance, self.completion_trigger, str(self.navigation_order))
 
     
-
     def execute_behavior(self):
         rospy.loginfo("BehaviorServer: Executing "+ self.state_name + " behavior")
         #check and send navigational order
