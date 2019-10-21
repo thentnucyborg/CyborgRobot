@@ -10,7 +10,7 @@ process_count = 0
 running = False
 
 
-ser = serial.Serial('/dev/ttyUSB12')
+ser = serial.Serial('/dev/ttyUSB13')
 time.sleep(3)
 ser.write("C")
 

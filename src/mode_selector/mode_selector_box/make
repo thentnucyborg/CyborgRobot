@@ -14,7 +14,7 @@ PROGRAMMER=arduino
 F_CPU=16000000UL
 
 # Port number, Change to correct arduino port - Waloen 2017
-PORT=/dev/ttyUSB0 # Was 12
+PORT=/dev/ttyUSB013 # Was 12
 
 
 SRC = main.c USART.c oled.c font8x8.c spi.c cyborg_menu.c

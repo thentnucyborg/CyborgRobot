@@ -8,5 +8,10 @@ To compile and upload to the start box, run the following command in this folder
 ./flash
 
 If that does not work you probably need to change the port number in the make file.
-On the Cyborg it should be /dev/ttyUSB12
+On the Cyborg it should be /dev/ttyUSB13
 Use "ls /dev/ttyUSB*" before and after removing the Start Box to find which port is correct.
+
+There are two places you might have to change the USB port:
+- the make file
+- start.py
+

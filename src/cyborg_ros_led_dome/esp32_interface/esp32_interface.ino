@@ -238,7 +238,7 @@ void remapLeds(CRGB * output, cLEDMatrixBase &input){
       output[i-80] = input(i);
       //strip 7
     if(i>211 && i<244)
-   output[i-83] = input(i);
+      output[i-83] = input(i);
       //strip 8 
     if(i>245 && i<278)
       output[i-86] = input(i);
