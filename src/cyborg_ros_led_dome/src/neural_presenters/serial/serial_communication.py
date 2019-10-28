@@ -30,7 +30,7 @@ def array2sparseadressedarray(led_color_array):
 
 class SerialInterface:
     def __init__(self):
-        port = "/dev/ttyUSB0" # ACM0 for Arduino
+        port = "/dev/led_dome" # ACM0 for Arduino
         # Initialize serial communication, 8 data bits, no parity 1 stop bit
         self.ser = serial.Serial(port, SERIAL_BAUD_RATE, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE)
         time.sleep(2)

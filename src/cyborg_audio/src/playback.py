@@ -39,7 +39,7 @@ class Playback():
             if self.got_message is True:
                 if self.playback_command != "PreemptPlayback":
                     rospy.loginfo("Cyborg Audio: Executing Playback.")
-                    recording = vlc.MediaPlayer(self.homedir+ "/" + self.playback_command + ".mp3")
+                    recording = vlc.MediaPlayer(self.homedir+ "/catkin_ws/src/cyborg_audio/audio_files/" + self.playback_command + ".mp3")
                     recording.play()
                     rospy.sleep(0.2)
                     start_time = time.time()

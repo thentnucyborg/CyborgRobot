@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import os
+
 # Serial
 SERIAL_BAUD_RATE = 1497600
 # 2D plot
@@ -28,7 +30,10 @@ THRESHOLD = -1*10**7
 ### Derived variables (initialized in environment.py) ###
 LEDS_TOTAL = 791
 LED_MODEL = None
-NEURAL_DATA_FILE = "/home/aregb/catkin_ws/src/cyborg_ros_led_dome/src/neural_sources/file/data/2017-10-20_MEA2_100000rows_10sec.csv"
+
+homedir = os.path.expanduser("~")
+path = homedir + "/catkin_ws/src/cyborg_ros_led_dome/src/neural_sources/file/data/2017-10-20_MEA2_100000rows_10sec.csv"
+NEURAL_DATA_FILE = path
 
 # Mode change
 CHANGE_REQUESTED = False

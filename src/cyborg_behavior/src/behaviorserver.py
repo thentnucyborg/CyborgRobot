@@ -58,7 +58,6 @@ class BehaviorServer():
         if message.data != None:
             self.command_location = message.data
 
-
     def server_behavior_callback(self, goal):
         self.behavior_goal = goal
         # check if preset exists and execute, else abort

@@ -25,8 +25,7 @@ from neural_interpreter.snake import Snake
 class startup(smach.State):
     def __init__(self, loopfunction,update_visualization_mode):
         smach.State.__init__(self,outcomes=["nonmea","meafromfile","text"],
-                               output_keys=["presenter_out","interpreter_out",
-                                            "led_colors_out","current_interpreter_out"])
+                               output_keys=["presenter_out","interpreter_out","led_colors_out","current_interpreter_out"])
         self.loop = loopfunction
         self.update_visualization_mode = update_visualization_mode
 
@@ -242,9 +241,3 @@ def domecontrol():
 
 if __name__=="__domecontrol__":
     domecontrol()
-
-
-
-
-
-
