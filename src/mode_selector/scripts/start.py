@@ -10,7 +10,7 @@ process_count = 0
 running = False
 
 
-ser = serial.Serial('/dev/mode_selector_box')
+ser = serial.Serial('/dev/mode_selector_box') #see udev rules on wiki about /dev/mode_selector_box
 time.sleep(3)
 ser.write("C")
 
