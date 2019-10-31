@@ -13,12 +13,11 @@ from primary_states_server import PrimaryStatesServer
 
 def main():
     homedir = os.path.expanduser("~")
-    path = homedir + "/navigation.db"
+    path = homedir + "/catkin_ws/src/cyborg_ros_navigation/navigation.db"
 
     rospy.init_node("cyborg_primary_states")
     primary_states_server = PrimaryStatesServer(database_file = path)
     rospy.spin()
-
 
 
 if __name__ =="__main__":

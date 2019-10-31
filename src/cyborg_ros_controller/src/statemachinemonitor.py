@@ -38,7 +38,7 @@ class StateMachineMonitor():
     # This function updates the graph and creates an image
     def update(self):
         homedir = os.path.expanduser("~")
-        path = homedir + "/controller.db"
+        path = homedir + "/catkin_ws/src/cyborg_ros_controller/controller.db"
 
         self.graph.clear()
         self.traverse_state_machine(self.state_machine)

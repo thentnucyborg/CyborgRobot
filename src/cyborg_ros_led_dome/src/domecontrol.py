@@ -177,8 +177,7 @@ def domecontrol():
         return sm.userdata.sm_mode
         
     def set_visualization_mode_callback(data):
-        if (data.data in ("siren","eyes","snake","moving-average","individual-moving-average")
-            and sm.userdata.sm_current_interpreter != data.data):
+        if (data.data in ("siren","eyes","snake","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
             sm.userdata.sm_next_interpreter = data.data
             settings.CHANGE_REQUESTED = True
         elif ("text" in data.data):

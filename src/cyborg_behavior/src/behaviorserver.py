@@ -76,7 +76,6 @@ class BehaviorServer():
             self.server_behavior.set_aborted()
             return
             
-    
     def enter(self):
         # get behavior parameters from parameter server
         self.behavior_name = self.state_name
@@ -106,12 +105,11 @@ class BehaviorServer():
             _, _, self.behavior_duration = self.completion_trigger.partition(' ')
             self.behavior_duration = float(self.behavior_duration)
 
-        rospy.loginfo("BehaviorServer: Parameters loaded: playback = %s, visual_mode = %s, utterance = %s, completion_trigger = %s, navigation_order = %s. ",
-                    self.playback, self.visual_mode, self.utterance, self.completion_trigger, str(self.navigation_order))
+        rospy.loginfo("BehaviorServer: Parameters loaded: playback = %s, visual_mode = %s, utterance = %s, completion_trigger = %s, navigation_order = %s. ", self.playback, self.visual_mode, self.utterance, self.completion_trigger, str(self.navigation_order))
 
-    
     def execute_behavior(self):
         rospy.loginfo("BehaviorServer: Executing "+ self.state_name + " behavior")
+        
         #check and send navigational order
         if self.navigation_order is not None:
             self.status_navigation_server = -1
@@ -119,25 +117,31 @@ class BehaviorServer():
             goal_navigation.location_name = self.command_location if self.command_location != None else ""
             print("BehaviorServer: sending navigation order '" + self.navigation_order +"' and navigation goal '" + str(goal_navigation.location_name) +"' to navigation client.")
             self.client_navigation.send_goal(goal_navigation, done_cb = self.callback_navigation_done)
+        
         #check and send visual command
         if self.visual_mode != "":
             message_visual = String(data=self.visual_mode)
             self.publisher_visual.publish(message_visual)
+        
         #check and send audio command
         if self.playback != "":
             message_audio = String(data = self.playback)
             self.publisher_audio_playback.publish(message_audio)
+        
         #check and send utterance
         elif self.utterance != "":
             message_audio = String(data= self.utterance)
             self.publisher_text_to_speech.publish(message_audio)
+        
         #give more details in loginfo
         rospy.loginfo("BehaviorServer: Behavior configurations executing.")
         if self.emotional_feedback != None:
             self.send_emotion(self.emotional_feedback['p'], self.emotional_feedback['a'], self.emotional_feedback['d'])
         start_time = time.time()
         feedback_time = time.time()
+       
         while not rospy.is_shutdown():
+            
             #check if trigger is met, aka goal completed       
             if self.behavior_finished is True:
                 if self.completion_trigger == "navigation":
@@ -151,7 +155,8 @@ class BehaviorServer():
                         self.send_emotion(pleasure=-0.01, arousal=0, dominance=-0.01)                        
                         self.server_behavior.set_aborted()
                         return  
-                        # if aborted, rejected, recalled or lost
+                
+                # if aborted, rejected, recalled or lost
                 if (self.status_navigation_server in [4, 5, 8, 9]):
                     if self.playback != "":
                         self.publisher_audio_playback.publish("PreemptPlayback")
@@ -161,6 +166,7 @@ class BehaviorServer():
                     self.send_emotion(pleasure=0, arousal=-0.3, dominance=0.0)
                     self.server_behavior.set_aborted()
                     return
+                
                 else:
                     if self.navigation_order != None:
                         self.client_navigation.cancel_all_goals()
@@ -169,6 +175,7 @@ class BehaviorServer():
                     self.send_emotion(pleasure=0.01, arousal=0.01, dominance=0.01)
                     self.server_behavior.set_succeeded()
                     return 
+            
             #check for preempt request, and check executions of behavior and timer 
             if self.server_behavior.is_preempt_requested():
                 rospy.loginfo("BehaviorServer preempt requested: "+ self.state_name + " behavior preempted." )
@@ -181,6 +188,7 @@ class BehaviorServer():
                         self.publisher_text_to_speech.publish("PreemptUtterance")
                 self.server_behavior.set_preempted()
                 return
+            
             # check  behavior_timeout to prevent eternal looping
             if self.behavior_timeout is not False:
                 if ((time.time() - start_time) > self.behavior_timeout):
@@ -190,21 +198,23 @@ class BehaviorServer():
                         self.client_navigation.cancel_all_goals()
                     self.server_behavior.set_aborted()
                     return
+            
             # Check behavior duration if time trigger
             if "time" in self.completion_trigger:
                 if ((time.time() - start_time) > self.behavior_duration):
                     self.behavior_finished = True
                     rospy.loginfo("BehaviorServer: Completion trigger " + self.completion_trigger +" has been met.")
+            
             # provide emotional feedback if continuous
             if self.emotional_feedback is not None:
                 if (time.time() - feedback_time > self.EMOTIONAL_FEEDBACK_CYCLE) and "continuous" in self.emotional_feedback:
                     self.send_emotion(self.emotional_feedback['p'], self.emotional_feedback['a'], self.emotional_feedback['d'])
                     feedback_time = time.time()
             self.RATE.sleep()
+        
         # set terminal goal status in case of shutdown
         self.server_behavior.set_aborted()
 
-        
     def callback_dynamic_behavior(self, data):
         if self.is_state_dynamic:
             #handle messages from motivator/emotional interpreter, or other modules
@@ -225,8 +235,6 @@ class BehaviorServer():
         else: 
             rospy.loginfo("BehaviorServer: behavior change requested, but state is not dynamic.")
 
-
-
     # Called when behavior goal is completed
     def callback_navigation_done(self, status, result):
         #print("BehaviorServer entered callback_navigation_done, with status: " +str(status) + " and result: " + str(result))
@@ -242,7 +250,6 @@ class BehaviorServer():
                 self.command_location = None
                 rospy.loginfo("BehaviorServer: Navigation Action aborted.")
 
-
     def change_behavior(self, behavior):
         requested_behavior = behavior
         if rospy.has_param(rospy.get_name() + "/" + requested_behavior):
@@ -256,7 +263,7 @@ class BehaviorServer():
                 self.send_emotion(self.emotional_feedback['p'], self.emotional_feedback['a'], self.emotional_feedback['d'])
 
             if self.visual_mode !="":
-                message_visual = String(data  =self.visual_mode)
+                message_visual = String(data = self.visual_mode)
                 self.publisher_visual.publish(message_visual)
 
             if self.playback !="":
@@ -268,7 +275,6 @@ class BehaviorServer():
         else:
             rospy.loginfo("BehaviorServer: change behavior could not load request behavior: %s.", requested_behavior)
 
-
     def callback_playback(self, message):
         if message.data == "finished":
             if self.completion_trigger == "playback":
@@ -276,7 +282,6 @@ class BehaviorServer():
                 rospy.loginfo("BehaviorServer: Completion trigger " + self.completion_trigger + " has been met.")
         else:
             rospy.loginfo("BehaviorServer: " + "playback has " + message)
-
 
     def callback_text_to_speech(self, message):
         if message.data == "finished":

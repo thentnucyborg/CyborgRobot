@@ -25,10 +25,11 @@ add_message_files(
 )
 
 #uncomment if you have defined services
-#add_service_files(
-#  FILES
-#  # TODO: List your msg files here
-#)
+add_service_files(
+  FILES 
+  MakePlan.srv 
+  LoadMapFile.srv
+)
 
 add_action_files(
   DIRECTORY action

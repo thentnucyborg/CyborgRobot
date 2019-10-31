@@ -9,7 +9,10 @@ import rospy
 import time
 import os
 import sys
-sys.path.append('/home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/')
+
+homedir = os.path.expanduser("~")
+path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
+sys.path.append(path)
 from databasehandler import DatabaseHandler
 import datetime
 import actionlib
