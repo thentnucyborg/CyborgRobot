@@ -1,0 +1,131 @@
+
+
+diff -r /home/johanndk/catkin_ws/src/cyborg_primary_states/src/primary_states_server.py "/home/johanndk/Documents/Fra Cyborg Robot/cyborg/catkin_ws/src/cyborg_primary_states/src/primary_states_server.py"
+1a2,4
+> """Created by Areg Babayan on 19/3/2019.
+> Copyright (C) 2019 Areg Babayan. All rights reserved. """
+> 
+12,15c15
+< 
+< homedir = os.path.expanduser("~")
+< path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
+< sys.path.append(path)
+---
+> sys.path.append('/home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/')
+20a21
+> #from cyborg_behavior.msg import BehaviorAction, BehaviorGoal
+22a24
+> #   CHECK ALL TOPIC AND ACTION PATHS!!!
+26c28,30
+< 
+---
+>     #next_location = ""
+>     #current_emotional_state ="neutral"
+>     #current_state = ""  #check variable!
+27a32
+>         # ADD VARIABLE FOR CURRENT BEHAVIOR
+35c40
+<         self.current_state = ""
+---
+>         self.current_state = "" #check variable!
+51c56,58
+<         if self.state_goal.current_state == "wandering_emotional":
+---
+>         if self.state_goal.current_state == "idle":
+>             self.idle_state()
+>         elif self.state_goal.current_state == "wandering_emotional":
+54a62,64
+>         #elif self.state_goal.current_state =="conveying_emotional_state":
+>             #self.convey_emotional_state()
+> 
+80a91,92
+>             #print("PrimaryStatesServer: Server state is " + str(behaviorserver_state))
+>             #if behaviorserver_state != 1:
+84c96
+<                 rospy.loginfo("PrimaryStatesServer: %s state BehaviorServer goal succeeded. ", self.current_state) 
+---
+>                 rospy.loginfo("PrimaryStatesServer: %s state BehaviorServer goal succeeded. ", self.current_state) # add the behavior
+89c101
+<                 rospy.loginfo("PrimaryStatesServer: %s state BehaviorServer goal was preempted. ", self.current_state) 
+---
+>                 rospy.loginfo("PrimaryStatesServer: %s state BehaviorServer goal was preempted. ", self.current_state) # add the behavior
+94c106
+<                 rospy.loginfo("PrimaryStatesServer: %s state BehaviorServer goal aborted. ", self.current_state)
+---
+>                 rospy.loginfo("PrimaryStatesServer: %s state BehaviorServer goal aborted. ", self.current_state) # add the behavior
+100c112,130
+<     def wandering_emotional(self):
+---
+>     def idle_state(self):
+>         rospy.loginfo("PrimaryStatesServer: Executing Idle state...")
+>         self.create_and_send_behavior_goal(behavior = "idle")
+>         behaviorserver_state ="" # fix for all!
+>         feedback_time = time.time()
+>         while not rospy.is_shutdown():
+>             self.RATE_ACTIONLOOP.sleep()
+>             if self.actionloop_check() == True:
+>                 return
+>             if (time.time() - feedback_time >10):
+>                 # Increase boredom by lowering PADS values
+>                 self.send_emotion(pleasure = -0.04, arousal = -0.04, dominance =  -0.04)
+>                 feedback_time = time.time()
+>         # set terminal goal status in case of shutdown
+>         self.server_primary_states.set_aborted()
+> 
+> 
+> 
+>     def wandering_emotional(self): #dunno if goal really needed here? depends on eventhandling i guess
+104a135
+>         start_time = time.time()
+118,119d148
+< 
+< 
+126c155
+<             if self.current_emotional_state == "angry":
+---
+>             if self.current_emotional_state == "angry": #need emotionsubscriber
+128a158
+>                 print(self.next_location)
+134a165
+>                 print(self.next_location)
+139a171
+>             print("nav_planning entering nav_emotional_goal_event")
+155c187
+<                 self.next_location = "wandering"
+---
+>                 self.next_location = "wandering" # maybe not needed
+158a191,209
+>     def waking_up(self):
+>         behavior = ""
+>         if self.current_emotional_state in ["angry", "inhibited", "bored"]:
+>             behavior = "waking_up_grumpy"
+>             self.send_emotion(pleasure=0.0, arousal= 0.2, dominance = -0.3)
+>         else:
+>             behavior = "waking_up_happy"
+>             self.send_emotion(pleasure=0.1, arousal=0.1, dominance = 0.1)
+>         # emotional reward?
+>         rospy.loginfo("PrimaryStatesServer: Executing waking up state.")
+>         self.create_and_send_behavior_goal(behavior = behavior)
+>         while not rospy.is_shutdown():
+>             if self.actionloop_check() == True:
+>                 return
+>             self.RATE_ACTIONLOOP.sleep()
+>         # set terminal goal status in case of shutdown
+>         self.server_primary_states.set_aborted()
+> 
+> 
+159a211,217
+>     def sleeping_state(self):
+>         rospy.loginfo("PrimaryStatesServer: Executing sleeping state.")
+>         # docking until time to wake up and almost full battery
+>         if False:# time now > scheduled time and battery > 80%
+>             
+>             return
+>             
+161a220
+>         print("PrimaryStatesServer: Changing state")
+167a227
+>                     print("PrimaryStatesServer: Change state function entered location if.")
+169a230
+>                 print("PrimaryStatesServer: Change state function publishing event.")
+

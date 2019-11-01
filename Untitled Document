@@ -1,0 +1,53 @@
+^C[cyborg_controller-8] killing on exit
+[cyborg_eventscheduler-7] killing on exit
+[cyborg_primary_states-6] killing on exit
+DatabaseHandler: Unable to find_location()...
+[cyborg_behavior-5] killing on exit
+[cyborg_led_dome-4] killing on exit
+[cyborg_audio-3] killing on exit
+[cyborg_navigation-2] killing on exit
+Can't keep up!
+[ERROR] [1572608043.482970]: Publishing SMACH introspection structure message failed.
+[INFO] [1572608043.485515]: Cyborg Audio: Text to Speech Deactivated
+Exception in thread controller_viewer:status_publisher:
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/threading.py", line 801, in __bootstrap_inner
+    self.run()
+  File "/usr/lib/python2.7/threading.py", line 754, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/smach_ros/introspection.py", line 164, in _status_pub_loop
+    self._publish_status('HEARTBEAT')
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/smach_ros/introspection.py", line 228, in _publish_status
+    self._status_pub.publish(state_msg)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rospy/topics.py", line 882, in publish
+    self.impl.publish(data)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rospy/topics.py", line 1041, in publish
+    raise ROSException("publish() to a closed topic")
+ROSException: publish() to a closed topic
+
+Cyborg Primary States: Shutting Down
+[INFO] [1572608043.683713]: Controller: Terminated...
+Cyborg Controller: End of Program...
+[ERROR] [1572608043.696889]: Exception in your execute callback: rospy shutdown
+Traceback (most recent call last):
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/actionlib/simple_action_server.py", line 289, in executeLoop
+    self.execute_callback(goal)
+  File "/home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/navigationserver.py", line 145, in navigationserver_callback
+    self.start_wandering()
+  File "/home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/navigationserver.py", line 251, in start_wandering
+    rospy.wait_for_service("/rosarnl_node/wander")
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rospy/impl/tcpros_service.py", line 159, in wait_for_service
+    raise ROSInterruptException("rospy shutdown")
+ROSInterruptException: rospy shutdown
+
+[INFO] [1572608043.708020]: BehaviorServer: Succeeded
+Cyborg Behavior: Shutting Down
+Cyborg LED Dome: End of Program...
+Cyborg Navigation: End of Program...
+Exception in thread Thread-7 (most likely raised during interpreter shutdown):Cyborg Behavior: Shutting Down
+[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+done
+
