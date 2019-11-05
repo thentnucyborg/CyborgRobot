@@ -1,4 +1,11 @@
-^C[cyborg_controller-8] killing on exit
+Ting funnet ved raskt Google søk:
+- https://answers.ros.org/question/285869/publish-to-a-closed-topic-when-publishing-a-marker/
+
+
+
+
+
+[cyborg_controller-8] killing on exit
 [cyborg_eventscheduler-7] killing on exit
 [cyborg_primary_states-6] killing on exit
 DatabaseHandler: Unable to find_location()...

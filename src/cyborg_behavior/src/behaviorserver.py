@@ -237,7 +237,6 @@ class BehaviorServer():
 
     # Called when behavior goal is completed
     def callback_navigation_done(self, status, result):
-        #print("BehaviorServer entered callback_navigation_done, with status: " +str(status) + " and result: " + str(result))
         if self.behavior_finished != True:
             self.status_navigation_server = status
             if self.completion_trigger == "navigation" and self.status_navigation_server==3:

@@ -5,9 +5,9 @@ import system.settings as settings
 
 
 class Eyes():
-
     def __init__(self):
         self.isStatic = True
+        
     def render(self,input_data, output_data):
 
         output_data[248*3+2] = 10
@@ -24,8 +24,6 @@ class Eyes():
         output_data[318*3+2] = 55
         output_data[319*3+2] = 55
         output_data[320*3+2] = 10
-
-
 
         output_data[238*3+2] = 10
         output_data[239*3+2] = 55
@@ -53,6 +51,7 @@ class Eyes():
         output_data[5*3+2] = 30
         output_data[6*3+2] = 30
         output_data[7*3+2] = 30
+
         # left
         output_data[23*3+2] = 30
         output_data[24*3+2] = 30

@@ -12,18 +12,20 @@ from subprocess import Popen
 # Consider adding some code to not need a hardcoded fil path for the scripts.
 
 def start_sequence(sequence):
+    homedir = os.path.expanduser("~")
+    path = homedir + "/catkin_ws/src/mode_selector/scripts/"
   # SEQUENCE 1
   # NORMAL START SEQUENCE
   # Start sequence for demonstrations in Glassgarden
     if "1" in sequence:
         print("Starting sequence 1.\n")
         # Start roscore
-        Popen(["xfce4-terminal", "--command", "/home/cyborg/catkin_ws/src/mode_selector/scripts/roscore_start.sh"],preexec_fn=os.setsid) #bash -c "/opt/ros/kinetic/bin/roscore"
+        Popen(["xfce4-terminal", "--command", path+"roscore_start.sh"],preexec_fn=os.setsid) #bash -c "/opt/ros/kinetic/bin/roscore"
         time.sleep(3) # Wait for ROS core to start
         # Start Arnl and controller
-        Popen(["xfce4-terminal", "--command", "/home/cyborg/catkin_ws/src/mode_selector/scripts/arnl_start.sh"], preexec_fn=os.setsid)
+        Popen(["xfce4-terminal", "--command", path+"arnl_start.sh"], preexec_fn=os.setsid)
         time.sleep(15)
-        Popen(["xfce4-terminal", "--command", "/home/cyborg/catkin_ws/src/mode_selector/scripts/controller_start.sh"],  preexec_fn=os.setsid)
+        Popen(["xfce4-terminal", "--command", path+"controller_start.sh"],  preexec_fn=os.setsid)
         time.sleep(1)
         return 3
 
@@ -39,7 +41,7 @@ def start_sequence(sequence):
     # SEQUENCE 3
     elif "3" in sequence:
         print("Starting sequence ARNL.\n")
-        Popen(["xfce4-terminal", "--command", "/home/cyborg/catkin_ws/src/mode_selector/scripts/arnl_start.sh"], preexec_fn=os.setsid)
+        Popen(["xfce4-terminal", "--command", path+"arnl_start.sh"], preexec_fn=os.setsid)
         time.sleep(4)
         return 1
 
@@ -65,8 +67,11 @@ def start_sequence(sequence):
 
 
 def stop_sequence(process_count):
+    homedir = os.path.expanduser("~")
+    path = homedir + "/catkin_ws/src/mode_selector/scripts/"
+
     if process_count ==-1:
-        Popen(["xfce4-terminal", "--command", "/home/cyborg/catkin_ws/src/mode_selector/scripts/shutdown_aria.sh"])
+        Popen(["xfce4-terminal", "--command", path+"shutdown_aria.sh"])
         print("Finished shutting down.\n")
 
     elif process_count >0:

@@ -17,7 +17,7 @@ NEURAL_ELECTRODES_TOTAL = 60
 NEURAL_PRESENTER = 'serial'
 NEURAL_SOURCE = 'none'
 NEURAL_INTERPRETER = 'random'
-NEURAL_DATA_TYPE = 'frequency'
+NEURAL_DATA_TYPE = 'frequency'	#possible values: intensity, frequency
 
 # Visualization
 LED_REFRESHES_PER_SECOND = 6 #18

@@ -45,7 +45,6 @@ class SerialInterface:
     def shutdown(self):
         self.ser.write(bytearray([0] * (3*LEDS_TOTAL)))
 
-
     def refresh(self, led_color_array):
         #new array with start/end marker
         array = bytearray([0])

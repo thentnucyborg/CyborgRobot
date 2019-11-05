@@ -121,7 +121,6 @@ class Motivator():
             cost_event = priority_event * ((event.reward_pleasure/2.0) + (event.reward_arousal/2.0) + (event.reward_dominance/2.0))
 
             r = reward_pleasure + reward_arousal + reward_dominance - cost_event # tot_reward = reward_pleasure + reward_arousal + reward_dominance - cost_event
-            #print(event.event,r+cost_event, -cost_event, r) # event_name, tot_reward + cost_event, -cost_event, tot_reward
             solution = event if r > reward else solution # solution = event if tot_reward > reward, else solution = solution
             reward = r if r > reward else reward # reward = tot_reward  if tot_reward > reward, else reward = reward
         return solution
