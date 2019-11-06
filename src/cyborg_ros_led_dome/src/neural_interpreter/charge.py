@@ -2,6 +2,7 @@
 
 import system.settings as settings
 import rospy
+import math
 
 class Charge:
 	def __init__(self, charge_msg):
@@ -11,6 +12,7 @@ class Charge:
 
 	def render(self, input_data, output_data):
 		100/len(output_data)
-			
+		
+		
 
 		self.rate.sleep()

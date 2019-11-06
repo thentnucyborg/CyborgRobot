@@ -200,7 +200,7 @@ def domecontrol():
 
     #initialize subscribers
     set_visualization_mode_subscriber = rospy.Subscriber("cyborg_visual/domecontrol", String, set_visualization_mode_callback)
-    subscriber_battery_status =         rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, self.battery_status_callback)
+    subscriber_battery_status =         rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, battery_status_callback)
 
     #Open the container
     with sm:
