@@ -49,7 +49,10 @@ class PrimaryStatesServer():
 
     def callback_server_primary_states(self, goal):
         self.state_goal = goal
-        if self.state_goal.current_state == "wandering_emotional":
+        #ADDED FROM THE CODE ON THE ROBOT (only the first if-sentence)
+        if self.state_goal.current_state == "idle":
+            self.idle_state()
+        elif self.state_goal.current_state == "wandering_emotional":
             self.wandering_emotional()
         elif self.state_goal.current_state =="navigation_planning":
             self.navigation_planning_state(self.state_goal)
@@ -97,12 +100,30 @@ class PrimaryStatesServer():
                 return True
 
 
+    #ADDED FROM THE CODE ON THE ROBOT (the whole function)
+    def idle_state(self):
+        rospy.loginfo("PrimaryStatesServer: Executing Idle state...")
+        self.create_and_send_behavior_goal(behavior = "idle")
+        behaviorserver_state ="" 
+        feedback_time = time.time()
+        while not rospy.is_shutdown():
+            self.RATE_ACTIONLOOP.sleep()
+            if self.actionloop_check() == True:
+                return
+            if (time.time() - feedback_time >10):
+                # Increase boredom by lowering PADS values
+                self.send_emotion(pleasure = -0.04, arousal = -0.04, dominance =  -0.04)
+                feedback_time = time.time()
+        # set terminal goal status in case of shutdown
+        self.server_primary_states.set_aborted()
+
 
     def wandering_emotional(self):
         rospy.loginfo("PrimaryStatesServer: Executing wander emotional state.")
         #connect to server and send goal
         goal = "wandering_emotional"
         self.create_and_send_behavior_goal(goal)
+
         while not rospy.is_shutdown():
             if self.actionloop_check() == True:
                 return
@@ -115,7 +136,6 @@ class PrimaryStatesServer():
             self.RATE_ACTIONLOOP.sleep()
         # set terminal goal status in case of shutdown
         self.server_primary_states.set_aborted()
-
 
 
     # Called when the controller (state machine) sets the navigation_planning state as active
@@ -158,7 +178,6 @@ class PrimaryStatesServer():
                 self.change_state(event="navigation_start_wandering")
 
 
-
     def change_state(self, event=None):
         if event ==None:
             self.server_primary_states.set_aborted()
@@ -181,7 +200,6 @@ class PrimaryStatesServer():
             self.RATE_ACTIONLOOP.sleep()
         # set terminal goal status in case of shutdown
         self.server_primary_states.set_aborted()
-            
 
 
     # Sends the emotional change to the controller

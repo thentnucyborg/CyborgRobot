@@ -25,10 +25,11 @@ add_message_files(
 )
 
 #uncomment if you have defined services
-#add_service_files(
-#  FILES
-#  # TODO: List your msg files here
-#)
+add_service_files(
+  FILES 
+  MakePlan.srv 
+  LoadMapFile.srv
+)
 
 add_service_files(FILES
 MakePlan.srv
@@ -42,7 +43,11 @@ add_action_files(
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
-  DEPENDENCIES actionlib_msgs geometry_msgs std_msgs nav_msgs
+  DEPENDENCIES 
+  actionlib_msgs 
+  geometry_msgs 
+  std_msgs 
+  nav_msgs
 )
 
 #generate_dynamic_reconfigure_options(cfg/....cfg)
@@ -52,10 +57,13 @@ generate_messages(
 #target_link_libraries(${PROJECT_NAME} another_library)
 
 catkin_package(
-    DEPENDS roscpp nav_msgs geometry_msgs tf actionlib_msgs
+    DEPENDS 
+    roscpp 
+    nav_msgs 
+    geometry_msgs 
+    tf 
+    actionlib_msgs
 )
-
-
 
 find_package(Boost REQUIRED COMPONENTS thread)
 include_directories(${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} )

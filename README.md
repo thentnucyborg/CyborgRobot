@@ -1,5 +1,6 @@
 # CyborgRobot
 The NTNU Cyborg Robot repo
+For any more information check out the git wiki or _https://www.ntnu.no/wiki/display/cyborg/_.
 
 ## Starting with the repo ##
 1. create a catkin workspace 

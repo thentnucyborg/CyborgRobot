@@ -13,6 +13,11 @@ Node name: cyborg_led_dome
 * colour
 * pyserial
 
+Libraries needed when programming using the Arduino IDE:
+* FastLED - can be added by searching for FastLED in Library Manager
+* LEDMatrix.h - download from: https://github.com/AaronLiddiment/LEDMatrix
+* LEDText.h + FontMatrise.h - download from: https://github.com/AaronLiddiment/LEDText
+
 ## Features:
 * Executes visualization commands published on topic cyborg_visual/domecontrol.
 * Current list of interpreters: Eyes, Siren, MovingAverage, IndividualMovingAverage, Snake.
@@ -20,5 +25,3 @@ Node name: cyborg_led_dome
 
 ## Usage:
 $ rosrun cyborg_led_dome led_dome.py
-
-

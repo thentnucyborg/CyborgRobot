@@ -9,6 +9,15 @@ import rospy
 import sys
 import os
 import time
+<<<<<<< HEAD
+=======
+
+homedir = os.path.expanduser("~")
+path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
+sys.path.append(path)
+from databasehandler import DatabaseHandler
+
+>>>>>>> e51fec4f149399025c90c2b82886d79b125b7896
 import datetime
 import threading
 
@@ -34,7 +43,7 @@ class EventScheduler():
         self.SCHEDULER_RATE = rospy.Rate(0.05) #(Hz)
         self.LOW_POWER_THRESHOLD = 20
         self.HOMEDIR = os.path.expanduser("~")
-        self.PATH = self.HOMEDIR + "/navigation.db"
+        self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_ros_navigation/navigation.db"
         self.MAP_NAME = "glassgarden.map"
         self.current_state = "idle"
 

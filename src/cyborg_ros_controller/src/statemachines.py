@@ -10,7 +10,8 @@ from smach import Sequence
 from smach import StateMachine
 from module import Module
 
-sm_remapping = {"input_events":"state_machine_events",
+sm_remapping = {
+            "input_events":"state_machine_events",
             "output_events":"state_machine_events",
             "previous_state":"last_state",
             "current_state":"last_state",
@@ -27,6 +28,7 @@ sequence_navigation_go_to_emotional = Sequence(
 with sequence_navigation_go_to_emotional:
     sequence_navigation_go_to_transitions = {"succeeded":"succeeded", "aborted":"aborted", "preempted":"preempted"}
     sequence_navigation_go_to_resources = {}
+    
     Sequence.add("transport",
                 Module("transport", "cyborg_behavior", sequence_navigation_go_to_transitions, sequence_navigation_go_to_resources),
                 remapping= sm_remapping)

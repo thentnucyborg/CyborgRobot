@@ -41,51 +41,52 @@ void setup(){
   Serial.begin(BAUDRATE, SERIAL_8N1);
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
 
-    //init horizontal text
-    ScrollingMsgHorizontal.Init(&textledsHorizontal, textledsHorizontal.Width(), ScrollingMsgHorizontal.FontHeight()+1,0,16);
-    ScrollingMsgHorizontal.SetFont(MatriseFontData);
-    ScrollingMsgHorizontal.SetTextColrOptions(COLR_RGB |  COLR_SINGLE, 0xff, 0x00, 0xff);
-    ScrollingMsgHorizontal.SetScrollDirection(SCROLL_RIGHT);
-    ScrollingMsgHorizontal.SetFrameRate(2);
-    ScrollingMsgHorizontal.SetTextDirection(CHAR_DOWN);
-    //init vertical text
-    ScrollingMsgVertical.Init(&textledsVertical, 6, MATRIX_HEIGHT,15,0);
-    ScrollingMsgVertical.SetFont(MatriseFontData);
-    ScrollingMsgVertical.SetScrollDirection(SCROLL_UP);
-    ScrollingMsgVertical.SetTextDirection(CHAR_DOWN);
-    ScrollingMsgVertical.SetTextColrOptions(COLR_RGB |  COLR_SINGLE, 0xff, 0x00, 0xff);
-    ScrollingMsgVertical.SetFrameRate(2);
+  //init horizontal text
+  ScrollingMsgHorizontal.Init(&textledsHorizontal, textledsHorizontal.Width(), ScrollingMsgHorizontal.FontHeight()+1,0,16);
+  ScrollingMsgHorizontal.SetFont(MatriseFontData);
+  ScrollingMsgHorizontal.SetTextColrOptions(COLR_RGB |  COLR_SINGLE, 0xff, 0x00, 0xff);
+  ScrollingMsgHorizontal.SetScrollDirection(SCROLL_RIGHT);
+  ScrollingMsgHorizontal.SetFrameRate(2);
+  ScrollingMsgHorizontal.SetTextDirection(CHAR_DOWN);
+  
+  //init vertical text
+  ScrollingMsgVertical.Init(&textledsVertical, 6, MATRIX_HEIGHT,15,0);
+  ScrollingMsgVertical.SetFont(MatriseFontData);
+  ScrollingMsgVertical.SetScrollDirection(SCROLL_UP);
+  ScrollingMsgVertical.SetTextDirection(CHAR_DOWN);
+  ScrollingMsgVertical.SetTextColrOptions(COLR_RGB |  COLR_SINGLE, 0xff, 0x00, 0xff);
+  ScrollingMsgVertical.SetFrameRate(2);
 
   BaseType_t xIndex;
   xMessageQueue = xQueueCreate(2,sizeof(MessageStruct*));
   xFreeQueue = xQueueCreate(2, sizeof(MessageStruct*));
 
- for (xIndex = 0; xIndex <2; xIndex++){
-      MessageStruct *messageStructPointer = messageBuffer + xIndex;
-      xQueueSendToBack(xFreeQueue, (void*) &messageStructPointer, 0);
-    }
+  for (xIndex = 0; xIndex <2; xIndex++){
+    MessageStruct *messageStructPointer = messageBuffer + xIndex;
+    xQueueSendToBack(xFreeQueue, (void*) &messageStructPointer, 0);
+  }
 
-    xTaskCreatePinnedToCore(
-            ReceiveSerialDataTask, //task function
-            "ReceiveSerialDataTask", //name of task
-            10000, //stack size
-            NULL, //parameter of task
-            2,     //priority of task
-            NULL,  //task handle
-            0);    //core assigned to
-        delay(10);
+  xTaskCreatePinnedToCore(
+    ReceiveSerialDataTask, //task function
+    "ReceiveSerialDataTask", //name of task
+    10000, //stack size
+    NULL, //parameter of task
+    2,     //priority of task
+    NULL,  //task handle
+    0);    //core assigned to
+  delay(10);
+  
+  xTaskCreatePinnedToCore(
+    VisualizationTask, //task function
+    "VisualizationTask", //name of task
+    10000, //stack size
+    NULL, //parameter of task
+    3,     //priority of task
+    NULL,  //task handle
+    1);  //core assigned to    
+  delay(10);
 
-    xTaskCreatePinnedToCore(
-        VisualizationTask, //task function
-        "VisualizationTask", //name of task
-        10000, //stack size
-        NULL, //parameter of task
-        3,     //priority of task
-        NULL,  //task handle
-        1);  //core assigned to    
-        delay(10);
-
-// brightness  0-255
+  // brightness  0-255
   FastLED.setBrightness(10);
   FastLED.showColor(CRGB::Red);
   delay(20);
@@ -93,7 +94,7 @@ void setup(){
   delay(20);
   FastLED.showColor(CRGB::Blue);
   delay(20);
-  FastLED.setBrightness(255);
+  FastLED.setBrightness(100);
   FastLED.show();
 }
 
@@ -238,7 +239,7 @@ void remapLeds(CRGB * output, cLEDMatrixBase &input){
       output[i-80] = input(i);
       //strip 7
     if(i>211 && i<244)
-   output[i-83] = input(i);
+      output[i-83] = input(i);
       //strip 8 
     if(i>245 && i<278)
       output[i-86] = input(i);

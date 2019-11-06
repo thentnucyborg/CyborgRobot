@@ -20,7 +20,7 @@ __all__ = []
 def main():
 
     homedir = os.path.expanduser("~")
-    path = homedir + "/navigation.db"
+    path = homedir + "/catkin_ws/src/cyborg_ros_navigation/navigation.db"
 
     if (os.path.exists(path) == False):
         database_handler = DatabaseHandler(filename=path)

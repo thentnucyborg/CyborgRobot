@@ -45,7 +45,7 @@ def main():
     emotion_system.add_emotion(name="unconcerned", pleasure=-0.13, arousal=-0.41, dominance=0.08)
 
     homedir = os.path.expanduser("~")
-    path = homedir + "/controller.db"
+    path = homedir + "/catkin_ws/src/cyborg_ros_controller/controller.db"
 
     # Fill database with default values
     if (os.path.exists(path) == False):

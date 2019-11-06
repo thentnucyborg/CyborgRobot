@@ -16,7 +16,7 @@ rec={
     "viewers": 104
 } 
 
-# inserting the data in the database 
+# inserting the data in the database
 x = mydb.primarystates_goal.insert(rec) 
 rec = {"TITLE":"HELLO"}
 x = mycol.insert(rec)
