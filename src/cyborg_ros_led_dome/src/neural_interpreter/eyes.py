@@ -3,7 +3,6 @@ import rospy
 import system.settings as settings
 
 
-
 class Eyes():
     def __init__(self):
         self.isStatic = True

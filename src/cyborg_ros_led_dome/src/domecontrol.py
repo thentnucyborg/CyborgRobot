@@ -5,13 +5,13 @@ __license__     = "BSD"
 __version__     = "0.0.6"
 
 import threading
-
 import rospy
 import system.settings as settings
 import smach
 import smach_ros
-from std_msgs.msg import String
 import time
+
+from std_msgs.msg import String
 from neural_presenters.serial.serial_communication import SerialInterface
 from neural_interpreter.support_functions.data_to_color import create_electrode_mapping
 from neural_sources.file.file_server import FileServer
@@ -20,6 +20,7 @@ from neural_interpreter.siren import Siren
 from neural_interpreter.moving_average import MovingAverage
 from neural_interpreter.individual_moving_average import IndividualMovingAverage
 from neural_interpreter.snake import Snake
+from rosarnl.msg import BatteryStatus
 
     
 class startup(smach.State):
@@ -136,6 +137,8 @@ def domecontrol():
     sm.userdata.sm_current_interpreter = None
     sm.userdata.sm_next_interpreter = None
     sm.userdata.sm_text = None
+    #variable for battery status subscriber
+    battery_charge = None
 
     def loop(data):
         sm.userdata.sm_interpreter.render(data,sm.userdata.sm_led_colors)
@@ -189,9 +192,15 @@ def domecontrol():
                     sm.userdata.sm_next_interpreter = "text"
                     settings.CHANGE_REQUESTED = True
 
-    #initialize subscriber
-    set_visualization_mode_subscriber = rospy.Subscriber("cyborg_visual/domecontrol", String, set_visualization_mode_callback)
 
+    def battery_status_callback(message):
+        # might want to change this to the whole msg later
+        battery_charge = message.charge_percent
+
+
+    #initialize subscribers
+    set_visualization_mode_subscriber = rospy.Subscriber("cyborg_visual/domecontrol", String, set_visualization_mode_callback)
+    subscriber_battery_status =         rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, self.battery_status_callback)
 
     #Open the container
     with sm:

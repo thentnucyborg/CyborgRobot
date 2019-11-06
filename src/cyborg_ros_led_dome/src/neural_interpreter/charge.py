@@ -1,18 +1,16 @@
 #!/usr/bin/env python
 
-
 import system.settings as settings
 import rospy
 
-
-class Roadwork:
-	def __init__(self):
+class Charge:
+	def __init__(self, charge_msg):
 		self.rate = rospy.Rate(3)
 		self.isStatic = False
-
+		self.battery_charge = charge_msg
 
 	def render(self, input_data, output_data):
-		if not settings.CHANGE_REQUESTED:
-			#blinking orange lights on the sides of the dome
+		100/len(output_data)
+			
 
-			self.rate.sleep()
+		self.rate.sleep()
