@@ -9,10 +9,14 @@ import rospy
 import sys
 import os
 import time
-sys.path.append('/home/cyborg/catkin_ws/src/cyborg_ros_navigation/src/')
-from databasehandler import DatabaseHandler
 import datetime
 import threading
+
+homedir = os.path.expanduser("~")
+path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
+sys.path.append(path)
+from databasehandler import DatabaseHandler
+
 from std_msgs.msg import String
 from rosarnl.msg import BatteryStatus
 from cyborg_controller.msg import SystemState

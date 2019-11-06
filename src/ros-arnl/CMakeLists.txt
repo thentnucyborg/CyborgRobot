@@ -30,6 +30,11 @@ add_message_files(
 #  # TODO: List your msg files here
 #)
 
+add_service_files(FILES
+MakePlan.srv
+LoadMapFile.srv
+)
+
 add_action_files(
   DIRECTORY action
   FILES JogPosition.action
