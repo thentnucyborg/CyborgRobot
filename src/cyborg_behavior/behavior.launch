@@ -156,7 +156,7 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
             navigation_order: "navigation_wander"
             playback: "r2-talk"
             completion_trigger: "playback"
-        </rosparam>    
+        </rosparam>
         <rosparam param="make_way">
             visual_mode: "siren"
             utterance: "Here I come, please make way for the Cyborg."

@@ -9,9 +9,9 @@ import rospy
 import system.settings as settings
 import smach
 import smach_ros
-import time
 
 from std_msgs.msg import String
+from rosarnl.msg import BatteryStatus
 from neural_presenters.serial.serial_communication import SerialInterface
 from neural_interpreter.support_functions.data_to_color import create_electrode_mapping
 from neural_sources.file.file_server import FileServer
@@ -20,7 +20,8 @@ from neural_interpreter.siren import Siren
 from neural_interpreter.moving_average import MovingAverage
 from neural_interpreter.individual_moving_average import IndividualMovingAverage
 from neural_interpreter.snake import Snake
-from rosarnl.msg import BatteryStatus
+from neural_interpreter.charge import Charge
+
 
     
 class startup(smach.State):
@@ -40,10 +41,11 @@ class startup(smach.State):
         #execute animation
         self.loop(neuron_data)
         print("LED-dome initiated - waiting for incoming message")
+
         #wait for incoming message
         while not settings.CHANGE_REQUESTED and not rospy.is_shutdown(): 
             pass
-            
+        
         return self.update_visualization_mode()
 
 #currently not implemented, included as a placeholder
@@ -138,7 +140,7 @@ def domecontrol():
     sm.userdata.sm_next_interpreter = None
     sm.userdata.sm_text = None
     #variable for battery status subscriber
-    battery_charge = None
+    battery_charge = 0.0                #ANTAR AT DEN HER SETTES TIL 0 IGJEN 
 
     def loop(data):
         sm.userdata.sm_interpreter.render(data,sm.userdata.sm_led_colors)
@@ -155,6 +157,8 @@ def domecontrol():
             return Siren()
         elif "eyes" in interpreter:
             return Eyes()
+        elif "charge" in interpreter:
+            return Charge(battery_charge)
         elif "snake" in interpreter:
             return Snake()
         else:
@@ -165,7 +169,7 @@ def domecontrol():
         sm.userdata.sm_led_colors = bytearray([0] * (3 * settings.LEDS_TOTAL))
 
         #return next state
-        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake"):
+        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake","charge"):
             sm.userdata.sm_mode = "nonmea"
                       
         elif sm.userdata.sm_next_interpreter in ("moving-average","individual-moving-average"):
@@ -180,7 +184,7 @@ def domecontrol():
         return sm.userdata.sm_mode
         
     def set_visualization_mode_callback(data):
-        if (data.data in ("siren","eyes","snake","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
+        if (data.data in ("siren","eyes","snake","charge","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
             sm.userdata.sm_next_interpreter = data.data
             settings.CHANGE_REQUESTED = True
         elif ("text" in data.data):
