@@ -11,18 +11,35 @@ import rospy
 import domecontrol
 from neural_presenters.serial.serial_communication import SerialInterface
 import system.settings as settings
+import time
 
 
 def shutdown_test():
 	print("LED - shutdown test funksjon")
 	leds = bytearray([0] * (3 * settings.LEDS_TOTAL))
-	leds[788*3+1] = 100
+	leds[788*3] = 100
 
 	led_colors = SerialInterface()
 	led_colors.refresh(leds)
 
+def startup_test():
+    print("LED - startup test funksjon")
+    leds = bytearray([0] * (3 * settings.LEDS_TOTAL))
+    leds[789*3+2] = 100
+
+    led_colors = SerialInterface()
+    led_colors.refresh(leds)
+
 def main():
     rospy.init_node("cyborg_led_dome")
+
+    #print("for startup_test")
+    #startup_test()
+    #print("etter startup_test")
+    time.sleep(5)
+    print("etter sleep")
+
+
     domecontrol.domecontrol()
     rospy.on_shutdown(shutdown_test)
     rospy.spin()

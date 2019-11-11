@@ -11,7 +11,6 @@ import smach
 import smach_ros
 
 from std_msgs.msg import String
-from rosarnl.msg import BatteryStatus
 from neural_presenters.serial.serial_communication import SerialInterface
 from neural_interpreter.support_functions.data_to_color import create_electrode_mapping
 from neural_sources.file.file_server import FileServer
@@ -21,6 +20,7 @@ from neural_interpreter.moving_average import MovingAverage
 from neural_interpreter.individual_moving_average import IndividualMovingAverage
 from neural_interpreter.snake import Snake
 from neural_interpreter.charge import Charge
+from neural_interpreter.roadwork import Roadwork
 
 
     
@@ -138,9 +138,7 @@ def domecontrol():
     sm.userdata.sm_mode = None
     sm.userdata.sm_current_interpreter = None
     sm.userdata.sm_next_interpreter = None
-    sm.userdata.sm_text = None
-    #variable for battery status subscriber
-    battery_charge = 0.0                #ANTAR AT DEN HER SETTES TIL 0 IGJEN 
+    sm.userdata.sm_text = None 
 
     def loop(data):
         sm.userdata.sm_interpreter.render(data,sm.userdata.sm_led_colors)
@@ -158,9 +156,11 @@ def domecontrol():
         elif "eyes" in interpreter:
             return Eyes()
         elif "charge" in interpreter:
-            return Charge(battery_charge)
+            return Charge()
         elif "snake" in interpreter:
             return Snake()
+        elif "roadwork" in interpreter:
+            return Roadwork()
         else:
             pass
 
@@ -169,7 +169,7 @@ def domecontrol():
         sm.userdata.sm_led_colors = bytearray([0] * (3 * settings.LEDS_TOTAL))
 
         #return next state
-        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake","charge"):
+        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake","charge","roadwork"):
             sm.userdata.sm_mode = "nonmea"
                       
         elif sm.userdata.sm_next_interpreter in ("moving-average","individual-moving-average"):
@@ -184,7 +184,7 @@ def domecontrol():
         return sm.userdata.sm_mode
         
     def set_visualization_mode_callback(data):
-        if (data.data in ("siren","eyes","snake","charge","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
+        if (data.data in ("siren","eyes","snake","charge","roadwork","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
             sm.userdata.sm_next_interpreter = data.data
             settings.CHANGE_REQUESTED = True
         elif ("text" in data.data):
@@ -197,14 +197,9 @@ def domecontrol():
                     settings.CHANGE_REQUESTED = True
 
 
-    def battery_status_callback(message):
-        # might want to change this to the whole msg later
-        battery_charge = message.charge_percent
-
 
     #initialize subscribers
     set_visualization_mode_subscriber = rospy.Subscriber("cyborg_visual/domecontrol", String, set_visualization_mode_callback)
-    subscriber_battery_status =         rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, battery_status_callback)
 
     #Open the container
     with sm:

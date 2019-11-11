@@ -3,6 +3,8 @@ This repository contains the source code for the NTNU Cyborg's LED-Dome and ESP3
 
 Node name: cyborg_led_dome
 
+There are 791 leds and the bytearray sent to the led-controller contains three values for each led (RGB). To access led 365: led_array[365*3+x] where you use x to set the red (+0), green (+1) or blue (+2) led. 
+
 ## Requirements:
 * ROS
 * SMACH

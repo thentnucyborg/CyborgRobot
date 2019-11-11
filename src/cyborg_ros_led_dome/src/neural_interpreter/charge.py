@@ -8,7 +8,7 @@ from rosarnl.msg import BatteryStatus
 
 
 class Charge:
-    def __init__(self, charge_msg):
+    def __init__(self):
         self.rate = rospy.Rate(3)
         self.isStatic = False
         self.battery_charge = 0.0
