@@ -27,11 +27,10 @@ def array2sparseadressedarray(led_color_array):
             totelements+=1
     return indexedarray
 
-
 class SerialInterface:
     def __init__(self):
         port = "/dev/led_dome"  #see udev rules on wiki
-        # Initialize serial communication, 8 data bits, no parity 1 stop bit
+        # Initialize serial communication, bytesize = 8 data bits, no parity, 1 stop bit
         self.ser = serial.Serial(port, SERIAL_BAUD_RATE, serial.EIGHTBITS, serial.PARITY_NONE, serial.STOPBITS_ONE)
         time.sleep(2)
 
@@ -49,10 +48,10 @@ class SerialInterface:
         #new array with start/end marker
         array = bytearray([0])
         array[0] = 254
-        if (led_color_array[0]!=253):
+        if (led_color_array[0] != 253):
            array.append(0)
            array.append(0)
-        array +=led_color_array
+        array += led_color_array
         array.append(255)
         self.ser.write(array)
 

@@ -11,8 +11,6 @@ class Roadwork:
         self.isStatic = False
         self.previous_light = False
 
-# oransje er rgb(255,140,0)
-
     def render(self, input_data, output_data):
         if not settings.CHANGE_REQUESTED:
             #blinking orange lights on the sides of the dome

@@ -177,6 +177,7 @@ def domecontrol():
 
         elif sm.userdata.sm_next_interpreter == "text":
             sm.userdata.sm_mode = "text"
+        #functionality for reading mea from server adds here
 
         sm.userdata.sm_current_interpreter = sm.userdata.sm_next_interpreter
         sm.userdata.sm_next_interpreter = None

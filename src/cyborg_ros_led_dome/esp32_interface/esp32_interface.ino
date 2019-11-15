@@ -67,24 +67,24 @@ void setup(){
     }
 
     xTaskCreatePinnedToCore(
-        ReceiveSerialDataTask, //task function
-        "ReceiveSerialDataTask", //name of task
-        10000, //stack size
-        NULL, //parameter of task
-        2,     //priority of task
-        NULL,  //task handle
-        0);    //core assigned to
+        ReceiveSerialDataTask,      //task function
+        "ReceiveSerialDataTask",    //name of task
+        10000,      //stack size
+        NULL,       //parameter of task
+        2,          //priority of task
+        NULL,       //task handle
+        0);         //core assigned to
 
     delay(10);
 
     xTaskCreatePinnedToCore(
-        VisualizationTask, //task function
-        "VisualizationTask", //name of task
-        10000, //stack size
-        NULL, //parameter of task
-        3,     //priority of task
-        NULL,  //task handle
-        1);  //core assigned to   
+        VisualizationTask,      //task function
+        "VisualizationTask",    //name of task
+        10000,      //stack size
+        NULL,       //parameter of task
+        3,          //priority of task
+        NULL,       //task handle
+        1);         //core assigned to   
 
     delay(10);
 
@@ -99,7 +99,6 @@ void setup(){
     FastLED.setBrightness(100);
     FastLED.show();
 }
-
 
 void ReceiveSerialDataTask(void * parameter){
     static boolean recvInProgress = false;
@@ -117,7 +116,7 @@ void ReceiveSerialDataTask(void * parameter){
                     (*messageStructPointer).data[index] = rb;
                     index++;
                 }
-                else { //end of message
+                else {  //end of message
                     (*messageStructPointer).length = index;
                     xQueueSendToBack(xMessageQueue, (void*)&messageStructPointer, portMAX_DELAY);
                     xQueueReceive(xFreeQueue, (void*)&messageStructPointer, portMAX_DELAY);
@@ -160,7 +159,6 @@ void receiveMessageInfo(MessageStruct  *message) {
     textVertical = false;
     textmode = false;
 }
-
 
 void VisualizationTask(void * parameter){
     MessageStruct *messageStructPointer;
