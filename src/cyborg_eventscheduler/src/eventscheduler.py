@@ -9,15 +9,11 @@ import rospy
 import sys
 import os
 import time
-<<<<<<< HEAD
-=======
 
 homedir = os.path.expanduser("~")
 path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
 sys.path.append(path)
 from databasehandler import DatabaseHandler
-
->>>>>>> e51fec4f149399025c90c2b82886d79b125b7896
 import datetime
 import threading
 

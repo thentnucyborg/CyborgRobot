@@ -8,13 +8,13 @@ __all__         = []
 
 import rospy
 
-from web_transmitter import WebTransmitter
+from topic_transmitter import TopicTransmitter
 # from livefeed import Livefeed
 
 def main():
     rospy.init_node("cyborg_gui")
     # livefeed = Livefeed()
-    webTransmitter = WebTransmitter()
+    topicTransmitter = TopicTransmitter()
     rospy.spin()
 
 
