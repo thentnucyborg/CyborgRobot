@@ -14,18 +14,18 @@ class Siren():
     def render(self, input_data, output_data):
         if not settings.CHANGE_REQUESTED:
             if self.previous_color == "blue":
-                for i in range((settings.LEDS_TOTAL/2)-1):
+                for i in range((settings.LEDS_TOTAL/2)+5):
                     output_data[i*3 ] = 50
                     output_data[i*3+ 2] = 0
-                for i in range(settings.LEDS_TOTAL/2,settings.LEDS_TOTAL):
+                for i in range(settings.LEDS_TOTAL/2+5,settings.LEDS_TOTAL):
                     output_data[i*3 ] = 0
                     output_data[i*3 + 2] = 50
                 self.previous_color = "red"
             else:
-                for i in range((settings.LEDS_TOTAL/2)-1):
+                for i in range((settings.LEDS_TOTAL/2)+5):
                     output_data[i*3 ] = 0
                     output_data[i*3+ 2] = 50
-                for i in range(settings.LEDS_TOTAL/2,settings.LEDS_TOTAL):
+                for i in range(settings.LEDS_TOTAL/2+5,settings.LEDS_TOTAL):
                     output_data[i*3 ] = 50
                     output_data[i*3 + 2] = 0
                 self.previous_color = "blue"
