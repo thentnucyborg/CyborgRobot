@@ -31,11 +31,6 @@ add_service_files(
   LoadMapFile.srv
 )
 
-add_service_files(FILES
-MakePlan.srv
-LoadMapFile.srv
-)
-
 add_action_files(
   DIRECTORY action
   FILES JogPosition.action
