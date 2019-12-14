@@ -20,7 +20,7 @@ Libraries needed when programming using the Arduino IDE:
 	// FastLED needs to be included before the two others.
 * LEDMatrix.h - download from: https://github.com/AaronLiddiment/LEDMatrix
 * LEDText.h + FontMatrise.h - download from: https://github.com/AaronLiddiment/LEDText
-	// For LEDMatrix and LEdText don't use the repo RGBLEDS as it is a never version where some things have been changed.
+	// For LEDMatrix and LEDText don't use the repo RGBLEDS as it is a newer version where some things have been changed.
 
 ## Features:
 * Executes visualization commands published on topic cyborg_visual/domecontrol.
