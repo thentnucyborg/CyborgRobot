@@ -4,6 +4,8 @@
 #include <FontMatrise.h>
 #include <WiFi.h>
 
+// sjekke bruk av rosserial med freeRTOS, og lage denne til en egen node. Kanskje det kan løse tilkoblingsprobeleme.
+
 #define MATRIX_TYPE HORIZONTAL_ZIGZAG_MATRIX
 const uint16_t  MATRIX_WIDTH =  35;
 const uint16_t  MATRIX_HEIGHT = 30;

@@ -5,8 +5,6 @@ import rospy
 import math
 from rosarnl.msg import BatteryStatus
 
-
-
 class Charge:
     def __init__(self):
         self.rate = rospy.Rate(3)

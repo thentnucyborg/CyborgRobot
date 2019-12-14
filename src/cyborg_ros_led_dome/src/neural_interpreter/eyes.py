@@ -8,36 +8,36 @@ class Eyes():
         self.isStatic = True
         
     def render(self,input_data, output_data):
+        output_data[420*3+2] = 30
+        output_data[421*3+2] = 75
+        output_data[422*3+2] = 75
+        output_data[423*3+2] = 30
 
-        output_data[248*3+2] = 30
-        output_data[249*3+2] = 75
-        output_data[250*3+2] = 75
-        output_data[251*3+2] = 10
-
-        output_data[273*3+2] = 30
-        output_data[274*3+2] = 75
-        output_data[277*3+2] = 75
-        output_data[278*3+2] = 30
+        output_data[443*3+2] = 30
+        output_data[444*3+2] = 75
+        output_data[447*3+2] = 75
+        output_data[448*3+2] = 30
         
-        output_data[317*3+2] = 30
-        output_data[318*3+2] = 75
-        output_data[319*3+2] = 75
-        output_data[320*3+2] = 30
+        output_data[487*3+2] = 30
+        output_data[488*3+2] = 75
+        output_data[489*3+2] = 75
+        output_data[490*3+2] = 30
 
-        output_data[238*3+2] = 30
-        output_data[239*3+2] = 75
-        output_data[240*3+2] = 75
-        output_data[241*3+2] = 30
 
-        output_data[283*3+2] = 30
-        output_data[284*3+2] = 75
-        output_data[287*3+2] = 75
-        output_data[288*3+2] = 30
+        output_data[410*3+2] = 30
+        output_data[411*3+2] = 75
+        output_data[412*3+2] = 75
+        output_data[413*3+2] = 10
 
-        output_data[307*3+2] = 30
-        output_data[308*3+2] = 75
-        output_data[309*3+2] = 75
-        output_data[310*3+2] = 30
+        output_data[453*3+2] = 30
+        output_data[454*3+2] = 75
+        output_data[457*3+2] = 75
+        output_data[458*3+2] = 30
+
+        output_data[477*3+2] = 30
+        output_data[478*3+2] = 75
+        output_data[479*3+2] = 75
+        output_data[480*3+2] = 30
         
 
         ###########################
@@ -122,11 +122,6 @@ class Eyes():
         output_data[759*3+2] = 50
         output_data[760*3+2] = 50
         output_data[783*3+2] = 50
-
-
-        
-
-
 
 
 
