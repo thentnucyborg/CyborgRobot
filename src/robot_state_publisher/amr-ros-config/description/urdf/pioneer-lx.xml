@@ -13,7 +13,7 @@
     </inertial>
     <visual>
       <geometry name="base_link_visual_geom">
-        <mesh filename="package://amr_robots_description/meshes/pioneer-lx/pioneer-lx_visual.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://robot_state_publisher/amr-ros-config/description/meshes/pioneer-lx/pioneer-lx_visual.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <origin rpy="0 0 1.570796" xyz="0 0 0.0"/>
     </visual>

@@ -1,20 +1,18 @@
 <launch>
-    <!-- Load the urdf into the ROS Parameter server. -->
-    <param name="my_robot_description" textfile="$(find robot_state_publisher)amr-ros-config/description/urdf/pioneer-lx.urdf"/>
+  <!-- Run the map server --> 
+  <!---<arg name="map_file" default="$(find map_server)/maps/willow.yaml"/>--> 
+  <!---<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>--> 
 
-    <!-- Run nodes -->
-    <node pkg="rosaria" name="rosaria" type="RosAria" output="screen"/>
+  <!--- Run AMCL --> 
+  <!---<include file="$(find amcl)/examples/amcl_omni.launch" /> --> 
+  
+  <!-- Load the urdf into the ROS Parameter server. -->
+  <param name="robot_description" textfile="$(find robot_state_publisher)amr-ros-config/description/urdf/pioneer-lx.urdf"/>
 
-    <node pkg="joint_state_publisher" name="joint_state_publisher" type="joint_state_publisher" output="screen">
-      <remap from="robot_description" to="my_robot_description"/>
-    </node>
+  <!-- Start nodes: joint_state_publisher, robot_state_publisher and rviz --> 
+  <node pkg="rosaria" name="rosaria" type="RosAria" output="screen"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />   
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_state_publisher)amr-ros-config/description/urdf/display_urdf.rviz" required="true" /> <!-- (required = "true") if rviz dies, entire roslaunch will be killed -->
 
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" >
-      <remap from="robot_description" to="my_robot_description" />
-      <remap from="joint_states" to="my_robot_description/joint_states"/>
-    </node>
-
-
-    <node pkg="rviz" name="rviz" type="rviz" respawn="false" output="screen"/>
-    
-</launch>
+</launch>x  
