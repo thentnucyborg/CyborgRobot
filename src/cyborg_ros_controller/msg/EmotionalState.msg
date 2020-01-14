@@ -1,0 +1,5 @@
+string from_emotional_state
+string to_emotional_state
+float32 current_pleasure
+float32 current_arousal
+float32 current_dominance
