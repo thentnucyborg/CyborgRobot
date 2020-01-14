@@ -1,0 +1,29 @@
+<!--           ################# TEMPLATE ####################
+<launch>
+
+   <node pkg="sensor_node_pkg" type="sensor_node_type" name="sensor_node_name" output="screen">
+   <param name="sensor_param" value="param_value" />
+   </node>
+   
+   <node pkg="odom_node_pkg" type="odom_node_type" name="odom_node" output="screen">
+   <param name="odom_param" value="param_value" />
+   </node>
+
+   <node pkg="transform_configuration_pkg" type="transform_configuration_type" name="transform_configuration_name" output="screen">
+   <param name="transform_configuration_param" value="param_value" />
+   </node>
+
+</launch>
+-->
+<launch>
+   <!-- Run ROSARIA (Sensors and odometry) -->
+   <node pkg="rosaria" type="RosAria" name="rosaria" output="screen">
+   <param name="publish_aria_lasers" value="true"/>
+   </node>
+
+   <!-- Set up transform configuration (URDF, joint_state_publisher and robot_state_publisher -->
+   <param name="robot_description" textfile="$(find robot_state_publisher)/amr-ros-config/description/urdf/pioneer-lx.urdf"/>
+   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />   
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+</launch>

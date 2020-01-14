@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/install
+
+Name: cyborg_2dnav
+Description: Description of cyborg_2dnav
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/lassegoncz/catkin_ws/install/lib 
+Requires: 

@@ -1,0 +1,12 @@
+(cl:in-package cyborg_controller-msg)
+(cl:export '(FROM_EMOTIONAL_STATE-VAL
+          FROM_EMOTIONAL_STATE
+          TO_EMOTIONAL_STATE-VAL
+          TO_EMOTIONAL_STATE
+          CURRENT_PLEASURE-VAL
+          CURRENT_PLEASURE
+          CURRENT_AROUSAL-VAL
+          CURRENT_AROUSAL
+          CURRENT_DOMINANCE-VAL
+          CURRENT_DOMINANCE
+))

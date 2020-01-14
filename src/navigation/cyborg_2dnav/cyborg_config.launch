@@ -1,0 +1,15 @@
+<launch>
+   <!-- Run ROSARIA (Sensors and odometry)-->
+   <node pkg="rosaria" type="RosAria" name="RosAria" output="screen">
+   <param name="publish_aria_lasers" value="true"/>
+   <remap from="RosAria/pose" to="odom" />
+   <remap from="RosAria/cmd_vel" to="cmd_vel" />
+   <param name="port" value="/dev/ttyUSB0" type="string"/>
+   </node>
+
+   <!-- Set up transform configuration (URDF, joint_state_publisher and robot_state_publisher -->
+   <param name="robot_description" textfile="$(find robot_state_publisher)/amr-ros-config/description/urdf/pioneer-lx.urdf"/>
+   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />   
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+</launch>

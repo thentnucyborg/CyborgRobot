@@ -1,0 +1,21 @@
+<launch>
+
+   <master auto="start"/>
+   <!-- Run the map server --> 
+   <arg name="map_file" default="$(find map_server)/maps/willow.yaml"/>
+   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)"/>
+
+   <!--- Run AMCL --> 
+   <include file="$(find amcl)/examples/amcl_omni.launch" />
+
+   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+   <rosparam file="$(find cyborg_2dnav)/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+   <rosparam file="$(find cyborg_2dnav)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+   <rosparam file="$(find cyborg_2dnav)/local_costmap_params.yaml" command="load" />
+   <rosparam file="$(find cyborg_2dnav)/global_costmap_params.yaml" command="load" /> 
+   <rosparam file="$(find cyborg_2dnav)/base_local_planner_params.yaml" command="load" />
+   </node>
+
+   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot_state_publisher)amr-ros-config/description/urdf/display_urdf.rviz"/>
+
+</launch>

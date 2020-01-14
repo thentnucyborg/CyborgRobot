@@ -1,0 +1,1 @@
+set(rviz_DEFAULT_PLUGIN_FILE_NAME librviz_default_plugin.so)

@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/devel
+
+Name: rosaria_client
+Description: Description of rosaria_client
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/lassegoncz/catkin_ws/devel/lib 
+Requires: 

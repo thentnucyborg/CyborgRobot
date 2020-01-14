@@ -1,0 +1,13 @@
+#goal definition
+string previous_state
+string event
+string current_state
+string order #valid is EXECUTE or CANCEL
+---
+#result definition
+string status #optional
+string message #optional
+---
+#feedback
+string status #optional
+string message #optional

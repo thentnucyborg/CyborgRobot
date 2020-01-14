@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/install
+
+Name: rviz
+Description: Description of rviz
+Version: 1.12.17
+Cflags: -I/home/lassegoncz/catkin_ws/install/include -I/usr/include/eigen3 -I/usr/include/OGRE/Overlay -I/usr/include/OGRE -I/usr/include
+Libs: -L/home/lassegoncz/catkin_ws/install/lib -lrviz /usr/lib/x86_64-linux-gnu/libOgreOverlay.so /usr/lib/x86_64-linux-gnu/libOgreMain.so /usr/lib/x86_64-linux-gnu/libpthread.so /usr/lib/x86_64-linux-gnu/libGLU.so /usr/lib/x86_64-linux-gnu/libGL.so
+Requires: geometry_msgs image_transport interactive_markers laser_geometry map_msgs message_filters nav_msgs pluginlib resource_retriever roscpp roslib sensor_msgs std_msgs tf urdf visualization_msgs

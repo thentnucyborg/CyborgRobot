@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/devel
+
+Name: cyborg_primary_states
+Description: Description of cyborg_primary_states
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/lassegoncz/catkin_ws/devel/lib 
+Requires: 

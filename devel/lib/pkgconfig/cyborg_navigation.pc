@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/devel
+
+Name: cyborg_navigation
+Description: Description of cyborg_navigation
+Version: 0.0.2
+Cflags: -I/home/lassegoncz/catkin_ws/devel/include
+Libs: -L/home/lassegoncz/catkin_ws/devel/lib 
+Requires: roscpp rospy std_msgs message_runtime actionlib_msgs

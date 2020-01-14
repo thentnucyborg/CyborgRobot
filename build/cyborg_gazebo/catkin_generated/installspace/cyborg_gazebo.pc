@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/install
+
+Name: cyborg_gazebo
+Description: Description of cyborg_gazebo
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/lassegoncz/catkin_ws/install/lib 
+Requires: 

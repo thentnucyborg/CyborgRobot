@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/devel
+
+Name: cyborg_behavior
+Description: Description of cyborg_behavior
+Version: 0.0.1
+Cflags: 
+Libs: -L/home/lassegoncz/catkin_ws/devel/lib 
+Requires: 

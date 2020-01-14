@@ -1,0 +1,8 @@
+prefix=/home/lassegoncz/catkin_ws/devel
+
+Name: rosarnl
+Description: Description of rosarnl
+Version: 0.0.2
+Cflags: -I/home/lassegoncz/catkin_ws/devel/include
+Libs: -L/home/lassegoncz/catkin_ws/devel/lib 
+Requires: roscpp nav_msgs geometry_msgs tf actionlib_msgs
