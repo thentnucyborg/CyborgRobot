@@ -1,6 +1,0 @@
-SUBSYSTEMS=="usb", ATTRS{idProduct}=="ea60", ATTRS{idVendor}=="10c4",GROUP=="dialout", SYMLINK+="led_dome"
-SUBSYSTEMS=="usb", ATTRS{idProduct}=="7523", ATTRS{idVendor}=="1a86",GROUP=="dialout", SYMLINK+="mode_selector_box$
-SUBSYSTEMS=="usb", ATTRS{product}=="ZED", ATTRS{idProduct}=="f580", ATTRS{idVendor}=="2b03", SYMLINK+="zed_camera$
-
-# These are the rules that are added to the cyborg.
-# See the wiki for how to add, change or set up these rules: # https://github.com/thentnucyborg/CyborgRobot/wiki/Cyborg-Usb-Rules
