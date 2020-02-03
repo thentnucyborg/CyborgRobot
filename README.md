@@ -1,8 +1,11 @@
 # CyborgRobot
-The NTNU Cyborg Robot repo
-For any more information check out the git wiki or _https://www.ntnu.no/wiki/display/cyborg/_.
+This repo contains code for running NTNU Cyborgs Robot based on the Pioneer LX mobile robot. The project utilizes ROS.
 
-## Setup and install 
+For more information, check out:
+- [this repos git wiki](https://github.com/thentnucyborg/CyborgRobot/wiki)
+- [overview wiki at ntnu.no](https://www.ntnu.no/wiki/display/cyborg/)
+
+## Setup and install
 
 ### Starting with the repo
 1. create a catkin workspace 
@@ -16,7 +19,7 @@ You should now be abele to use the workspace and git without any problems.
 - Also, check out [setup/setup.sh](https://github.com/thentnucyborg/CyborgRobot/tree/master/setup) for more. 
 
 Run: 
-```
+```bash
 find <path-to-catkin_ws/src/> -name '*.py' -exec chmod +x {} \;
 ```
 to make all python files executable to be able to run them. Might need to do it with .sh files too (also catkin_ws/src/rosaria/cfg/RosAria.cfg)
