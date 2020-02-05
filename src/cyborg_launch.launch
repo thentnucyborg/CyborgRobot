@@ -1,7 +1,7 @@
 <launch>
 <include file="$(find cyborg_2dnav)cyborg_config.launch" />
 <include file="$(find cyborg_2dnav)move_base.launch" />
-<node pkg="cyborg_navigation" name="cyborg_navigation" type="navigation.py" output="screen" />
+<!-- <node pkg="cyborg_navigation" name="cyborg_navigation" type="navigation.py" output="screen" /> -->
 </launch>
 
 

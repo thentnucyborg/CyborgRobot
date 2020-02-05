@@ -18,7 +18,7 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from cyborg_controller.msg import StateMachineFeedback, StateMachineResult
 from cyborg_navigation.msg import NavigationAction, NavigationResult,NavigationFeedback
 from geometry_msgs.msg import PoseWithCovarianceStamped
-from rosarnl.srv import MakePlan
+from nav_msgs.srv import GetPlan
 from cyborg_controller.msg import StateMachineFeedback, StateMachineResult, EmotionalFeedback
 
 
@@ -43,13 +43,13 @@ class NavigationServer():
 		self.base_canceled = False
 		self.base_succeeded = False
 
-		self.location_subscriber = rospy.Subscriber("/rosarnl_node/amcl_pose", PoseWithCovarianceStamped, self.location_callback)
+		self.location_subscriber = rospy.Subscriber("/amcl_pose", PoseWithCovarianceStamped, self.location_callback)
 		self.publisher_current_location = rospy.Publisher(rospy.get_name() + "/current_location", String, queue_size= 10)
 		self.emotion_publisher = rospy.Publisher("/cyborg_controller/emotional_feedback", EmotionalFeedback, queue_size=100)
 
 		self.server_navigation = actionlib.SimpleActionServer(rospy.get_name() + "/navigation", NavigationAction, execute_cb=self.navigationserver_callback, auto_start = False)
 		self.server_navigation.start()
-		self.client_base = actionlib.SimpleActionClient("/rosarnl_node/move_base", MoveBaseAction)
+		self.client_base = actionlib.SimpleActionClient("/move_base", MoveBaseAction)
 
 		self.database_handler = DatabaseHandler(filename=database_file)
 		self.location_updater_thread = threading.Thread(target=self.location_updater)
@@ -61,6 +61,7 @@ class NavigationServer():
 	def location_callback(self, data):
 		self.current_x = data.pose.pose.position.x
 		self.current_y = data.pose.pose.position.y
+		#rospy.loginfo("Location is currently x: " + str(self.current_x) + "y: " + str(self.current_y))
 
 
 	# Updates current location based on position and publishes to other nodes
@@ -109,7 +110,11 @@ class NavigationServer():
 		self.is_controlling_base = False
 
 		if goal.order =="navigation_wander":
-			self.start_wandering()
+			#self.start_wandering()
+			rospy.loginfo("Wandering.....")
+			rospy.loginfo("Waiting for 10 seconds...")
+			time.sleep(10)
+
 		elif goal.order =="navigation_go_to" and goal.location_name !=None:
 			self.navigation_go_to(goal)
 		elif goal.order == "navigation_dock":
@@ -182,13 +187,23 @@ class NavigationServer():
 		goal.target_pose.pose = pose
 		goal.target_pose.header.frame_id = location.robot_map_name
 		goal.target_pose.header.stamp = rospy.Time.now()
-		rospy.wait_for_service("/rosarnl_node/make_plan")
-		baseCheckPath = rospy.ServiceProxy("/rosarnl_node/make_plan", MakePlan())
-		makeplan = MakePlan()
-		makeplan.position = location
-		makeplan.orientation = pose.orientation
+		rospy.wait_for_service("/move_base/make_plan")
+		baseCheckPath = rospy.ServiceProxy("/move_base/make_plan", GetPlan())
+		getplan = GetPlan()
+		#getplan.position = location
+		#getplan.orientation = pose.orientation
+
+		rospy.loginfo(vars(getplan))
+		rospy.loginfo(str(goal))
+
+		goal.target_pose.header.stamp = rospy.Time.now()
+		self.client_base.send_goal(goal, self.client_base_done_callback, self.client_base_active_callback, self.client_base_feedback_callback)
+		rospy.loginfo("NavigationServer: Path OK.")
+		rospy.logdebug("NavigationServer: Location goal is - " + str(self.next_location))
+
+		'''
 		try:
-			path = baseCheckPath(makeplan)
+			path = baseCheckPath(getplan)
 			if (len(path.path) >0):
 				goal.target_pose.header.stamp = rospy.Time.now()
 				self.client_base.send_goal(goal, self.client_base_done_callback, self.client_base_active_callback, self.client_base_feedback_callback)
@@ -203,7 +218,7 @@ class NavigationServer():
 			self.next_location = None
 			self.base_canceled = True
 			return
-
+		'''
 
 	# The robot base starts to wander and keeps wandering until it is preempted
 	def start_wandering(self):
