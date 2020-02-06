@@ -26,10 +26,10 @@ class NavigationServer():
 	"""NavigationServer"""
 
 	def __init__(self, database_file=""):
-		self.MAP_NAME = "glassgarden.map"
+		self.MAP_NAME = "map"
 		self.TIMEOUT_GOTO = 300 # (S)
 		self.TIMEOUT_WANDERING = 600 # (S)
-		self.EMOTIONAL_FEEDBACK_CYCLE = 15 # (s)
+		self.EMOTIONAL_FEEDBACK_CYCLE = 5 # (s)
 		self.SERVER_RATE = rospy.Rate(10) #(Hz)
 
 		self.client_base_feedback = StateMachineFeedback()
@@ -110,10 +110,7 @@ class NavigationServer():
 		self.is_controlling_base = False
 
 		if goal.order =="navigation_wander":
-			#self.start_wandering()
-			rospy.loginfo("Wandering.....")
-			rospy.loginfo("Waiting for 10 seconds...")
-			time.sleep(10)
+			self.start_wandering()
 
 		elif goal.order =="navigation_go_to" and goal.location_name !=None:
 			self.navigation_go_to(goal)
@@ -221,7 +218,7 @@ class NavigationServer():
 		'''
 
 	# The robot base starts to wander and keeps wandering until it is preempted
-	def start_wandering(self):
+	def start_wandering_old(self):
 		# Tell base to start wandering
 		rospy.logdebug("NavigationServer: Waiting for base wandering service.")
 		rospy.wait_for_service("/rosarnl_node/wander")
@@ -244,6 +241,7 @@ class NavigationServer():
 					rospy.logdebug("NavigationServer: stop service error - " + str(e))
 				self.server_navigation.set_preempted()
 				return
+
 			# Check wandering timeout to prevent eternal looping
 			if (time.time() - started_waiting > self.TIMEOUT_WANDERING):
 				rospy.loginfo("NavigationServer: Timed out, aborting.")
@@ -256,13 +254,68 @@ class NavigationServer():
 				self.server_navigation.set_aborted()
 				return
 			if (time.time() - feedback_timer > self.EMOTIONAL_FEEDBACK_CYCLE): # give emotional feedback every 15 seconds
-				self.send_emotion(pleasure=0.01, arousal=0.01, dominance=0.01)
+				self.send_emotion(pleasure=0.05, arousal=0.03, dominance=0.04)
 				feedback_timer = time.time()
 			self.SERVER_RATE.sleep()
 		# set terminal goal status in case of shutdown
 		self.server_navigation.set_aborted()
 
 
+	def start_wandering(self):
+		rospy.loginfo("NavigationServer: Cyborg is on patrol...")
+		# Prevent eternal looping
+		started_waiting = time.time() 
+		feedback_timer = time.time()
+
+		waypoints = [[(7,9,0), (0,0,0,1)],[(0,10,0), (0,0,0,1)],[(-43,53,0), (0,0,0,1)],[(-39,43,0), (0,0,0,1)],[(-3,-4,0), (0,0,0,1)],[(3,16,0), (0,0,0,1)],[(-7,19,0), (0,0,0,1)],[(-30,38,0), (0,0,0,1)],[(-50,56,0), (0,0,0,1)], [(-48,41,0), (0,0,0,1)]]
+
+		#client = actionlib.SimpleActionClient('/move_base', MoveBaseAction)
+		self.client_base.wait_for_server()
+
+		while not rospy.is_shutdown():
+			for pose in waypoints:
+				i = 0
+				rospy.loginfo("Patrolling to waypoint " + str(i))
+				goal = self.goal_pose(pose)
+				self.client_base.send_goal(goal)
+				self.client_base.wait_for_result()
+				i += 1
+
+				if self.server_navigation.is_preempt_requested():
+					rospy.loginfo("NavigationServer: Preempted.")
+					self.client_base.cancel_all_goals()
+					self.server_navigation.set_preempted()
+					return
+
+				if (time.time() - started_waiting > self.TIMEOUT_WANDERING):
+					rospy.loginfo("NavigationServer: Timed out, aborting patrol.")
+					self.client_base.cancel_all_goals()
+					self.client_base.set_aborted()
+					break
+
+				if (time.time() - feedback_timer > self.EMOTIONAL_FEEDBACK_CYCLE): # give emotional feedback every 15 seconds
+					self.send_emotion(pleasure=0.01, arousal=0.01, dominance=0.01)
+					feedback_timer = time.time()
+
+			self.SERVER_RATE.sleep()
+		# set terminal goal status in case of shutdown
+		self.server_navigation.set_aborted()
+				
+
+
+	
+	def goal_pose(self, pose):
+		goal_pose = MoveBaseGoal()
+		goal_pose.target_pose.header.frame_id = 'map'
+		goal_pose.target_pose.pose.position.x = pose[0][0]
+		goal_pose.target_pose.pose.position.y = pose[0][1]
+		goal_pose.target_pose.pose.position.z = pose[0][2]
+		goal_pose.target_pose.pose.orientation.x = pose[1][0]
+		goal_pose.target_pose.pose.orientation.y = pose[1][1]
+		goal_pose.target_pose.pose.orientation.z = pose[1][2]
+		goal_pose.target_pose.pose.orientation.w = pose[1][3]
+
+		return goal_pose
 
 	def navigation_dock(self): # NOT YET FINISHED
 		# Tell base to navigate to charger and dock

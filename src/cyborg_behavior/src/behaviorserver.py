@@ -148,7 +148,7 @@ class BehaviorServer():
         start_time = time.time()
         feedback_time = time.time()
         while not rospy.is_shutdown():
-            rospy.loginfo("loop")
+            #rospy.loginfo("loop")
             #check if trigger is met, aka goal completed       
             if self.behavior_finished is True:
                 if self.completion_trigger == "navigation":

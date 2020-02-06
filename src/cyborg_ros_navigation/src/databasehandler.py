@@ -153,7 +153,7 @@ class DatabaseHandler(object):
 
     def search_ongoing_events(self, robot_map_name, current_date=datetime.datetime.now()):
         try:
-            print("Searching for ongoing events...")
+            print("DatabaseHandler: Searching for ongoing events...")
 
             connection = sqlite3.connect(self.dbfilename)
             connection.row_factory = self.namedtuple_factory_event_record
@@ -161,7 +161,7 @@ class DatabaseHandler(object):
             cursor.execute('SELECT * from Event natural join Location WHERE Event.start_date<? and Event.end_date>? and Location.robot_map_name=? and Event.ignore=? ORDER BY Event.start_date DESC', (current_date, current_date, robot_map_name, False))
             records = cursor.fetchall()
 
-            print("Databasehandler found: ")
+            print("DatabaseHandler: found: ")
             print(len(records))
 
             cursor.close()
