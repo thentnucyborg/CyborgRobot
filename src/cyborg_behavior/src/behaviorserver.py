@@ -280,7 +280,7 @@ class BehaviorServer():
                 self.behavior_finished = True
                 rospy.loginfo("BehaviorServer: Completion trigger " + self.completion_trigger + " has been met.")
         else:
-            rospy.loginfo("BehaviorServer: " + "playback has " + message)
+            rospy.loginfo("BehaviorServer: " + "playback has " + message.data)
 
     def callback_text_to_speech(self, message):
         if message.data == "finished":
@@ -288,7 +288,7 @@ class BehaviorServer():
                 self.behavior_finished = True
                 rospy.loginfo("BehaviorServer: Completion trigger " + self.completion_trigger + " has been met")
         else:
-            rospy.loginfo("BehaviorServer: " + "playback has " + message)
+            rospy.loginfo("BehaviorServer: " + "playback has " + message.data)
 
     # Sends the emotional change to the controller
     def send_emotion(self, pleasure, arousal, dominance):
