@@ -1,0 +1,6 @@
+<launch>
+<include file="$(find cyborg_2dnav)cyborg_config.launch" />
+<include file="$(find cyborg_2dnav)move_base.launch" />
+</launch>
+
+

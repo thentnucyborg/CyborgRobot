@@ -1,0 +1,20 @@
+<launch>
+    <!-- Load the urdf into the ROS Parameter server. -->
+    <param name="my_robot_description" textfile="$(find robot_state_publisher)amr-ros-config/description/urdf/pioneer-lx.urdf"/>
+
+    <!-- Run nodes -->
+    <node pkg="rosaria" name="rosaria" type="RosAria" output="screen"/>
+
+    <node pkg="joint_state_publisher" name="joint_state_publisher" type="joint_state_publisher" output="screen">
+      <remap from="robot_description" to="my_robot_description"/>
+    </node>
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" >
+      <remap from="robot_description" to="my_robot_description" />
+      <remap from="joint_states" to="my_robot_description/joint_states"/>
+    </node>
+
+
+    <node pkg="rviz" name="rviz" type="rviz" respawn="false" output="screen"/>
+    
+</launch>
