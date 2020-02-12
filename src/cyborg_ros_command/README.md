@@ -23,10 +23,6 @@ Allows:
 * ROS
 * npyscreen
 
-Npyscreen can be installed:  
-//This is pip2 for Python 2.7 (used by ROS)  
-$ sudo apt-get install python-pip  
-$ pip2 install npyscreen  
 
 ## Usage:  
 It can be run using:  

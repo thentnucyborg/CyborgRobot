@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Created by Areg Babayan on 20/9/2018.
 Copyright (C) 2018 Areg Babayan. ALl rights reserved."""
-__author__      = "Areg Babayan"
+__author__      = "Areg Babayan, edited by Johanne Doevle Kalland"
 __copyright__   = "Copyright (C) 2018 Areg Babayan"
 __license__     = "BSD"
 __version__     = "0.0.3"
@@ -32,6 +32,7 @@ def startup_test():
 
 def main():
     rospy.init_node("cyborg_led_dome")
+    rospy.logwarn("Charge animation not avaliable with new navigation stack. Update charge.py to subscribe to the correct topic!")
 
     #print("for startup_test")
     #startup_test()

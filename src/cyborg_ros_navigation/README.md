@@ -1,5 +1,5 @@
 # README
-This repository contains the source code for the NTNU Cyborg`s Navigation Module (ROS node).
+This repository contains the source code for the NTNU Cyborg's Navigation Module (ROS node).
 
 Node name: cyborg_navigation   
 Language: Python  

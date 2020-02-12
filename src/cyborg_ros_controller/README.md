@@ -7,6 +7,7 @@ Language: Python
 ## Requirements:
 * ROS  
 * SMACH 
+* pygraphviz
 
 SMACH can be installed:
 $ sudo apt-get install ros-kinetic-smach
@@ -18,6 +19,7 @@ $ sudo apt-get install ros-kinetic-smach
 * Motivator: If the Cyborg is idle, it selects the event (action) that gives the largest reward. 
 
 Database location is at ~/catkin_ws/src/cyborg_ros_controller/controller.db  
+
 
 ## Usage:
 $ rosrun cyborg_controller controller.py
