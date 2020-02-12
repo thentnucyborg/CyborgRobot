@@ -13,12 +13,12 @@ import time
 homedir = os.path.expanduser("~")
 path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
 sys.path.append(path)
-from databasehandler import DatabaseHandler
 
+from databasehandler import DatabaseHandler
 import datetime
 import threading
 from std_msgs.msg import String
-from rosarnl.msg import BatteryStatus
+#from rosarnl.msg import BatteryStatus
 from cyborg_controller.msg import SystemState
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
@@ -34,14 +34,16 @@ class EventScheduler():
         self.SCHEDULER_RATE = rospy.Rate(0.05) #(Hz)
         self.LOW_POWER_THRESHOLD = 20
         self.HOMEDIR = os.path.expanduser("~")
+
         self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_ros_navigation/navigation.db"
         self.MAP_NAME = "glassgarden.map"
+
         self.current_state = "idle"
 
         self.publisher_event = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.subscriber_current_location = rospy.Subscriber("cyborg_navigation/current_location", String, self.callback_current_location)
         self.subscriber_state = rospy.Subscriber( "/cyborg_controller/state_change", SystemState, self.callback_subscriber_state, queue_size=100)
-        self.subscriber_battery_status = rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, callback = self.callback_battery_status, queue_size = 10)
+        #self.subscriber_battery_status = rospy.Subscriber("/RosAria/battery_state_of_charge", Float32, callback = self.callback_battery_status, queue_size = 10)
 
         self.database_handler = DatabaseHandler(filename=self.PATH)
         self.scheduler_thread = threading.Thread(target=self.scheduler)

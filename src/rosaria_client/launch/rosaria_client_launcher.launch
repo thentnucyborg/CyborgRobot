@@ -1,10 +1,6 @@
 <launch>
-	<node pkg = "rosaria" type = "RosAria" name = "RosAria">
-		<param name="port" value="/dev/ttyUSB0" type="string"/>
-		<param name="publish_aria_lasers" value="true"/>
-		<remap from="RosAria/pose" to="odom" />
-	</node>
+	
 
 	<node pkg="rosaria_client" type="interface" name="RosAria_interface" output="screen"/>
-
+	
 </launch>

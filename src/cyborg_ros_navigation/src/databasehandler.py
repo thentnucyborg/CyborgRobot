@@ -104,6 +104,7 @@ class DatabaseHandler(object):
             cursor.execute('SELECT * from Location WHERE location_name=?', (location_name, ))
             records = cursor.fetchall()
             cursor.close()
+            print(records)
             return records[0] if len(records) > 0 else None
         except sqlite3.OperationalError:
             print("DatabaseHandler: Unable to search_for_location()...")
@@ -152,13 +153,19 @@ class DatabaseHandler(object):
 
     def search_ongoing_events(self, robot_map_name, current_date=datetime.datetime.now()):
         try:
+            print("DatabaseHandler: Searching for ongoing events...")
+
             connection = sqlite3.connect(self.dbfilename)
             connection.row_factory = self.namedtuple_factory_event_record
             cursor = connection.cursor()
             cursor.execute('SELECT * from Event natural join Location WHERE Event.start_date<? and Event.end_date>? and Location.robot_map_name=? and Event.ignore=? ORDER BY Event.start_date DESC', (current_date, current_date, robot_map_name, False))
             records = cursor.fetchall()
+
+            print("DatabaseHandler: found: ")
+            print(len(records))
+
             cursor.close()
-            if len(records) == 0: 
+            if len(records) == 0:
                 return None
             else:
                 return records[0]

@@ -66,7 +66,7 @@ def main():
     sm = smach.StateMachine(outcomes=["error"])
 
     sm.userdata.state_machine_events = []
-    sm.userdata.last_state = "initializing"
+    sm.userdata.last_state = "initializing" 
     sm.userdata.last_event = "start_up"
 
     with sm:

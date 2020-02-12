@@ -79,7 +79,7 @@ class EmotionSystem(object):
         self.arousal = max(-1, min(1, self.arousal + arousal - decay_arousal))
         self.dominance = max(-1, min(1, self.dominance + dominance - decay_dominance))
         candidate = None
-        candidate_distance = 1000
+        candidate_distance = 10000
         for e in self.emotions:
             distance = math.sqrt((self.pleasure - e.pleasure)**2 + (self.arousal - e.arousal)**2 + (self.dominance - e.dominance)**2)
             candidate = e.name if distance < candidate_distance and distance <= self.radius else candidate

@@ -60,6 +60,8 @@ class BehaviorServer():
 
     def server_behavior_callback(self, goal):
         self.behavior_goal = goal
+        rospy.loginfo("Behavior server: GOAL IS: " + str(self.behavior_goal))
+
         # check if preset exists and execute, else abort
         if rospy.has_param(rospy.get_name() +"/"+ self.behavior_goal.current_state + "_" + self.current_emotional_state):
             self.state_name = self.behavior_goal.current_state + "_" + self.current_emotional_state
@@ -86,6 +88,8 @@ class BehaviorServer():
         self.utterance = rospy.get_param(rospy.get_name() + "/" + self.state_name + "/utterance", "")
         self.is_state_dynamic = rospy.get_param( rospy.get_name() + "/" + self.state_name + "/dynamic", False)
         self.navigation_order = rospy.get_param( rospy.get_name() + "/" + self.state_name + "/navigation_order", None)
+        rospy.loginfo("navigation_order is: " + str(self.navigation_order))
+
         if self.navigation_order == "navigation_go_to":
             if rospy.has_param( rospy.get_name() + "/" + self.state_name + "/location"):
                 self.command_location = rospy.get_param( rospy.get_name() + "/" + self.state_name + "/location", None)
@@ -93,7 +97,7 @@ class BehaviorServer():
         self.emotional_feedback = rospy.get_param(rospy.get_name() + "/" + self.state_name + "/emotional_feedback" , None)
 
         if self.navigation_order is not None:
-            self.client_navigation = actionlib.SimpleActionClient('cyborg_navigation/navigation', NavigationAction)
+            self.client_navigation = actionlib.SimpleActionClient('/cyborg_navigation/navigation', NavigationAction)
             if not self.client_navigation.wait_for_server(rospy.Duration(2.0)):
                 rospy.logwarn("ERROR: Behaviorserver unable to connect to navigation server.")
                 return
@@ -115,7 +119,8 @@ class BehaviorServer():
             self.status_navigation_server = -1
             goal_navigation = NavigationGoal(order=self.navigation_order)
             goal_navigation.location_name = self.command_location if self.command_location != None else ""
-            print("BehaviorServer: sending navigation order '" + self.navigation_order +"' and navigation goal '" + str(goal_navigation.location_name) +"' to navigation client.")
+            rospy.loginfo("BehaviorServer: goal_navigation is: " + str(goal_navigation))
+            rospy.loginfo("BehaviorServer: sending navigation order '" + self.navigation_order +"' and navigation goal '" + str(goal_navigation.location_name) +"' to navigation client.")
             self.client_navigation.send_goal(goal_navigation, done_cb = self.callback_navigation_done)
         
         #check and send visual command
@@ -135,13 +140,18 @@ class BehaviorServer():
         
         #give more details in loginfo
         rospy.loginfo("BehaviorServer: Behavior configurations executing.")
+        rospy.loginfo("BehaviorServer: emotional_feedback is: " + str(self.emotional_feedback))
         if self.emotional_feedback != None:
             self.send_emotion(self.emotional_feedback['p'], self.emotional_feedback['a'], self.emotional_feedback['d'])
         start_time = time.time()
         feedback_time = time.time()
        
         while not rospy.is_shutdown():
+<<<<<<< HEAD
             
+=======
+            #rospy.loginfo("loop")
+>>>>>>> navigation-new
             #check if trigger is met, aka goal completed       
             if self.behavior_finished is True:
                 if self.completion_trigger == "navigation":
@@ -213,6 +223,7 @@ class BehaviorServer():
             self.RATE.sleep()
         
         # set terminal goal status in case of shutdown
+        rospy.loginfo("Aborted...")
         self.server_behavior.set_aborted()
 
     def callback_dynamic_behavior(self, data):
@@ -237,6 +248,11 @@ class BehaviorServer():
 
     # Called when behavior goal is completed
     def callback_navigation_done(self, status, result):
+<<<<<<< HEAD
+=======
+        rospy.loginfo("BehaviorServer entered callback_navigation_done, with status: " + str(status) + " and result: " + str(result))
+
+>>>>>>> navigation-new
         if self.behavior_finished != True:
             self.status_navigation_server = status
             if self.completion_trigger == "navigation" and self.status_navigation_server==3:
@@ -280,7 +296,12 @@ class BehaviorServer():
                 self.behavior_finished = True
                 rospy.loginfo("BehaviorServer: Completion trigger " + self.completion_trigger + " has been met.")
         else:
+<<<<<<< HEAD
             rospy.loginfo("BehaviorServer: " + "playback has " + message.data)
+=======
+            rospy.loginfo("BehaviorServer: " + "playback has " + str(message))
+
+>>>>>>> navigation-new
 
     def callback_text_to_speech(self, message):
         if message.data == "finished":
@@ -288,7 +309,11 @@ class BehaviorServer():
                 self.behavior_finished = True
                 rospy.loginfo("BehaviorServer: Completion trigger " + self.completion_trigger + " has been met")
         else:
+<<<<<<< HEAD
             rospy.loginfo("BehaviorServer: " + "playback has " + message.data)
+=======
+            rospy.loginfo("BehaviorServer: " + "playback has " + str(message))
+>>>>>>> navigation-new
 
     # Sends the emotional change to the controller
     def send_emotion(self, pleasure, arousal, dominance):

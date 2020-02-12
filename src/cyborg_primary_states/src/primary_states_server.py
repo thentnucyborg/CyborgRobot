@@ -13,20 +13,21 @@ import sys
 homedir = os.path.expanduser("~")
 path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
 sys.path.append(path)
+
 from databasehandler import DatabaseHandler
 import datetime
 import actionlib
 from std_msgs.msg import String
 from cyborg_controller.msg import StateMachineAction, StateMachineGoal, EmotionalState, EmotionalFeedback
-from rosarnl.msg import BatteryStatus
+#from rosarnl.msg import BatteryStatus
 
 
 class PrimaryStatesServer():
     """Primary States Server"""
 
-    def __init__(self, database_file =""):
+    def __init__(self, database_file ="controller.db"):
         self.action_name = rospy.get_name()
-        self.MAP_NAME = "glassgarden.map"
+        self.MAP_NAME = "map"
         self.PLANNING_TIMEOUT = 10
         self.RATE_ACTIONLOOP = rospy.Rate(4) # Hz
 
@@ -54,6 +55,7 @@ class PrimaryStatesServer():
         elif self.state_goal.current_state == "wandering_emotional":
             self.wandering_emotional()
         elif self.state_goal.current_state =="navigation_planning":
+            rospy.loginfo("state goal: " + str(self.state_goal))
             self.navigation_planning_state(self.state_goal)
 
 
@@ -145,26 +147,38 @@ class PrimaryStatesServer():
         if goal.event == "navigation_schedular":
             if self.current_emotional_state == "angry":
                 self.next_location = self.database_handler.search_for_crowded_locations(robot_map_name=self.MAP_NAME, crowded=False)
+                rospy.loginfo("next location is: " + str(self.next_location))
+
                 message = String(data = self.next_location.location_name)
                 self.publisher_location_command.publish(message)
                 self.send_emotion(pleasure=0, arousal=0, dominance=0.1)
                 self.change_state(event="navigation_start_moving_schedular")
             else:
                 self.next_location = self.database_handler.search_ongoing_events(robot_map_name=self.MAP_NAME, current_date=datetime.datetime.now())
+                rospy.loginfo("next location is: " + str(self.next_location))
+                
                 message = String(data = self.next_location.location_name)
                 self.publisher_location_command.publish(message)
                 self.send_emotion(pleasure=0, arousal=0, dominance=-0.1)
                 self.change_state(event="navigation_start_moving_schedular")
 
-        elif goal.event == "navigation_emotional": 
+        elif goal.event == "navigation_emotional":
+            rospy.loginfo("PrimaryStatesServer: goal.event is navigation_emotional")
+
             if self.current_emotional_state in ["angry", "sad", "fear", "inhibited"]:
                 self.next_location = self.database_handler.search_for_crowded_locations(robot_map_name=self.MAP_NAME, crowded=False)
+                rospy.loginfo("PrimaryStatesServer: the next location found from database is: ")
+                rospy.loginfo(self.next_location)
+
                 message = String(data = self.next_location.location_name)
                 self.publisher_location_command.publish(message)
                 self.send_emotion(pleasure=0, arousal=0, dominance=0.1)
                 self.change_state(event="navigation_start_moving_emotional")
 
             elif self.current_emotional_state in ["happy", "loved", "dignified", "neutral", "elated"]:
+                rospy.loginfo("PrimaryStatesServer: the next location found from database is: ")
+                rospy.loginfo(self.next_location)
+                
                 self.next_location = self.database_handler.search_for_crowded_locations(robot_map_name=self.MAP_NAME, crowded=True)
                 message = String(data = self.next_location.location_name)
                 self.publisher_location_command.publish(message)
