@@ -15,6 +15,7 @@ path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
 sys.path.append(path)
 
 from databasehandler import DatabaseHandler
+
 import datetime
 import actionlib
 from std_msgs.msg import String
