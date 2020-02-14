@@ -3,17 +3,20 @@ echo "Setup script running..."
 echo "Needs to be run with sudo"
 
 # This is not complete, and may be missing some libraries or install commands 
-# All commands should also be updated to include versions. Work to find the right versions for the updated system is NOT complete. 
+# All commands should also be updated to include versions. 
+
 
 ## Exit if failure
-set -e
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root"
+   exit 1
+fi
 
 sudo apt-get update
 sudo apt-get install git
 sudo apt install python-pip
 sudo apt install pyhton2.7 python-pip
 #sudo apt install python3-pip 	#may be unnecessary 
-
 
 
 ## ROS
@@ -39,7 +42,6 @@ sudo apt install python-rosinstall python-rosinstall-generator python-wstool bui
 mkdir -p ~/catkin_ws/
 
 
-
 ## Clone Cyborg Repo from git, and place it in the right directory
 cd ~/catkin_ws
 git clone https://github.com/thentnucyborg/CyborgRobot.git 	#clones the master branch
@@ -49,7 +51,6 @@ rm -rf CyborgRobot 	#delete the now empty folder
 # Finish setting up the workspace
 catkin_make
 source devel/setup.bash
-
 
 
 ## Installs for Navigation stack (may be more)
@@ -64,32 +65,25 @@ git clone https://github.com/ros-planning/navigation.git -b melodic-devel #used 
 sudo apt install ros-melodic-move-base
 
 
-
 ## Install SMACH
 sudo apt-get install ros-melodic-smach
 
 
-
 ## Install for Audio node
-### MAY NEED OTHER VERSIONS ###
 pip2 install -Iv pyttsx3==2.7	#-I ignores installed packages, -v prints/verbose
 sudo apt-get install vlc
 pip2 install python-vlc==3.0.7110
-
 
 
 ## Install for Command node
 pip2 instll npyscreen
 
 
-
 ## Install for Controller node
 pip2 install pygraphviz
 
 
-
 ## Install for Led Dome node
-### MAY NEED OTHER VERSIONS ###
 pip2 install colour==0.1.5
 pip2 install pandas==0.24.2
 pip2 install pyserial==3.0.1
@@ -98,10 +92,8 @@ pip2 install pyopengl
 pip2 install pyopengl-accelerate
 
 
-
 ## Other
 sudo apt-get install sqlitebrowser	#tool for editing databases
-
 
 
 ## Base requirements
@@ -111,8 +103,8 @@ echo "You must logout and back in for userpivilages to take effect..."
 echo " "
 
 echo "There are still some things to install:"
-echo " - If changes to the led-controller are needed (the NodeMCU ESP32), follow the install instructions in cyborg_ros_led_dome/README.md"
-echo " - some udev rules are needed to interface with the led-dome, mode-selector-box and zed-camera. Follow the instructions on the github wiki under 'Cyborg udev Rules'"
+echo " - If changes to the code on the led-controller are needed (the NodeMCU ESP32), follow the install instructions in cyborg_ros_led_dome/README.md"
+echo " - Some udev rules are needed to interface with the led-dome, mode-selector-box and zed-camera. Follow the instructions on the github wiki under 'Cyborg udev Rules'"
 echo " - Download 'mobilesim_0.9.8+ubuntu16_amd64.deb' from Box (in Robotics/MobileRobots legacy software/ and install using Ubuntu Software"
 echo " - Repeat the step above for 'libaria_2.9.4+ubuntu16_amd64.deb'"
 
