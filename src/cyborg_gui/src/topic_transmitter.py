@@ -157,7 +157,7 @@ class TopicTransmitter():
 
             # Debug
             # print("sent topic: " + topic + " ------ \n containing data: " + str(rec) + " ------ \n to db")
-            print("sent topic: " + topic + " ------ \n to db")
+            # print("sent topic: " + topic + " ------ \n to db")
 
         # t1 = time.time()
         # total = t1-t0
