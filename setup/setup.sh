@@ -28,7 +28,7 @@ sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31
 sudo apt-get update
 # Full ROS installation 
 sudo apt install ros-melodic-desktop-full
-# Find avaliable packages
+# Find available packages
 apt search ros-melodic
 # Initialise rosdep
 sudo rosdep init

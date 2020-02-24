@@ -13,7 +13,7 @@ __version__ = "0.0.2"
 __all__ = ['StateMachineMonitor']
 
 class StateMachineMonitor():
-    """StateMachineMonitor takes in a SMACH state machine and crates a graph of it and keeps updating the graph.
+    """StateMachineMonitor takes in a SMACH state machine and creates a graph of it and keeps updating the graph.
 
     StateMachineMonitor creates a graph of a SMACH state machine. When a state change occurs, the graph will be updated. Active states will be displayed in green color. States that contains a hiarchy of states will be displayed in gray color.
 
@@ -23,7 +23,6 @@ class StateMachineMonitor():
     """
 
     graph = pygraphviz.AGraph(strict=False, directed=True)
-
     def __init__(self, state_machine, display_all=False):
         self.state_machine = state_machine
         self.display_all = display_all
