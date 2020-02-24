@@ -71,7 +71,7 @@ class meafromfile(smach.State):
         rospy.loginfo("executing meafromfile, interpreter: %s"%userdata.current_interpreter_in)
         #set interpreter and source
         userdata.interpreter = self.return_interpreter(userdata.current_interpreter_in)
-        source= FileServer(self.loop,SerialInterface)
+        source = FileServer(self.loop,SerialInterface)
 
         #delay added for correct output after switching interpreter
         rate = rospy.Rate(10)
