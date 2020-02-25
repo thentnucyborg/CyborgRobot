@@ -30,13 +30,16 @@ from module import Module
 from motivator import Motivator
 from std_msgs.msg import Bool
 
-def main():
+class Controller():
+    """Controller"""
+    
     rospy.init_node("cyborg_controller")
 
-    self.subscriber_behaviour_state = rospy.Subscriber("cyborg_command/behaviour_state", Bool, callback = self.controller_init, queue_size=10)
+    def __init__(self):
+        self.subscriber_behaviour_state = rospy.Subscriber("cyborg_modeselector/behaviour_state", Bool, callback = self.controller_init, queue_size=10)
 
     def controller_init(self, message):
-        if message == True:
+        if message.data == True:
             # Create emotions
             emotion_system = EmotionSystem()
             emotion_system.add_emotion(name="angry", pleasure=-0.51, arousal=0.59, dominance=0.25)
@@ -236,7 +239,6 @@ if __name__ == "__main__":
     if sys.version_info < (2,5):
         print("Cyborg Controller: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
         exit()
-
-    main()
-
+    Controller()
+    rospy.spin()
     print("Cyborg Controller: End of Program...")

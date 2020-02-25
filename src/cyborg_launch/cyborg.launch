@@ -5,7 +5,7 @@
 	<include file="$(find cyborg_behavior)/behavior.launch"/>
 	<node pkg="cyborg_primary_states" name="cyborg_primary_states" type="primary_states.py" output = "screen" />
 	<node pkg="cyborg_eventscheduler" name="cyborg_eventscheduler" type="eventscheduler.py" output= "screen" />
-	<!-- <node pkg="cyborg_controller" name="cyborg_controller" type="controller.py" required="true" output="screen" /> -->
+	<node pkg="cyborg_controller" name="cyborg_controller" type="controller.py" required="true" output="screen" />
 	<node pkg="cyborg_modeselector" name="cyborg_modeselector" type="modeselector.py" output= "screen" />
 </launch>
 

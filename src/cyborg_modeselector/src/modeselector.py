@@ -9,14 +9,14 @@ __all__         = []
 import rospy
 
 from topic_transmitter import TopicTransmitter
+from topic_receiver import TopicReceiver
 # from livefeed import Livefeed
 
 def main():
     rospy.init_node("cyborg_modeselector")
     # livefeed = Livefeed()
     # maneuver
-    self.publisher_behaviourstate = rospy.Publisher(rospy.get_name() + "/behaviour_state", String, queue_size=10)
-
+    TopicReceiver()
     topicTransmitter = TopicTransmitter()
     rospy.spin()
 
