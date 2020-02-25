@@ -1,5 +1,7 @@
 # Proposed system architecture for 2020
 
+See [Issue29](https://github.com/thentnucyborg/CyborgRobot/issues/29) for new module-based naming convension.
+
 ![System architecture](system_proposal_2020.png)
 
 Changes from current system: 
@@ -14,4 +16,4 @@ Specification:
   - Audio
   - Navigate to point, wander or dock
   - Manual mode: which lets us operate the Pioneer LX by attached Joystick or remotely by keyboard.
-- Visual and audio nodes have built-in behaviours that can be requested by Commander or Behaviour: Idle, Navigating, Manual, Play sound, Text-to-speach, LED show etc.  
+- Visual and audio nodes have built-in behaviours that can be requested by Commander or Behaviour: Idle, Navigating, Manual, Play sound, Text-to-speach, LED show etc.
