@@ -51,7 +51,7 @@ class EmotionSystem(object):
         self.set_emotional_values_subscriber = rospy.Subscriber( rospy.get_name() + "/set_emotional_values", EmotionalFeedback, self.set_emotional_value_callback, queue_size=100)
         self.emotion_publisher = rospy.Publisher( rospy.get_name() + "/emotional_state", EmotionalState, queue_size=100)
         self.emotion_service = rospy.Service( rospy.get_name() + "/get_emotional_state", EmotionalStateService, self.get_emotional_state_callback)
-        self.controller_subscriber = rospy.Subscriber( rospy.get_name() + "/emotional_controler", String, self.controller_callback, queue_size=100)
+        self.controller_subscriber = rospy.Subscriber( rospy.get_name() + "/emotional_controller", String, self.controller_callback, queue_size=100)
         rospy.loginfo("EmotionSystem: Activated...")
 
 

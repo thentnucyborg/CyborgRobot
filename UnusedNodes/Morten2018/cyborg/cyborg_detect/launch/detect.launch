@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- Console launch prefix -->
+  <arg name="launch_prefix" default=""/>
+
+  <!-- Start OpenCV DNN and ROS wrapper -->
+  <node pkg="cyborg_detect" ns="cyborg_detect" name="cyborg_detect_node" type="main.py" output="screen" required="true">
+      <param name="camera_topic_name"  value="/cv_camera/image_raw" />
+      <!-- <param name="depth_topic_name"  value="/zed/depth/depth_registered" /> -->
+
+      <param name="label_file_path" value="data/cfg/coco.names" />
+      <param name="cfg_file_path" value="data/cfg/yolov3.cfg" />
+      <param name="weights_file_path" value="data/yolov3.weights" />
+    
+      <param name="predictions_topic_name"  value="predictions" />
+      <param name="predictions_topic_latch" value="true" />
+
+      <param name="detection_image_topic_name"  value="detection_image" />
+      <param name="detection_image_topic_latch" value="true" />
+  </node>
+</launch>

@@ -1,0 +1,22 @@
+<?xml version="1.2"?>
+<package>
+  <name>cyborg</name>
+  <version>0.1.0</version>
+  <description>The NTNU Cyborg</description>
+  <maintainer email="morten.mjelva@gmail.com">Morten Mjelva</maintainer>
+  <license>BSD</license>
+  <url>https://www.ntnu.edu/cyborg</url>
+  <author email="morten.mjelva@gmail.com">Morten Mjelva</author>
+
+  <!-- Dependencies which this packages needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>cyborg_bt</run_depend>
+  <run_depend>cyborg_nav</run_depend>
+  <run_depend>cyborg_types</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

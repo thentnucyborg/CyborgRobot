@@ -95,6 +95,10 @@ pip2 install pyopengl-accelerate
 ## Other
 sudo apt-get install sqlitebrowser	#tool for editing databases
 
+# Make  python  and  bash  scripts  executable
+find ~/catkin_ws/src/ -name ’*.py’ -exec  chmod +x {} \;
+find ~/catkin_ws/src/ -name ’*.sh’ -exec  chmod +x {} \;
+
 
 ## Base requirements
 sudo usermod -a -G dialout $USER 	#add user to dialout group
