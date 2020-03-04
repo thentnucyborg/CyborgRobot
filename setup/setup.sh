@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo "Setup script running..."
 echo "Needs to be run with sudo"
 
@@ -27,14 +28,15 @@ sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31
 
 sudo apt-get update
 # Full ROS installation 
-sudo apt install ros-melodic-desktop-full
+sudo apt install ros-kinetic-desktop-full
 # Find avaliable packages
-apt search ros-melodic
+apt-cache search ros-kinetic
+read -p "Avaliable packages (above). Take a note if some are needed. Press ENTER to continue."
 # Initialise rosdep
 sudo rosdep init
 rosdep update
 # Setup the environment
-echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 # Dependencies for building packages
 sudo apt install python-rosinstall python-rosinstall-generator python-wstool build-essential
@@ -54,19 +56,19 @@ source devel/setup.bash
 
 
 ## Installs for Navigation stack (may be more)
-sudo apt-get install ros-melodic-navigation #used the kinetic branch for the system before updating
-sudo apt-get install ros-melodic-tf2-sensor-msgs #used the kinetic branch for the system before updating
+sudo apt-get install ros-kinetic-navigation
+sudo apt-get install ros-kinetic-tf2-sensor-msgs
 sudo apt-get install libsdl-dev
 sudo apt-get install libsdl-image1.2-dev
 sudo apt-get install libbullet-dev
-git clone https://github.com/ros-visualization/rviz.git -b melodic-devel #used the kinetic branch for the system before updating
-git clone https://github.com/ros-planning/navigation.git -b melodic-devel #used the kinetic branch for the system before updating
+git clone https://github.com/ros-visualization/rviz.git -b kinetic-devel
+git clone https://github.com/ros-planning/navigation.git -b kinetic-devel
 # Install move-base 
-sudo apt install ros-melodic-move-base
+sudo apt install ros-kinetic-move-base
 
 
 ## Install SMACH
-sudo apt-get install ros-melodic-smach
+sudo apt-get install ros-kinetic-smach
 
 
 ## Install for Audio node
@@ -94,6 +96,10 @@ pip2 install pyopengl-accelerate
 
 ## Other
 sudo apt-get install sqlitebrowser	#tool for editing databases
+
+# Make  python  and  bash  scripts  executable
+find ~/catkin_ws/src/ -name ’*.py’ -exec  chmod +x {} \;
+find ~/catkin_ws/src/ -name ’*.sh’ -exec  chmod +x {} \;
 
 
 ## Base requirements
