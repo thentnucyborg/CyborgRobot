@@ -11,4 +11,9 @@ catkin_make
 source ~/catkin_ws/devel/setup.bash 
 
 cd ~/catkin_ws/src/cyborg_launch/
+
+## run this command for testing on computers not on the cyborg
 gnome-terminal -e 'roslaunch cyborg.launch'
+	
+## run this command and comment out the other for running on the cyborg
+# xfce4-terminal -e 'roslaunch cyborg.launch' --hold
