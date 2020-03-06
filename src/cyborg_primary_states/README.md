@@ -7,7 +7,7 @@ Number of actionlib server(s): 1
 
 ## Requirements:
 * Databasehandler from navigation module
-	*"sys.path.append('~/catkin_ws/src/cyborg_ros_navigation/src/')"
+	*"sys.path.append('~/catkin_ws/src/cyborg_navigation/src/')"
 * Map name
 
 

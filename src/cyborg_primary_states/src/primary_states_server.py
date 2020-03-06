@@ -11,7 +11,7 @@ import os
 import sys
 
 homedir = os.path.expanduser("~")
-path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
+path = homedir + "/catkin_ws/src/cyborg_navigation/src/"
 sys.path.append(path)
 from databasehandler import DatabaseHandler
 import datetime
