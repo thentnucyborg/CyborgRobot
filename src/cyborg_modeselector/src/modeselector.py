@@ -7,17 +7,19 @@ __all__         = []
 
 
 import rospy
-
 from topic_transmitter import TopicTransmitter
-from topic_receiver import TopicReceiver
+# from topic_receiver import TopicReceiver
 # from livefeed import Livefeed
 
 def main():
     rospy.init_node("cyborg_modeselector")
     # livefeed = Livefeed()
     # maneuver
-    TopicReceiver()
-    topicTransmitter = TopicTransmitter()
+    TopicTransmitter()
+    print("started topic transmitter")
+    # TopicReceiver()
+    # print("started topic receiver")
+    
     rospy.spin()
 
 

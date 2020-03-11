@@ -32,14 +32,16 @@ from std_msgs.msg import Bool
 
 class Controller():
     """Controller"""
-    
+
     rospy.init_node("cyborg_controller")
 
     def __init__(self):
+        self.prev = None
         self.subscriber_behaviour_state = rospy.Subscriber("cyborg_modeselector/behaviour_state", Bool, callback = self.controller_init, queue_size=10)
 
     def controller_init(self, message):
-        if message.data == True:
+        self.message = message
+        while not rospy.is_shutdown():
             # Create emotions
             emotion_system = EmotionSystem()
             emotion_system.add_emotion(name="angry", pleasure=-0.51, arousal=0.59, dominance=0.25)
@@ -160,7 +162,6 @@ class Controller():
                 sm_nav = smach.StateMachine(outcomes=["succeeded","aborted","power_low"])
 
                 with sm_nav:
-                
                     navigation_planning_transitions = {"navigation_start_moving_schedular":"navigation_go_to_schedular",
                                                         "navigation_start_moving_emotional":"navigation_go_to_emotional",
                                                         "navigation_start_wandering":"wandering_emotional",
@@ -217,21 +218,39 @@ class Controller():
 
                 sm.register_io_keys({"state_machine_events","last_state","last_event"})
                 sm_nav.register_io_keys({"state_machine_events","last_state","last_event"})
+                
+            print(self.message.data)
+            if self.message.data == True and self.prev != True:                 
+                rospy.sleep(3)
+                self.sis = smach_ros.IntrospectionServer('controller_viewer', sm, '/controller_viewer')
+                self.smach_thread = threading.Thread(target=sm.execute)
+                self.smach_thread.daemon = True
+                
+                # Start ROS main looping
+                print("tried to start")
+                self.sis.start()
+                self.smach_thread.start()
+                self.prev = True 
+                
+                rospy.loginfo("Controller: Activated...")
 
+                rospy.sleep(5)
+                self.sis.stop()
+                terminate(sm)
+                self.smach_thread.join()
+            elif self.message.data == False and self.prev != False:
+                # Stop ROS main looping
+                print("tried to stop")
+                self.sis.stop()
+                terminate(sm)
+                self.smach_thread.join()
+                self.prev = False
 
-            rospy.sleep(3)
-            sis = smach_ros.IntrospectionServer('controller_viewer', sm, '/controller_viewer')
-            sis.start()
+                rospy.loginfo("Controller: Terminated...")
+            rospy.sleep(1)
 
-            smach_thread = threading.Thread(target=sm.execute)
-            smach_thread.daemon = True
-            smach_thread.start()
-            # Start ROS main looping
-            rospy.loginfo("Controller: Activated...")
-            rospy.spin()
-            sis.stop()
-            rospy.loginfo("Controller: Terminated...")
-
+def terminate(self): 
+    self._running = False
 
 if __name__ == "__main__":
     print("Cyborg Controller: Starting Program...")
@@ -239,6 +258,8 @@ if __name__ == "__main__":
     if sys.version_info < (2,5):
         print("Cyborg Controller: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
         exit()
+    
     Controller()
+
     rospy.spin()
     print("Cyborg Controller: End of Program...")

@@ -38,7 +38,6 @@ def main():
     #startup_test()
     #print("etter startup_test")
     time.sleep(5)
-    print("etter sleep")
 
 
     domecontrol.domecontrol()

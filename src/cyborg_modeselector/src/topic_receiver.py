@@ -13,7 +13,7 @@ class TopicReceiver():
     """TopicReceiver"""
 
     def __init__(self):
-        self.publisher_behaviour_state = rospy.Publisher(rospy.get_name() + "/behaviour_state", Bool, queue_size=10)
+        # self.publisher_behaviour_state = rospy.Publisher(rospy.get_name() + "/behaviour_state", Bool, queue_size=10)
         while not rospy.is_shutdown():
-            self.publisher_behaviour_state.publish(False)
+            # self.publisher_behaviour_state.publish(False)
             rospy.sleep(10)
