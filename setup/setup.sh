@@ -16,7 +16,7 @@ fi
 sudo apt-get update
 sudo apt-get install git
 sudo apt install python-pip
-sudo apt install pyhton2.7 python-pip
+sudo apt install python2.7
 #sudo apt install python3-pip 	#may be unnecessary 
 
 
@@ -50,12 +50,19 @@ git clone https://github.com/thentnucyborg/CyborgRobot.git 	#clones the master b
 mv ~/catkin_ws/CyborgRobot/* ~/catkin_ws/	#move all files and folders to the workspace
 mv ~/catkin_ws/CyborgRobot/.* ~/catkin_ws/	#move all hidden files and folders to the workspace. Ingore the message saying . and .. cannot be moved
 rm -rf CyborgRobot 	#delete the now empty folder
-# Finish setting up the workspace
-catkin_make
-source devel/setup.bash
+
+
+# Open a different folder and download Arnl.tar.gz, libaria 2.9.4, libarnl 1.9.2a, arnl-base_1.9.2 and mobilesim_0.9.8 from BOX.
+# Unzip Arnl.tar.gz
+sudo dpkg -i arnl-base_1.9.2+ubuntu16_amd64.deb
+sudo dpkg -i libarnl_1.9.2a+ubuntu16_amd64.deb
+sudo dpkg -i libaria_2.9.4+ubuntu16_amd64.deb
+sudo dpkg -i mobilesim_0.9.8+ubuntu16_amd64.deb
+sudo mv ./Arnl /usr/local/Arnl
 
 
 ## Installs for Navigation stack (may be more)
+cd ~/catkin_ws/src
 sudo apt-get install ros-kinetic-navigation
 sudo apt-get install ros-kinetic-tf2-sensor-msgs
 sudo apt-get install libsdl-dev
@@ -78,18 +85,20 @@ pip2 install python-vlc==3.0.7110
 
 
 ## Install for Command node
-pip2 instll npyscreen
+pip2 install npyscreen
 
 
 ## Install for Controller node
-pip2 install pygraphviz
+sudo apt install graphviz-dev
+pip2 install pygraphviz 
+#Alternatively, run: sudo apt-get install python-pygraphviz
 
 
 ## Install for Led Dome node
 pip2 install colour==0.1.5
-pip2 install pandas==0.24.2
+pip2 install numpy==1.16.4
+pip2 install pandas==0.24.2 #might not work
 pip2 install pyserial==3.0.1
-pip2 install numpy==1.16.5
 pip2 install pyopengl
 pip2 install pyopengl-accelerate
 
@@ -97,9 +106,15 @@ pip2 install pyopengl-accelerate
 ## Other
 sudo apt-get install sqlitebrowser	#tool for editing databases
 
+
 # Make  python  and  bash  scripts  executable
 find ~/catkin_ws/src/ -name ’*.py’ -exec  chmod +x {} \;
 find ~/catkin_ws/src/ -name ’*.sh’ -exec  chmod +x {} \;
+
+
+# Finish setting up the workspace
+catkin_make    #May have to run several times, ignore errors until 100%.
+source devel/setup.bash
 
 
 ## Base requirements
@@ -115,29 +130,3 @@ echo " - Download 'mobilesim_0.9.8+ubuntu16_amd64.deb' from Box (in Robotics/Mob
 echo " - Repeat the step above for 'libaria_2.9.4+ubuntu16_amd64.deb'"
 
 echo "Setup script ended..."
-
-
-
-# ????
-# # Guide:
-# 1. Download Ubuntu 16.04 disk image and create a bootable disk using the image and a USB flash drive.
-# 2. Startup the system, if desktop environment is installed skip the next step.
-# 3. Get a desktop environment, we have been using Unity. To use unity, open command prompt for Ubuntu and do:
-# 	3.1.  sudo apt -get  update
-# 	3.2.  sudo apt -get  install  ubuntu -desktop
-# # (If you’re using  virtual  machine , follow  these  steps to be
-# # able to  remote  desktop  or  follow  this  guide:
-# # https :// gist.github.com/spacecat/b71918d49fbd520d18647b0ec3513525):
-# # In  Linux  Terminal:
-# A. cd
-# B. mkdir  Downloads
-# C. cd  Downloads
-# D. wget "http ://www.c-nergy.be/downloads/install -xrdp -1.9.1. zip"
-# E. sudo apt -get  install  unzip
-# F unzip  install -xrdp -1.9.1. zip
-# G. nano  install -xrdp -1.9.1. sh
-# # (** REMOVE ** Step1  Ubuntu  version  check , *from if to fi*)
-# H. chmod +x ~/ Downloads/install -xrdp -1.9.1/ install -xrdp -1.9.1. sh
-# I. sudo ./install -xrdp -1.9.1. sh25J. # Restart  VM  instance.
-# K. # Use  program "remote  desktop  connection" on  windows  and  put in
-# # your VM’s public  ip.
