@@ -124,9 +124,6 @@ class TopicTransmitter():
 
             if not topicString + "_Thread" in self.__dict__:
                 self.__dict__[topicString + "_Thread"] = threading.Thread(target=self.transmit_data(10, topicString))
-
-        
-
     
     def transmit_data(self, interval, topic):
         # total = 0
