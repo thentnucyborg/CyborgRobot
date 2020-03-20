@@ -58,7 +58,7 @@ sudo dpkg -i arnl-base_1.9.2+ubuntu16_amd64.deb
 sudo dpkg -i libarnl_1.9.2a+ubuntu16_amd64.deb
 sudo dpkg -i libaria_2.9.4+ubuntu16_amd64.deb
 sudo dpkg -i mobilesim_0.9.8+ubuntu16_amd64.deb
-sudo mv ./Arnl /usr/local/Arnl
+sudo cp -r ./Arnl /usr/local/
 
 
 ## Installs for Navigation stack (may be more)
