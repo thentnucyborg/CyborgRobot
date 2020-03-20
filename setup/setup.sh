@@ -31,7 +31,7 @@ sudo apt-get update
 sudo apt install ros-kinetic-desktop-full
 # Find avaliable packages
 apt-cache search ros-kinetic
-read -p "Avaliable packages (above). Take a note if some are needed. Press ENTER to continue."
+read -p "Available packages (above). Take a note if some are needed. Press ENTER to continue."
 # Initialise rosdep
 sudo rosdep init
 rosdep update
