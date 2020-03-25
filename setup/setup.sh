@@ -113,8 +113,8 @@ find ~/catkin_ws/src/ -name ’*.sh’ -exec  chmod +x {} \;
 
 
 # Finish setting up the workspace
-catkin_make_isolated    #builds one package at a time according to dependency order
-source devel_isolated/setup.bash
+catkin_make    #might have to run several times
+source devel/setup.bash
 
 
 ## Base requirements
