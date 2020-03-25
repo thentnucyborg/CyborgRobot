@@ -75,7 +75,6 @@ sudo apt-get install python-pyqt5
 sudo apt-get install python-qt-binding
 
 
-
 ## Install for Audio node
 pip2 install -Iv pyttsx3==2.7	#-I ignores installed packages, -v prints/verbose
 sudo apt-get install vlc

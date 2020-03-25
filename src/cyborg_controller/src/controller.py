@@ -228,11 +228,9 @@ class Controller():
             
             sis = IntrospectionServer('controller_viewer', sm, '/controller_viewer')
             sis.start()
-            rospy.loginfo("----- ETTER INTROSPECTIONSERVER -----") #testing
 
             smach_thread = threading.Thread(target = sm.execute)
             smach_thread.daemon = True
-            rospy.loginfo("----- ETTER THREAD START -----") #testing
 
             smach_thread.start()
 
