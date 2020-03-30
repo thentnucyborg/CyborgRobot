@@ -81,7 +81,7 @@ ELSE()
 ENDIF()
 
 add_executable(rosarnl_node rosarnl_node.cpp ArnlSystem.cpp RobotMonitor.cpp LaserPublisher.cpp)
-add_dependencies(rosarnl_node ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp})
+add_dependencies(rosarnl_node rosarnl_gencpp ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp})
 
 target_link_libraries(rosarnl_node ${catkin_LIBRARIES} ${Boost_LIBRARIES} Arnl BaseArnl ArNetworkingForArnl AriaForArnl pthread dl rt)
 set_target_properties(rosarnl_node PROPERTIES COMPILE_FLAGS "-fPIC -D_REENTRANT -Wall")
