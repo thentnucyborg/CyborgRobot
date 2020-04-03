@@ -114,7 +114,7 @@ add_executable(enable_motors src/enable_motors.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(turtle_test_node turtle_test_generate_messages_cpp)
+# add_dependencies(turtle_test_node turtle_test_generate_messages_cpp print_state ${catkin_EXPORTED_TARGETS})
 
 
 ## Specify libraries to link a library or executable target against
