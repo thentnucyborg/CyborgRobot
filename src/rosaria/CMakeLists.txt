@@ -4,13 +4,13 @@ project(rosaria)
 # Load catkin and all dependencies required for this package
 # TODO: remove all from COMPONENTS that are not catkin packages.
 find_package(catkin REQUIRED COMPONENTS 
-  message_generation 
   roscpp 
   nav_msgs 
   geometry_msgs 
   sensor_msgs 
   tf
   dynamic_reconfigure
+  message_generation 
   )
 
 # Set the build type.  Options are:
@@ -31,6 +31,7 @@ add_message_files(
   FILES
   BumperState.msg
 )
+
 #uncomment if you have defined services
 #add_service_files(
 #  FILES
@@ -74,12 +75,18 @@ set_target_properties(RosAria PROPERTIES COMPILE_FLAGS "-fPIC")
 generate_messages(
   DEPENDENCIES geometry_msgs std_msgs
 )
+
 # TODO: fill in what other packages will need to use this package
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-    DEPENDS roscpp nav_msgs geometry_msgs sensor_msgs tf
+catkin_package( CATKIN_DEPENDS 
+message_runtime 
+roscpp 
+nav_msgs 
+geometry_msgs 
+sensor_msgs 
+tf
 )
 
 #############

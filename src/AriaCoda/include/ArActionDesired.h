@@ -206,7 +206,7 @@ protected:
    movement command, the resolver (ArResolver) will combine these strengths 
    and figure out what to do based on them.
 
-   For all strength values there is a total of 1.0 combined strength available.
+   For all strength values there is a total of 1.0 combined strength avaliable.
    The range for strength is from 0 to 1.  This is simply a convention that 
    ARIA uses by default, if you don't like it, you could override this
    class the ArResolver class.

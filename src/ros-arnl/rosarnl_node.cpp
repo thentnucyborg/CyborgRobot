@@ -1,5 +1,3 @@
-
-
 #include "Aria/Aria.h"
 #include "Arnl.h"
 #include "ArPathPlanningInterface.h"
@@ -11,6 +9,9 @@
 #include "ArnlSystem.h"
 #include <rosarnl/BatteryStatus.h>
 #include <rosarnl/BumperState.h>
+#include <rosarnl/LoadMapFile.h>
+#include <rosarnl/MakePlan.h>
+
 #include "LaserPublisher.h"
 
 #include <ros/ros.h>
@@ -50,22 +51,26 @@ class RosArnlNode
 
     ArFunctorC<RosArnlNode> myPublishCB;
 
-    ArPose rosPoseToArPose(const geometry_msgs::Pose& p);
-    ArPose rosPoseToArPose(const geometry_msgs::PoseStamped& p) { return rosPoseToArPose(p.pose); }
-    ArPoseWithTime rosPoseStampedToArPoseWithTime(const geometry_msgs::PoseStamped& p); 
-    geometry_msgs::Pose rosPoseToArPose(const ArPose& arpose);
+    static ArPose rosPoseToArPose(const geometry_msgs::Pose& p);
+    static ArPose rosPoseToArPose(const geometry_msgs::PoseStamped& p) { return rosPoseToArPose(p.pose); }
+    static ArPoseWithTime rosPoseStampedToArPoseWithTime(const geometry_msgs::PoseStamped& p);
+    static geometry_msgs::Pose arPoseToRosPose(const ArPose& arpose);
 
     ros::ServiceServer enable_srv;
     ros::ServiceServer disable_srv;
     ros::ServiceServer wander_srv;
     ros::ServiceServer stop_srv;
     ros::ServiceServer dock_srv;
+    ros::ServiceServer map_srv;
+    ros::ServiceServer plan_srv;
 
     bool enable_motors_cb(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
     bool disable_motors_cb(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
     bool wander_cb(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
     bool stop_cb(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
     bool dock_cb(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
+    bool make_plan_cb(rosarnl::MakePlan::Request& request, rosarnl::MakePlan::Response& response);
+    bool map_cb(rosarnl::LoadMapFile::Request& request, rosarnl::LoadMapFile::Response& response);
 
     ros::Publisher motors_state_pub;
     std_msgs::Bool motors_state;
@@ -300,8 +305,11 @@ RosArnlNode::RosArnlNode(ros::NodeHandle nh, ArnlSystem& arnlsys)  :
   wander_srv = n.advertiseService("wander", &RosArnlNode::wander_cb, this);
   stop_srv = n.advertiseService("stop", &RosArnlNode::stop_cb, this);
   dock_srv = n.advertiseService("dock", &RosArnlNode::dock_cb, this);
+  plan_srv = n.advertiseService("make_plan", &RosArnlNode::make_plan_cb, this);
 
   global_localization_srv = n.advertiseService("global_localization", &RosArnlNode::global_localization_srv_cb, this);
+
+  map_srv = n.advertiseService("load_map_file", &RosArnlNode::map_cb, this);
 
   initialpose_sub = n.subscribe("initialpose", 1, (boost::function <void(const geometry_msgs::PoseWithCovarianceStampedConstPtr&)>) boost::bind(&RosArnlNode::initialpose_sub_cb, this, _1));
 
@@ -589,6 +597,21 @@ bool RosArnlNode::dock_cb(std_srvs::Empty::Request& request, std_srvs::Empty::Re
     return true;
 }
 
+bool RosArnlNode::make_plan_cb(rosarnl::MakePlan::Request& request, rosarnl::MakePlan::Response& response)
+{
+    ArPose from, to;
+    std::list<ArPose> path;
+
+    ROS_INFO_NAMED("rosarnl_node", "rosarnl_node: Make plan request.");
+
+    from = arnl.robot->getPose();
+    to   = rosPoseToArPose(request.goal);
+    path = arnl.pathTask->getPathFromTo(from, to, true, NULL);
+    std::transform(path.begin(), path.end(), std::back_inserter(response.path), arPoseToRosPose);
+
+    return true;
+}
+
 bool RosArnlNode::global_localization_srv_cb(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
 {
   ROS_INFO_NAMED("rosarnl_node", "rosarnl_node: Localize init (global_localization service) request...");
@@ -596,6 +619,16 @@ bool RosArnlNode::global_localization_srv_cb(std_srvs::Empty::Request& request, 
   if(! arnl.locTask->localizeRobotAtHomeBlocking() )
     ROS_WARN_NAMED("rosarnl_node", "rosarnl_node: Error in initial localization.");
   return true;
+}
+
+bool RosArnlNode::map_cb(rosarnl::LoadMapFile::Request& request, rosarnl::LoadMapFile::Response& response)
+{
+  ROS_INFO_NAMED("rosarnl_node", "rosarnl_node: Load new map file service request with file name \"%s\" received...", request.filename.c_str());
+  if(!arnl.map) return false;
+  char msg[256];
+  bool r = arnl.map->readFile(request.filename.c_str(), msg, 256);
+  response.message = msg;
+  return r;
 }
 
 
@@ -613,7 +646,8 @@ ArPose RosArnlNode::rosPoseToArPose(const geometry_msgs::Pose& p)
   return ArPose( p.position.x * 1000.0, p.position.y * 1000.0, tf::getYaw(p.orientation) / (M_PI/180.0) );
 }
 
-geometry_msgs::Pose arPoseToRosPose(const ArPose& arpose)
+
+geometry_msgs::Pose RosArnlNode::arPoseToRosPose(const ArPose& arpose)
 {
   // TODO use tf::poseTFToMsg instead?
   geometry_msgs::Pose rospose;
@@ -862,5 +896,3 @@ int main( int argc, char** argv )
   return 0;
 
 }
-
-

@@ -135,7 +135,7 @@ class Motivator():
         self.emotion_publisher.publish(msg)
 
 
-    # Updates the current emotion when the emotion subscriber recives data
+    # Updates the current emotion when the emotion subscriber receives data
     # Normalizes the data.
     def emotion_callback(self, data):
         self.current_emotion = data.to_emotional_state

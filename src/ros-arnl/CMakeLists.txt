@@ -3,7 +3,16 @@ cmake_minimum_required(VERSION 2.8.3)
 project(rosarnl)
 # Load catkin and all dependencies required for this package
 # TODO: remove all from COMPONENTS that are not catkin packages.
-find_package(catkin REQUIRED COMPONENTS message_generation roscpp nav_msgs geometry_msgs tf genmsg actionlib_msgs actionlib nav_msgs)
+find_package(catkin REQUIRED COMPONENTS 
+  roscpp 
+  nav_msgs 
+  geometry_msgs 
+  tf 
+  genmsg 
+  actionlib_msgs 
+  actionlib
+  message_generation 
+)
 
 # Set the build type.  Options are:
 #  Coverage       : w/ debug symbols, w/o optimization, w/ code-coverage
@@ -18,17 +27,16 @@ set(ROS_BUILD_TYPE RelWithDebInfo)
 #set the default path for built libraries to the "lib" directory
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
+#uncomment if you have defined messages
 add_message_files(
   FILES
   BatteryStatus.msg
   BumperState.msg
 )
 
-#uncomment if you have defined services
-add_service_files(
-  FILES 
-  MakePlan.srv 
+add_service_files( FILES
   LoadMapFile.srv
+  MakePlan.srv
 )
 
 add_action_files(
@@ -51,8 +59,8 @@ generate_messages(
 #add_library(${PROJECT_NAME} src/example.cpp)
 #target_link_libraries(${PROJECT_NAME} another_library)
 
-catkin_package(
-    DEPENDS 
+catkin_package( CATKIN_DEPENDS
+    message_runtime 
     roscpp 
     nav_msgs 
     geometry_msgs 
@@ -81,11 +89,11 @@ ELSE()
 ENDIF()
 
 add_executable(rosarnl_node rosarnl_node.cpp ArnlSystem.cpp RobotMonitor.cpp LaserPublisher.cpp)
-add_dependencies(rosarnl_node ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_generate_messages_cpp})
+add_dependencies(rosarnl_node ${PROJECT_NAME}_generate_messages_cpp} ${catkin_EXPORTED_TARGETS})
+add_dependencies(rosarnl_node rosarnl_gencpp)
 
 target_link_libraries(rosarnl_node ${catkin_LIBRARIES} ${Boost_LIBRARIES} Arnl BaseArnl ArNetworkingForArnl AriaForArnl pthread dl rt)
 set_target_properties(rosarnl_node PROPERTIES COMPILE_FLAGS "-fPIC -D_REENTRANT -Wall")
-
 
 
 #############

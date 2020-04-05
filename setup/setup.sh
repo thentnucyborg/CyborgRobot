@@ -113,8 +113,10 @@ find ~/catkin_ws/src/ -name ’*.sh’ -exec  chmod +x {} \;
 
 
 # Finish setting up the workspace
-catkin_make    #might have to run several times
-source devel/setup.bash
+catkin_make    #May have to run several times
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc # Opening new terminal runs source command, so we dont have to source workspace each time.
+source devel/setup.bash 
+
 
 
 ## Base requirements

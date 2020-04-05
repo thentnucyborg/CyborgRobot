@@ -9,3 +9,4 @@ To include:
 ## setup.sh
 
 ## CyborgUsbRules
+see [wiki page about udev rules](https://github.com/thentnucyborg/CyborgRobot/wiki/Cyborg-udev-Rules) 

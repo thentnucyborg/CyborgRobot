@@ -94,11 +94,9 @@ def main():
                         idle_transitions,
                         sm_remapping)
 
-        sleepy_transitions = {"aborted":"idle",
-                            "succeeded":"sleeping"}
+        sleepy_transitions = {"aborted":"idle","succeeded":"sleeping"}
         sleepy_resources = {}
-        show_off_mea_transitions={"aborted":"idle",
-                                "succeeded":"idle"}
+        show_off_mea_transitions={"aborted":"idle","succeeded":"idle"}
         smach.StateMachine.add("show_off_mea",
                             Module("show_off_mea", "cyborg_behavior",show_off_mea_transitions, sleepy_resources),
                             show_off_mea_transitions,
@@ -110,8 +108,7 @@ def main():
                                 sm_remapping)
 
 
-        exhausted_transitions = {"aborted":"idle",
-                            "succeeded":"sleeping"}
+        exhausted_transitions = {"aborted":"idle","succeeded":"sleeping"}
         exhausted_resources = {}
         smach.StateMachine.add("exhausted",
                                 Module("exhausted", "cyborg_behavior", exhausted_transitions, exhausted_resources),
@@ -119,8 +116,7 @@ def main():
                                 sm_remapping)
 
 
-        sleeping_transitions = {"preempted": "idle",
-                                "cyborg_wake_up":"waking_up"}
+        sleeping_transitions = {"preempted": "idle","cyborg_wake_up":"waking_up"}
 
         sleeping_resources = {}
         smach.StateMachine.add("sleeping",
@@ -190,16 +186,14 @@ def main():
         sm_nav_transitions = {"aborted":"idle","succeeded":"idle", "power_low":"exhausted"}
         smach.StateMachine.add("navigation", sm_nav, sm_nav_transitions, sm_remapping)
 
-        music_transitions = {"aborted":"idle",
-                                "succeeded":"idle"}
+        music_transitions = {"aborted":"idle","succeeded":"idle"}
         music_resources = {}
         smach.StateMachine.add("music_horror",
                                 Module("music_horror","cyborg_behavior", music_transitions, music_resources),
                                     music_transitions,
                                     sm_remapping)
         
-        astrolanguage_transitions = {"aborted":"idle",
-                                "succeeded":"idle"}
+        astrolanguage_transitions = {"aborted":"idle","succeeded":"idle"}
         astrolanguage_resources = {}
         smach.StateMachine.add("astrolanguage",
                                 Module("astrolanguage","cyborg_behavior", astrolanguage_transitions, astrolanguage_resources),
@@ -233,5 +227,5 @@ if __name__ == "__main__":
         exit()
 
     main()
-    rospy.spin()
+
     print("Cyborg Controller: End of Program...")
