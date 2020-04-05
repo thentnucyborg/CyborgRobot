@@ -99,6 +99,11 @@ pip2 install pyopengl-accelerate
 pip2 install pytz
 
 
+## Behavior Trees
+pip2 install networkx==2.2
+
+
+
 ## Other
 sudo apt-get install sqlitebrowser	#tool for editing databases
 
