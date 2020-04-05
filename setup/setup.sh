@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo "Setup script running..."
-echo "Needs to be run with sudo"
 
 # This is not complete, and may be missing some libraries or install commands 
 # All commands should also be updated to include versions. 
@@ -13,12 +12,20 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+echo "---------- General installs and setup ----------"
+echo "to continue press enter"
+read 
+
 sudo apt-get update
 sudo apt-get install git
 sudo apt install python-pip
-sudo apt install pyhton2.7 python-pip
+sudo apt install python2.7 python-pip
 #sudo apt install python3-pip 	#may be unnecessary 
 
+
+echo "---------- Install ROS ----------"
+echo "to continue press enter"
+read 
 
 ## ROS
 # Setup your computer to accept software from packages.ros.org:
@@ -31,7 +38,7 @@ sudo apt-get update
 sudo apt install ros-kinetic-desktop-full
 # Find avaliable packages
 apt-cache search ros-kinetic
-read -p "Avaliable packages (above). Take a note if some are needed. Press ENTER to continue."
+read -p "Available packages (above). Take a note if some are needed. Press ENTER to continue."
 # Initialise rosdep
 sudo rosdep init
 rosdep update
@@ -44,18 +51,49 @@ sudo apt install python-rosinstall python-rosinstall-generator python-wstool bui
 mkdir -p ~/catkin_ws/
 
 
+echo "---------- Clone Cyborg repo from Git ----------"
+echo "to continue press enter"
+read 
+
 ## Clone Cyborg Repo from git, and place it in the right directory
 cd ~/catkin_ws
 git clone https://github.com/thentnucyborg/CyborgRobot.git 	#clones the master branch
+
+echo "Use the master branch? Please type the branch name or 'yes' if you wish to use the master branch."
+read branchname
+if [ "$branchname" == "yes" ]
+then
+	echo "Using the master branch"
+else 
+	git checkout $branchname
+fi
+
 mv ~/catkin_ws/CyborgRobot/* ~/catkin_ws/	#move all files and folders to the workspace
 mv ~/catkin_ws/CyborgRobot/.* ~/catkin_ws/	#move all hidden files and folders to the workspace. Ingore the message saying . and .. cannot be moved
+echo "Please ignore the message saying . and .. cannot be moved"
 rm -rf CyborgRobot 	#delete the now empty folder
-# Finish setting up the workspace
-catkin_make
-source devel/setup.bash
 
+
+
+echo "---------- Install Arnl and ARIA .debs ----------"
+echo "to continue press enter"
+read 
+
+## Open a different folder and download Arnl.tar.gz, libaria 2.9.4, libarnl 1.9.2a, arnl-base_1.9.2 and mobilesim_0.9.8 from BOX.	
+# Unzip Arnl.tar.gz	
+sudo dpkg -i arnl-base_1.9.2+ubuntu16_amd64.deb	
+sudo dpkg -i libarnl_1.9.2a+ubuntu16_amd64.deb	
+sudo dpkg -i libaria_2.9.4+ubuntu16_amd64.deb	
+sudo dpkg -i mobilesim_0.9.8+ubuntu16_amd64.deb	
+sudo cp -r ./Arnl /usr/local/
+
+
+echo "---------- Installs for Navigation ----------"
+echo "to continue press enter"
+read 
 
 ## Installs for Navigation stack (may be more)
+cd  ~/catkin_ws/src
 sudo apt-get install ros-kinetic-navigation
 sudo apt-get install ros-kinetic-tf2-sensor-msgs
 sudo apt-get install libsdl-dev
@@ -67,6 +105,10 @@ git clone https://github.com/ros-planning/navigation.git -b kinetic-devel
 sudo apt install ros-kinetic-move-base
 
 
+echo "---------- Install SMACH ----------"
+echo "to continue press enter"
+read 
+
 ## Install SMACH
 sudo apt-get install ros-kinetic-executive-smach
 sudo apt-get install ros-kinetic-executive-smach-visualization
@@ -75,19 +117,37 @@ sudo apt-get install python-pyqt5
 sudo apt-get install python-qt-binding
 
 
+echo "---------- Install Aduio ----------"
+echo "to continue press enter"
+read 
+
 ## Install for Audio node
 pip2 install -Iv pyttsx3==2.7	#-I ignores installed packages, -v prints/verbose
 sudo apt-get install vlc
 pip2 install python-vlc==3.0.7110
 
 
-## Install for Command node
-pip2 instll npyscreen
+echo "---------- Install Command node ----------"
+echo "to continue press enter"
+read 
 
+## Install for Command node
+pip2 install npyscreen
+
+
+echo "---------- Install Controller ----------"
+echo "to continue press enter"
+read 
 
 ## Install for Controller node
-pip2 install pygraphviz
+sudo apt install graphviz-dev	
+pip2 install pygraphviz 	
+#Alternatively, run: sudo apt-get install python-pygraphviz	
 
+
+echo "---------- Install LED Dome node ----------"
+echo "to continue press enter"
+read 
 
 ## Install for Led Dome node
 pip2 install colour==0.1.5
@@ -99,10 +159,27 @@ pip2 install pyopengl-accelerate
 pip2 install pytz
 
 
+echo "---------- Install Behaviour Trees ----------"
+echo "to continue press enter"
+read 
+
 ## Behavior Trees
 pip2 install networkx==2.2
 
 
+echo "---------- Setup UDEV Rules ----------"
+echo "to continue press enter"
+read 
+
+## Set up UDEV rules
+sudo cp ~/catkin_ws/setup/90_cyborg_usb_rules.rules /etc/udev/rules.d/
+sudo udevadm controll --reload
+sudo udevadm trigger
+
+
+echo "---------- other ----------"
+echo "to continue press enter"
+read 
 
 ## Other
 sudo apt-get install sqlitebrowser	#tool for editing databases
@@ -112,10 +189,20 @@ find ~/catkin_ws/src/ -name '*.py' -exec  chmod +x {} \;
 find ~/catkin_ws/src/ -name '*.sh' -exec  chmod +x {} \;
 
 
+echo "---------- Finish setting up catkin_ws ----------"
+echo "to continue press enter"
+read 
+
+# Finish setting up the workspace	
+catkin_make	
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc # Opening new terminal runs source command, so we dont have to source workspace each time.	
+source devel/setup.bash
+
+
 ## Base requirements
 sudo usermod -a -G dialout $USER 	#add user to dialout group
+sudo apt autoremove
 
-#sudo apt autoremove
 
 
 # Relogin is required for last cmd to take effect
@@ -129,29 +216,3 @@ echo " - Download 'mobilesim_0.9.8+ubuntu16_amd64.deb' from Box (in Robotics/Mob
 echo " - Repeat the step above for 'libaria_2.9.4+ubuntu16_amd64.deb'"
 
 echo "Setup script ended..."
-
-
-
-# ????
-# # Guide:
-# 1. Download Ubuntu 16.04 disk image and create a bootable disk using the image and a USB flash drive.
-# 2. Startup the system, if desktop environment is installed skip the next step.
-# 3. Get a desktop environment, we have been using Unity. To use unity, open command prompt for Ubuntu and do:
-# 	3.1.  sudo apt -get  update
-# 	3.2.  sudo apt -get  install  ubuntu -desktop
-# # (If you’re using  virtual  machine , follow  these  steps to be
-# # able to  remote  desktop  or  follow  this  guide:
-# # https :// gist.github.com/spacecat/b71918d49fbd520d18647b0ec3513525):
-# # In  Linux  Terminal:
-# A. cd
-# B. mkdir  Downloads
-# C. cd  Downloads
-# D. wget "http ://www.c-nergy.be/downloads/install -xrdp -1.9.1. zip"
-# E. sudo apt -get  install  unzip
-# F unzip  install -xrdp -1.9.1. zip
-# G. nano  install -xrdp -1.9.1. sh
-# # (** REMOVE ** Step1  Ubuntu  version  check , *from if to fi*)
-# H. chmod +x ~/ Downloads/install -xrdp -1.9.1/ install -xrdp -1.9.1. sh
-# I. sudo ./install -xrdp -1.9.1. sh25J. # Restart  VM  instance.
-# K. # Use  program "remote  desktop  connection" on  windows  and  put in
-# # your VM’s public  ip.
