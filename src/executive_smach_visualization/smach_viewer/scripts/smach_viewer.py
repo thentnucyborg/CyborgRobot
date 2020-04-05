@@ -3,10 +3,10 @@
 # Copyright (c) 2010, Willow Garage, Inc.
 # All rights reserved.
 # Copyright (c) 2013, Jonathan Bohren, The Johns Hopkins University
-#
+# 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-#
+# 
 #   * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #   * Redistributions in binary form must reproduce the above copyright
@@ -15,7 +15,7 @@
 #   * Neither the name of the Willow Garage, Inc. nor the names of its
 #       contributors may be used to endorse or promote products derived from
 #       this software without specific prior written permission.
-#
+# 
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,9 +28,10 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Author: Jonathan Bohren
+# Author: Jonathan Bohren 
 
 import rospy
+import rospkg
 
 from smach_msgs.msg import SmachContainerStatus,SmachContainerInitialStatusCmd,SmachContainerStructure
 
@@ -42,16 +43,39 @@ import pprint
 import copy
 import StringIO
 import colorsys
+import time
 
 import wxversion
-# wxversion.select("2.8")
-wxversion.select("3.0.2")
+if wxversion.checkInstalled("2.8"):
+    wxversion.select("2.8")
+else:
+    print("wxversion 2.8 is not installed, installed versions are {}".format(wxversion.getInstalled()))
 import wx
 import wx.richtext
 
 import textwrap
 
-import xdot.wxxdot
+## this import system (or ros-released) xdot
+# import xdot
+## need to import currnt package, but not to load this file
+# http://stackoverflow.com/questions/6031584/importing-from-builtin-library-when-module-with-same-name-exists
+def import_non_local(name, custom_name=None):
+    import imp, sys
+
+    custom_name = custom_name or name
+
+    path = filter(lambda x: x != os.path.dirname(os.path.abspath(__file__)), sys.path)
+    f, pathname, desc = imp.find_module(name, path)
+
+    module = imp.load_module(custom_name, f, pathname, desc)
+    if f:
+        f.close()
+
+    return module
+
+smach_viewer = import_non_local('smach_viewer')
+from smach_viewer import xdot
+##
 import smach
 import smach_ros
 
@@ -85,13 +109,13 @@ def hex2t(color_str):
     color_tuple = [int(color_str[i:i+2],16)/255.0    for i in range(1,len(color_str),2)]
     return color_tuple
 
-class ContainerProxy():
+class ContainerNode():
     """
-    This class represents a given container in a running SMACH system.
+    This class represents a given container in a running SMACH system. 
 
     Its primary use is to generate dotcode for a SMACH container. It has
     methods for responding to structure and status messages from a SMACH
-    introspection server, as well as methods for updating the styles of a
+    introspection server, as well as methods for updating the styles of a 
     graph once it's been drawn.
     """
     def __init__(self, server_name, msg):
@@ -100,8 +124,8 @@ class ContainerProxy():
         self._path = msg.path
         splitpath = msg.path.split('/')
         self._label = splitpath[-1]
+        self._dir = '/'.join(splitpath[0:-1])
 
-        # Store container structure / topology
         self._children = msg.children
         self._internal_outcomes = msg.internal_outcomes
         self._outcomes_from = msg.outcomes_from
@@ -109,7 +133,7 @@ class ContainerProxy():
 
         self._container_outcomes = msg.container_outcomes
 
-        # Initialize container status
+        # Status
         self._initial_states = []
         self._active_states = []
         self._last_active_states = []
@@ -117,9 +141,7 @@ class ContainerProxy():
         self._info = ''
 
     def update_structure(self, msg):
-        """Update the structure of this container from a given message. Return
-        True if anything changes."""
-
+        """Update the structure of this container from a given message. Return True if anything changes."""
         needs_update = False
 
         if self._children != msg.children\
@@ -153,14 +175,12 @@ class ContainerProxy():
             needs_update = True
 
         # Store the initial and active states
-        if needs_update:
-            self._initial_states = msg.initial_states
-            self._last_active_states = self._active_states
-            self._active_states = msg.active_states
+        self._initial_states = msg.initial_states
+        self._last_active_states = self._active_states
+        self._active_states = msg.active_states
 
         # Unpack the user data
         while not rospy.is_shutdown():
-            # TODO: With catkin packages we no longer need to process the import errors
             try:
                 self._local_data._data = pickle.loads(msg.local_data)
                 break
@@ -178,7 +198,7 @@ class ContainerProxy():
 
     def get_dotcode(self, selected_paths, closed_paths, depth, max_depth, containers, show_all, label_wrapper, attrs={}):
         """Generate the dotcode representing this container.
-
+        
         @param selected_paths: The paths to nodes that are selected
         @closed paths: The paths that shouldn't be expanded
         @param depth: The depth to start traversing the tree
@@ -336,7 +356,7 @@ class ContainerProxy():
         """Update the styles for a list of containers without regenerating the dotcode.
 
         This function is called recursively to update an entire tree.
-
+        
         @param selected_paths: A list of paths to nodes that are currently selected.
         @param depth: The depth to start traversing the tree
         @param max_depth: The depth to traverse into the tree
@@ -390,7 +410,7 @@ class ContainerProxy():
                 if child_path in selected_paths:
                     child_color = hex2t('#FB000DFF')
 
-                # Generate dotcode for child containers
+                # Generate dotcode for child containers 
                 if child_path in containers:
                     subgraph_id = 'cluster_'+child_path
                     if subgraph_id in subgraph_shapes:
@@ -405,7 +425,7 @@ class ContainerProxy():
                                 v = 0.85
                             child_fillcolor = [v,v,v,1.0]
 
-
+                        
                         for shape in subgraph_shapes['cluster_'+child_path]:
                             pen = shape.pen
                             if len(pen.color) > 3:
@@ -443,62 +463,26 @@ class SmachViewerFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "Smach Viewer", size=(720,480))
 
-        # Create graph data structures
-        # Containers is a map of (container path) -> container proxy
+        # Create graph
         self._containers = {}
         self._top_containers = {}
-
-        # This is triggered every time the display needs to be updated
         self._update_cond = threading.Condition()
-
-        # smach introspection client
-        self._client = smach_ros.IntrospectionClient()
-        self._containers= {}
-        self._selected_paths = []
-
-        # Message subscribers
-        self._structure_subs = {}
-        self._status_subs = {}
-
-        # Populate the frame with widgets
-        self._populate_frame()
-
-        # Register mouse event callback for xdot widget
-        self.widget.register_select_callback(self.select_cb)
-
-        # Initialize xdot display state
-        self._path = '/'
-        self._needs_zoom = True
-        self._structure_changed = True
         self._needs_refresh = True
+        self.dotstr = ''
 
-        # Start a thread in the background to update the server list
-        self._keep_running = True
-        self._server_list_thread = threading.Thread(target=self._update_server_list)
-        self._server_list_thread.start()
+        vbox = wx.BoxSizer(wx.VERTICAL)
 
-        # Start a thread in the background to update the graph display
-        self._update_graph_thread = threading.Thread(target=self._update_graph)
-        self._update_graph_thread.start()
-        # Start a thread in the background to update the tree display
-        self._update_tree_thread = threading.Thread(target=self._update_tree)
-        self._update_tree_thread.start()
-
-    def _populate_frame(self):
-        """ Create all the widgets in the smach_viwer window"""
-
-        # Set the widget title
-        self.SetTitle('Smach Viewer')
 
         # Create Splitter
         self.content_splitter = wx.SplitterWindow(self, -1,style = wx.SP_LIVE_UPDATE)
         self.content_splitter.SetMinimumPaneSize(24)
         self.content_splitter.SetSashGravity(0.85)
 
+
         # Create viewer pane
         viewer = wx.Panel(self.content_splitter,-1)
 
-        # Create the tabbed view that contains the graph and tree views
+        # Create smach viewer 
         nb = wx.Notebook(viewer,-1,style=wx.NB_TOP | wx.WANTS_CHARS)
         viewer_box = wx.BoxSizer()
         viewer_box.Add(nb,1,wx.EXPAND | wx.ALL, 4)
@@ -511,6 +495,7 @@ class SmachViewerFrame(wx.Frame):
 
         # Construct toolbar
         toolbar = wx.ToolBar(graph_view, -1)
+
         toolbar.AddControl(wx.StaticText(toolbar,-1,"Path: "))
 
         # Path list
@@ -546,18 +531,30 @@ class SmachViewerFrame(wx.Frame):
         toggle_all = wx.ToggleButton(toolbar,-1,'Show Implicit')
         toggle_all.Bind(wx.EVT_TOGGLEBUTTON, self.toggle_all_transitions)
         self._show_all_transitions = False
+
         toolbar.AddControl(wx.StaticText(toolbar,-1,"    "))
         toolbar.AddControl(toggle_all)
 
-        # Help button and dialog
+        toggle_auto_focus = wx.ToggleButton(toolbar, -1, 'Auto Focus')
+        toggle_auto_focus.Bind(wx.EVT_TOGGLEBUTTON, self.toggle_auto_focus)
+        self._auto_focus = False
+
+        toolbar.AddControl(wx.StaticText(toolbar, -1, "    "))
+        toolbar.AddControl(toggle_auto_focus)
+
         toolbar.AddControl(wx.StaticText(toolbar,-1,"    "))
         toolbar.AddLabelTool(wx.ID_HELP, 'Help',
                 wx.ArtProvider.GetBitmap(wx.ART_HELP,wx.ART_OTHER,(16,16)) )
+        toolbar.AddLabelTool(wx.ID_SAVE, 'Save',
+                wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE,wx.ART_OTHER,(16,16)) )
         toolbar.Realize()
+
         self.Bind(wx.EVT_TOOL, self.ShowControlsDialog, id=wx.ID_HELP)
+        self.Bind(wx.EVT_TOOL, self.SaveDotGraph, id=wx.ID_SAVE)
 
         # Create dot graph widget
         self.widget = xdot.wxxdot.WxDotWindow(graph_view, -1)
+
         gv_vbox.Add(toolbar, 0, wx.EXPAND)
         gv_vbox.Add(self.widget, 1, wx.EXPAND)
 
@@ -566,26 +563,26 @@ class SmachViewerFrame(wx.Frame):
         nb.AddPage(graph_view,"Graph View")
         nb.AddPage(self.tree,"Tree View")
 
+
         # Create userdata widget
         borders = wx.LEFT | wx.RIGHT | wx.TOP
         border = 4
         self.ud_win = wx.ScrolledWindow(self.content_splitter, -1)
         self.ud_gs = wx.BoxSizer(wx.VERTICAL)
 
-        # Create userdata path input
         self.ud_gs.Add(wx.StaticText(self.ud_win,-1,"Path:"),0, borders, border)
 
         self.path_input = wx.ComboBox(self.ud_win,-1,style=wx.CB_DROPDOWN)
         self.path_input.Bind(wx.EVT_COMBOBOX,self.selection_changed)
         self.ud_gs.Add(self.path_input,0,wx.EXPAND | borders, border)
 
-        # Create userdata text dispaly
+
         self.ud_gs.Add(wx.StaticText(self.ud_win,-1,"Userdata:"),0, borders, border)
 
         self.ud_txt = wx.TextCtrl(self.ud_win,-1,style=wx.TE_MULTILINE | wx.TE_READONLY)
         self.ud_gs.Add(self.ud_txt,1,wx.EXPAND | borders, border)
-
-        # Add button for setting initial state
+        
+        # Add initial state button
         self.is_button = wx.Button(self.ud_win,-1,"Set as Initial State")
         self.is_button.Bind(wx.EVT_BUTTON, self.on_set_initial_state)
         self.is_button.Disable()
@@ -593,24 +590,47 @@ class SmachViewerFrame(wx.Frame):
 
         self.ud_win.SetSizer(self.ud_gs)
 
+
         # Set content splitter
         self.content_splitter.SplitVertically(viewer, self.ud_win, 512)
 
-        # Add statusbar showing information for the node the user is hovering over
+        # Add statusbar
         self.statusbar = wx.StatusBar(self,-1)
 
         # Add elements to sizer
-        vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(self.content_splitter, 1, wx.EXPAND | wx.ALL)
         vbox.Add(self.statusbar, 0, wx.EXPAND)
 
-        # Finalize the widget display
         self.SetSizer(vbox)
         self.Center()
 
-        # Bind idle and close events to handlers
+        # smach introspection client
+        self._client = smach_ros.IntrospectionClient()
+        self._containers= {}
+        self._selected_paths = []
+
+        # Message subscribers
+        self._structure_subs = {}
+        self._status_subs = {}
+
         self.Bind(wx.EVT_IDLE,self.OnIdle)
         self.Bind(wx.EVT_CLOSE,self.OnQuit)
+
+        # Register mouse event callback
+        self.widget.register_select_callback(self.select_cb)
+        self._path = '/'
+        self._needs_zoom = True
+        self._structure_changed = True
+
+        # Start a thread in the background to update the server list
+        self._keep_running = True
+        self._server_list_thread = threading.Thread(target=self._update_server_list)
+        self._server_list_thread.start()
+
+        self._update_graph_thread = threading.Thread(target=self._update_graph)
+        self._update_graph_thread.start()
+        self._update_tree_thread = threading.Thread(target=self._update_tree)
+        self._update_tree_thread.start()
 
     def OnQuit(self,event):
         """Quit Event: kill threads and wait for join."""
@@ -621,7 +641,7 @@ class SmachViewerFrame(wx.Frame):
         self._server_list_thread.join()
         self._update_graph_thread.join()
         self._update_tree_thread.join()
-
+        
         event.Skip()
 
     def update_graph(self):
@@ -644,9 +664,21 @@ class SmachViewerFrame(wx.Frame):
         self._needs_zoom = True
         self.update_graph()
 
+    def _set_path(self, path):
+        self._path = path
+        self._needs_zoom = True
+        self.path_combo.SetValue(path)
+        self.update_graph()
+
     def set_depth(self, event):
         """Event: Change the maximum depth and update the graph."""
         self._max_depth = self.depth_spinner.GetValue()
+        self._needs_zoom = True
+        self.update_graph()
+
+    def _set_max_depth(self, max_depth):
+        self._max_depth = max_depth
+        self.depth_spinner.SetValue(max_depth)
         self._needs_zoom = True
         self.update_graph()
 
@@ -660,6 +692,16 @@ class SmachViewerFrame(wx.Frame):
         """Event: Change whether automatic transitions are hidden and update the graph."""
         self._show_all_transitions = not self._show_all_transitions
         self._structure_changed = True
+        self.update_graph()
+
+    def toggle_auto_focus(self, event):
+        """Event: Enable/Disable automatically focusing"""
+        self._auto_focus = not self._auto_focus
+        self._needs_zoom = self._auto_focus
+        self._structure_changed = True
+        if not self._auto_focus:
+            self._set_path('/')
+            self._max_depth(-1)
         self.update_graph()
 
     def select_cb(self, item, event):
@@ -729,14 +771,6 @@ class SmachViewerFrame(wx.Frame):
                 # Disable the initial state button for this selection
                 self.is_button.Disable()
 
-    def _append_new_path(self, path):
-        """Append a new path to the path selection widgets"""
-
-        # Append paths to selector
-        self.path_combo.Append(path)
-        self.path_input.Append(path)
-
-
     def _structure_msg_update(self, msg, server_name):
         """Update the structure of the SMACH plan (re-generate the dotcode)."""
 
@@ -755,25 +789,25 @@ class SmachViewerFrame(wx.Frame):
         # Initialize redraw flag
         needs_redraw = False
 
-        # Determine if we need to update one of the proxies or create a new one
         if path in self._containers:
             rospy.logdebug("UPDATING: "+path)
 
             # Update the structure of this known container
             needs_redraw = self._containers[path].update_structure(msg)
-        else:
+        else: 
             rospy.logdebug("CONSTRUCTING: "+path)
 
             # Create a new container
-            container = ContainerProxy(server_name, msg)
+            container = ContainerNode(server_name, msg)
             self._containers[path] = container
 
             # Store this as a top container if it has no parent
             if parent_path == '':
                 self._top_containers[path] = container
 
-            # Append the path to the appropriate widgets
-            self._append_new_path(path)
+            # Append paths to selector
+            self.path_combo.Append(path)
+            self.path_input.Append(path)
 
             # We need to redraw thhe graph if this container's parent is already known
             if parent_path in self._containers:
@@ -792,6 +826,10 @@ class SmachViewerFrame(wx.Frame):
         # Check if we're in the process of shutting down
         if not self._keep_running:
             return
+
+        if self._auto_focus and len(msg.info) > 0:
+            self._set_path(msg.info)
+            self._set_max_depth(msg.info.count('/')-1)
 
         # Get the path to the updating conainer
         path = msg.path
@@ -819,7 +857,7 @@ class SmachViewerFrame(wx.Frame):
 
           1: The structure of the SMACH plans has changed, or the display
           settings have been changed. In this case, the dotcode needs to be
-          regenerated.
+          regenerated. 
 
           2: The status of the SMACH plans has changed. In this case, we only
           need to change the styles of the graph.
@@ -831,8 +869,6 @@ class SmachViewerFrame(wx.Frame):
 
                 # Get the containers to update
                 containers_to_update = {}
-                # Check if the path that's currently being viewed is in the
-                # list of existing containers
                 if self._path in self._containers:
                     # Some non-root path
                     containers_to_update = {self._path:self._containers[self._path]}
@@ -861,40 +897,39 @@ class SmachViewerFrame(wx.Frame):
 
                     # Generate the rest of the graph
                     # TODO: Only re-generate dotcode for containers that have changed
-                    for path,container in containers_to_update.items():
-                        dotstr += container.get_dotcode(
+                    for path,tc in containers_to_update.iteritems():
+                        dotstr += tc.get_dotcode(
                                 self._selected_paths,[],
                                 0,self._max_depth,
                                 self._containers,
                                 self._show_all_transitions,
                                 self._label_wrapper)
-
-                    # The given path isn't available
-                    if len(containers_to_update) == 0:
+                    else:
                         dotstr += '"__empty__" [label="Path not available.", shape="plaintext"]'
 
                     dotstr += '\n}\n'
-
+                    self.dotstr = dotstr
                     # Set the dotcode to the new dotcode, reset the flags
                     self.set_dotcode(dotstr,zoom=False)
                     self._structure_changed = False
 
                 # Update the styles for the graph if there are any updates
-                for path,container in containers_to_update.items():
-                    container.set_styles(
+                for path,tc in containers_to_update.iteritems():
+                    tc.set_styles(
                             self._selected_paths,
                             0,self._max_depth,
                             self.widget.items_by_url,
                             self.widget.subgraph_shapes,
                             self._containers)
 
-                # Redraw xdot widget
+                # Redraw
                 self.widget.Refresh()
 
     def set_dotcode(self, dotcode, zoom=True):
         """Set the xdot view's dotcode and refresh the display."""
         # Set the new dotcode
         if self.widget.set_dotcode(dotcode, None):
+            self.SetTitle('Smach Viewer')
             # Re-zoom if necessary
             if zoom or self._needs_zoom:
                 self.widget.zoom_to_fit()
@@ -939,20 +974,18 @@ class SmachViewerFrame(wx.Frame):
         """Event: On Idle, refresh the display if necessary, then un-set the flag."""
         if self._needs_refresh:
             self.Refresh()
-            # Unset refresh flag
+            # Re-populate path combo
             self._needs_refresh = False
 
     def _update_server_list(self):
         """Update the list of known SMACH introspection servers."""
         while self._keep_running:
-            # Discover new servers
+            # Update the server list
             server_names = self._client.get_servers()
             new_server_names = [sn for sn in server_names if sn not in self._status_subs]
 
-            # Create subscribers for newly discovered servers
+            # Create subscribers for new servers
             for server_name in new_server_names:
-
-                # Create a subscriber for the plan structure (topology) published by this server
                 self._structure_subs[server_name] = rospy.Subscriber(
                         server_name+smach_ros.introspection.STRUCTURE_TOPIC,
                         SmachContainerStructure,
@@ -960,7 +993,6 @@ class SmachViewerFrame(wx.Frame):
                         callback_args = server_name,
                         queue_size=50)
 
-                # Create a subscriber for the active states in the plan published by this server
                 self._status_subs[server_name] = rospy.Subscriber(
                         server_name+smach_ros.introspection.STATUS_TOPIC,
                         SmachContainerStatus,
@@ -969,6 +1001,15 @@ class SmachViewerFrame(wx.Frame):
 
             # This doesn't need to happen very often
             rospy.sleep(1.0)
+            
+            
+            #self.server_combo.AppendItems([s for s in self._servers if s not in current_servers])
+
+            # Grab the first server
+            #current_value = self.server_combo.GetValue()
+            #if current_value == '' and len(self._servers) > 0:
+            #    self.server_combo.SetStringSelection(self._servers[0])
+            #    self.set_server(self._servers[0])
 
     def ShowControlsDialog(self,event):
         dial = wx.MessageDialog(None,
@@ -976,26 +1017,40 @@ class SmachViewerFrame(wx.Frame):
                 'Keyboard Controls', wx.OK)
         dial.ShowModal()
 
+    def SaveDotGraph(self,event):
+        timestr = time.strftime("%Y%m%d-%H%M%S")
+        directory = rospkg.get_ros_home()+'/dotfiles/'
+        if not os.path.exists(directory):
+                os.makedirs(directory)
+        filename = directory+timestr+'.dot'
+        print('Writing to file: %s' % filename)
+        with open(filename, 'w') as f:
+            f.write(self.dotstr)
+
     def OnExit(self, event):
         pass
 
     def set_filter(self, filter):
-        """Set the graphviz filter type.
-
-        See http://www.graphviz.org/cgi-bin/man?dot for more info
-        """
         self.widget.set_filter(filter)
 
 def main():
-    # Top-level WxWidgets application
+    from argparse import ArgumentParser
+    p = ArgumentParser()
+    p.add_argument('-f', '--auto-focus',
+                 action='store_true',
+                 help="Enable 'AutoFocus to subgraph' as default",
+                 dest='enable_auto_focus')
+    args = p.parse_args()
     app = wx.App()
 
-    # Create smach viewer window
     frame = SmachViewerFrame()
     frame.set_filter('dot')
 
-    # Show the window and run
     frame.Show()
+
+    if args.enable_auto_focus:
+        frame.toggle_auto_focus(None)
+
     app.MainLoop()
 
 if __name__ == '__main__':
