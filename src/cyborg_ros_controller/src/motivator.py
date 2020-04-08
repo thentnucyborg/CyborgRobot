@@ -1,6 +1,10 @@
 #!/usr/bin/env python
-"""Created by Thomas Rostrup Andersen on 11/11/2016.
-Copyright (C) 2016 Thomas Rostrup Andersen. All rights reserved."""
+
+__author__ = "Thomas Rostrup Andersen 11/11/2016"
+__copyright__ = "Copyright (C) 2016 Thomas Rostrup Andersen"
+#__license__ = ""
+__version__ = "0.0.2"
+__all__ = []
 
 import math
 import threading
@@ -14,13 +18,6 @@ import geometry_msgs
 from std_msgs.msg import String
 from databasehandler import DatabaseHandler
 from cyborg_controller.msg import EmotionalFeedback, EmotionalState, SystemState
-
-__author__ = "Thomas Rostrup Andersen"
-__copyright__ = "Copyright (C) 2016 Thomas Rostrup Andersen"
-#__license__ = ""
-__version__ = "0.0.2"
-__all__ = []
-
 
 class Motivator():
     """Motivator for the controller.

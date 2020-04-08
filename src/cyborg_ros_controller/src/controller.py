@@ -78,7 +78,27 @@ def main():
             "current_event":"last_event"}
 
 
-        idle_transitions = {"navigation_schedular":"navigation",
+        startup_transitions = {"succeeded":"suspension",
+                            "aborted":"suspension"}
+        startup_resources = {}
+        smach.StateMachine.add("startup",
+                            Module("startup", "cyborg_behavior", startup_transitions, startup_resources),
+                            startup_transitions,
+                            sm_remapping)
+        
+
+        suspension_transitions = {"start":"idle",
+                            "restart":"startup",
+                            "aborted":"suspension"}
+        suspension_resources = {}
+        smach.StateMachine.add("suspension",
+                            Module("suspension", "cyborg_behavior", suspension_transitions, suspension_resources),
+                            suspension_transitions,
+                            sm_remapping)
+
+
+        idle_transitions = {"suspend":"suspension",
+                            "navigation_schedular":"navigation",
                             "navigation_emotional":"navigation",
                             "convey_emotion":"conveying_emotional_state",
                             "show_off_mea":"show_off_mea",
@@ -88,20 +108,22 @@ def main():
                             "power_low":"exhausted",
                             "bedtime":"sleepy"}
         idle_resources = {} # Idle does not require any resources
-
         smach.StateMachine.add("idle",
                         Module("idle", "cyborg_primary_states", idle_transitions, idle_resources),
                         idle_transitions,
                         sm_remapping)
 
-        sleepy_transitions = {"aborted":"idle","succeeded":"sleeping"}
-        sleepy_resources = {}
+
         show_off_mea_transitions={"aborted":"idle","succeeded":"idle"}
+        show_off_mea_resources={}
         smach.StateMachine.add("show_off_mea",
-                            Module("show_off_mea", "cyborg_behavior",show_off_mea_transitions, sleepy_resources),
+                            Module("show_off_mea", "cyborg_behavior",show_off_mea_transitions, show_off_mea_resources),
                             show_off_mea_transitions,
                             sm_remapping)
-                            
+        
+
+        sleepy_transitions = {"aborted":"idle","succeeded":"sleeping"}
+        sleepy_resources = {}                 
         smach.StateMachine.add("sleepy",
                                 Module("sleepy", "cyborg_behavior", sleepy_transitions, sleepy_resources),
                                 sleepy_transitions,
@@ -117,7 +139,6 @@ def main():
 
 
         sleeping_transitions = {"preempted": "idle","cyborg_wake_up":"waking_up"}
-
         sleeping_resources = {}
         smach.StateMachine.add("sleeping",
                                 Module("sleeping", "cyborg_primary_states", sleeping_transitions, sleeping_resources),
@@ -128,7 +149,6 @@ def main():
         waking_up_transitions = {"aborted":"idle",
                                 "succeeded":"idle"}
         waking_up_resources = {}
-
         smach.StateMachine.add("waking_up",
                                 Module("waking_up", "cyborg_behavior", waking_up_transitions, waking_up_resources),
                                 waking_up_transitions,
@@ -138,7 +158,6 @@ def main():
         conveying_emotion_transitions={"aborted":"idle",
                                     "succeeded":"idle"}
         conveying_emotion_resources={}
-
         smach.StateMachine.add("conveying_emotional_state",
                             Module("conveying_emotional_state", "cyborg_behavior", conveying_emotion_transitions, conveying_emotion_resources),
                                 conveying_emotion_transitions,
@@ -148,25 +167,22 @@ def main():
         sm_nav = smach.StateMachine(outcomes=["succeeded","aborted","power_low"])
 
         with sm_nav:
-        
             navigation_planning_transitions = {"navigation_start_moving_schedular":"navigation_go_to_schedular",
                                                 "navigation_start_moving_emotional":"navigation_go_to_emotional",
                                                 "navigation_start_wandering":"wandering_emotional",
                                                 "aborted":"aborted"}
             navigation_planning_resources = {}
-
             smach.StateMachine.add("navigation_planning",
                                     Module("navigation_planning", "cyborg_primary_states",navigation_planning_transitions, navigation_planning_resources),
                                     navigation_planning_transitions,
                                     sm_remapping)
 
+
             navigation_go_to_transitions = {"succeeded":"succeeded", "aborted":"aborted", "preempted":"aborted"}
-
-            smach.StateMachine.add("navigation_go_to_emotional", statemachines.sequence_navigation_go_to_emotional,
-                            transitions = navigation_go_to_transitions,
-                            remapping = sm_remapping)
-
             navigation_go_to_schedular_resources = {}
+            smach.StateMachine.add("navigation_go_to_emotional", statemachines.sequence_navigation_go_to_emotional,
+                transitions = navigation_go_to_transitions,
+                remapping = sm_remapping)
             smach.StateMachine.add("navigation_go_to_schedular",
                                     Module("navigation_go_to_schedular", "cyborg_behavior", navigation_go_to_transitions, navigation_go_to_schedular_resources),
                                     navigation_go_to_transitions,
@@ -177,14 +193,15 @@ def main():
                                                 "aborted":"aborted",
                                                 "power_low":"power_low"}
             navigation_wandering_emotional_resources  = {}
-
             smach.StateMachine.add("wandering_emotional",
                                     Module("wandering_emotional", "cyborg_primary_states", navigation_wandering_emotional_transitions, navigation_wandering_emotional_resources),
                                     navigation_wandering_emotional_transitions,
                                     sm_remapping)
 
+
         sm_nav_transitions = {"aborted":"idle","succeeded":"idle", "power_low":"exhausted"}
         smach.StateMachine.add("navigation", sm_nav, sm_nav_transitions, sm_remapping)
+
 
         music_transitions = {"aborted":"idle","succeeded":"idle"}
         music_resources = {}
@@ -193,6 +210,7 @@ def main():
                                     music_transitions,
                                     sm_remapping)
         
+
         astrolanguage_transitions = {"aborted":"idle","succeeded":"idle"}
         astrolanguage_resources = {}
         smach.StateMachine.add("astrolanguage",

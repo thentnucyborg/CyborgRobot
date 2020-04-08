@@ -1,6 +1,9 @@
 #!/usr/bin/env python
-"""Created by Thomas Rostrup Andersen on 11/11/2016.
-Copyright (C) 2016 Thomas Rostrup Andersen. All rights reserved."""
+__author__ = "Thomas Rostrup Andersen"
+__copyright__ = "Copyright (C) 2016 Thomas Rostrup Andersen"
+#__license__ = ""
+__version__ = "0.0.2"
+__all__ = ['Module']
 
 import rospy
 import actionlib
@@ -10,12 +13,6 @@ import time
 
 from std_msgs.msg import String
 from cyborg_controller.msg import StateMachineAction, StateMachineGoal, SystemState
-
-__author__ = "Thomas Rostrup Andersen"
-__copyright__ = "Copyright (C) 2016 Thomas Rostrup Andersen"
-#__license__ = ""
-__version__ = "0.0.2"
-__all__ = ['Module']
 
 # Define state Module
 class Module(smach.State):
