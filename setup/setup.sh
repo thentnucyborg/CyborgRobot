@@ -1,6 +1,8 @@
 #!/bin/bash
 
 echo "Setup script running..."
+echo "WARN - Specific versions of packages are needed in this project and when installing warnings about deprecated or old software may show up. This is expected."
+read 
 
 # This is not complete, and may be missing some libraries or install commands 
 # All commands should also be updated to include versions. 
@@ -12,9 +14,8 @@ read
 
 sudo apt-get update
 sudo apt-get install git
+sudo apt install python2.7 
 sudo apt install python-pip
-sudo apt install python2.7 python-pip
-#pip2 install --upgrade pip==20.0.2
 
 echo "---------- Install ROS ----------"
 echo "to continue press enter"
@@ -65,7 +66,7 @@ fi
 mv ~/catkin_ws/CyborgRobot/* ~/catkin_ws/	#move all files and folders to the workspace
 mv ~/catkin_ws/CyborgRobot/.* ~/catkin_ws/	#move all hidden files and folders to the workspace. Ingore the message saying . and .. cannot be moved
 echo "Please ignore the message saying . and .. cannot be moved"
-rm -rf CyborgRobot 	#delete the now empty folder
+rm -rf ~/catkin_ws/CyborgRobot 	#delete the now empty folder
 
 
 
@@ -83,7 +84,7 @@ sudo dpkg -i libaria_2.9.4+ubuntu16_amd64.deb
 sudo dpkg -i mobilesim_0.9.8+ubuntu16_amd64.deb	
 
 
-echo "---------- Installs for Navigation ----------"
+echo "---------- Installs for New Navigation ----------"
 echo "to continue press enter"
 read 
 
@@ -118,8 +119,7 @@ read
 
 ## Install for Audio node
 pip2 install -Iv pyttsx3==2.7	#-I ignores installed packages, -v prints/verbose
-sudo apt-get install vlc
-
+pip2 install python-vlc==3.0.7110
 
 echo "---------- Install Command node ----------"
 echo "to continue press enter"
@@ -145,7 +145,7 @@ read
 
 ## Install for Led Dome node
 pip2 install colour==0.1.5
-pip2 install numpy==1.16.5
+pip2 install numpy==1.16.6
 pip2 install pandas==0.24.2		# as of 6.april 2020, to install pandas==0.24.2, pip2 version 20.0.2 was needed. Upgrading to later versions might need pip2 doesn't have support for Python 2.7
 pip2 install pyserial==3.0.1
 pip2 install pyopengl
@@ -159,6 +159,13 @@ read
 
 ## Behavior Trees
 pip2 install networkx==2.2
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs		# also installs npm
+sudo npm install -g bower
+cd ~/catkin_ws/src/behavior3editor
+npm install
+bower install 
+sudo npm install --global gulp@3.9.1
 
 
 echo "---------- Setup UDEV Rules ----------"
@@ -202,14 +209,11 @@ sudo apt autoremove
 
 
 
+echo "Setup script ended..."
+echo "---------------------"
+
 # Relogin is required for last cmd to take effect
-echo "You must logout and back in for userpivilages to take effect..."
-echo " "
+echo "You must logout and back in for userpivileges to take effect..."
 
 echo "There are still some things to install:"
 echo " - If changes to the code on the led-controller are needed (the NodeMCU ESP32), follow the install instructions in cyborg_ros_led_dome/README.md"
-echo " - Some udev rules are needed to interface with the led-dome, mode-selector-box and zed-camera. Follow the instructions on the github wiki under 'Cyborg udev Rules'"
-echo " - Download 'mobilesim_0.9.8+ubuntu16_amd64.deb' from Box (in Robotics/MobileRobots legacy software/ and install using Ubuntu Software"
-echo " - Repeat the step above for 'libaria_2.9.4+ubuntu16_amd64.deb'"
-
-echo "Setup script ended..."

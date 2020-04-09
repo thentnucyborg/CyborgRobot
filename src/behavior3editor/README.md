@@ -5,6 +5,19 @@
 **Behavior3 Editor** is the official visual editor for the **Behavior3** libraries. It can be accessed online or you can download it to have handle local projects.
 
 
+## Usage
+
+During development you can run the editor in a web browser with automatically building and reloading:
+
+    gulp serve
+
+which will run a web server hosted on `http://127.0.0.1:8000`.
+
+When building final version, run:
+
+    gulp dist
+
+
 ## Why Behavior3 Editor?
 
 Why should you use b3editor? What is different from other editors? Can it compete against commercial alternatives? - Well, check it out some characteristics of Behavior3 Editor:
