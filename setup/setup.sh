@@ -16,6 +16,8 @@ sudo apt-get update
 sudo apt-get install git
 sudo apt install python2.7 
 sudo apt install python-pip
+pip install --upgrade pip==20.0.2
+
 
 echo "---------- Install ROS ----------"
 echo "to continue press enter"
@@ -77,7 +79,7 @@ read
 echo "Check that you have downloaded the Arnl and Arnl-base, Aria and MobileSim .deb files into Downloads from Box to be able to continue"
 read 
 
-cd ~/catkin_ws/setup
+cd ~/catkin_ws/setup/installs
 sudo dpkg -i arnl-base_1.9.2+ubuntu16_amd64.deb	
 sudo dpkg -i libarnl_1.9.2a+ubuntu16_amd64.deb	
 sudo dpkg -i libaria_2.9.4+ubuntu16_amd64.deb	
@@ -146,7 +148,7 @@ read
 ## Install for Led Dome node
 pip2 install colour==0.1.5
 pip2 install numpy==1.16.6
-pip2 install pandas==0.24.2		# as of 6.april 2020, to install pandas==0.24.2, pip2 version 20.0.2 was needed. Upgrading to later versions might need pip2 doesn't have support for Python 2.7
+pip install pandas==0.24.2
 pip2 install pyserial==3.0.1
 pip2 install pyopengl
 pip2 install pyopengl-accelerate
@@ -159,13 +161,19 @@ read
 
 ## Behavior Trees
 pip2 install networkx==2.2
+# install nodejs for behavior3editor
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs		# also installs npm
+#install bower
 sudo npm install -g bower
+# install dependencies for behavior3editor
 cd ~/catkin_ws/src/behavior3editor
 npm install
-bower install 
+bower install
 sudo npm install --global gulp@3.9.1
+# install b3 module
+cd ~/catkin_ws/setup/installs/behavior3py
+sudo python setup.py install
 
 
 echo "---------- Setup UDEV Rules ----------"
