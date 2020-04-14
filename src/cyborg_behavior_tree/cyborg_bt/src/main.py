@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import b3
 import json
 import rospy
@@ -11,6 +12,7 @@ from std_msgs.msg import Bool
 from std_srvs.srv import SetBool, SetBoolResponse
 import networkx as nx
 
+homedir = os.path.expanduser("~")
 
 NAME = 'behavior_tree_manager'
 
@@ -37,7 +39,7 @@ class BehaviorTreeManager():
 
         names = {'MoveTo': MoveTo}
 
-        with open('/home/mortenmj/.ros/project.json') as f:
+        with open(homedir + '/.ros/project.json') as f:
             rospy.loginfo('Loading project from %s' % f.name)
             data = json.load(f, object_pairs_hook=OrderedDict)
 
@@ -227,7 +229,7 @@ class BehaviorTreeManager():
 
         process_tree(G, tree)
 
-        nx.drawing.nx_agraph.write_dot(G, '/home/mortenmj/tree.dot')
+        nx.drawing.nx_agraph.write_dot(G, homedir + '/catkin_ws/src/cyborg_behavior_tree/cyborg_bt/src/tree.dot')
 
         return json_graph.tree_data(G, root=tree.id)
 
@@ -267,7 +269,7 @@ class BehaviorTreeManager():
         graph = pydot.Dot(graph_type='digraph')
         process_tree(graph, tree)
 
-        graph.write_png('/home/mortenmj/test.png')
+        graph.write_png(homedir + '/catkin_ws/src/cyborg_behavior_tree/cyborg_bt/src/test.png')
 
         return graph
 

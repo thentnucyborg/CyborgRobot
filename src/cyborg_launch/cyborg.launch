@@ -8,7 +8,7 @@
 	<node pkg="cyborg_navigation" name="cyborg_navigation" type="navigation.py" output="screen" />
 	
 	<node pkg="smach_viewer" name="smach_viewer" type="smach_viewer.py" output="screen" />
-	<node pkg="rosaria" name="rosaria" type="RosAria" output="screen" />
+	<!-- <node pkg="rosaria" name="rosaria" type="RosAria" output="screen" /> -->
 	<node pkg="rosarnl" name="rosarnl" type="rosarnl_node" output="screen" />
 
 </launch>

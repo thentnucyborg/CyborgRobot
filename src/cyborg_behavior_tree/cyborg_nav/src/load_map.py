@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+import os
 import rospy
 from rosarnl.srv import LoadMapFile
+
+homedir = os.path.expanduser("~")
 
 
 def load_map():
@@ -17,5 +20,5 @@ def load_map():
 
 
 if __name__ == "__main__":
-    rospy.set_param('~map_file', '/home/mortenmj/maps/maps/glassgarden.map')
+    rospy.set_param('~map_file', homedir + '/catkin_ws/src/maps/maps/glassgarden.map')
     load_map()

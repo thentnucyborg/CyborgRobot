@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import csv
 import rospy
 from collections import namedtuple
@@ -7,6 +8,8 @@ from itertools import ifilter, imap
 from geometry_msgs.msg import Pose2D
 from cyborg_msgs.msg import GoalWithHeading
 from cyborg_msgs.srv import AvailableGoals, AvailableGoalsResponse
+
+homedir = os.path.expanduser("~")
 
 NAME = 'available_goals_server'
 
@@ -59,5 +62,5 @@ class AvailableGoalsHandler():
 
 
 if __name__ == "__main__":
-    rospy.set_param('~map_file', '/home/mortenmj/maps/maps/glassgarden.map')
+    rospy.set_param('~map_file', homedir + '/catkin_ws/src/maps/maps/glassgarden.map')
     AvailableGoalsHandler()

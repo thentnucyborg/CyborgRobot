@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from __future__ import division
 
 from python_qt_binding.QtCore import QAbstractListModel, QFile, QIODevice, QTimer, Qt, Signal, Slot

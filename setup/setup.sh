@@ -4,7 +4,7 @@ echo "Setup script running..."
 echo "WARN - Specific versions of packages are needed in this project and when installing warnings about deprecated or old software may show up. This is expected."
 read 
 
-# This is not complete, and may be missing some libraries or install commands 
+# This may not be complete, and may be missing some libraries or install commands 
 # All commands should also be updated to include versions. 
 
 
@@ -161,6 +161,7 @@ read
 
 ## Behavior Trees
 pip2 install networkx==2.2
+chmod +x  ~/catkin_ws/src/rqt_behavior_tree/scripts/rqt_bt
 # install nodejs for behavior3editor
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs		# also installs npm
@@ -174,6 +175,9 @@ sudo npm install --global gulp@3.9.1
 # install b3 module
 cd ~/catkin_ws/setup/installs/behavior3py
 sudo python setup.py install
+
+
+
 
 
 echo "---------- Setup UDEV Rules ----------"

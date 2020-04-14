@@ -15,7 +15,10 @@
 	<include file="$(find cyborg_nav)/launch/cyborg_nav.launch" />
 
 	<!-- Runs the behavior3 editor -->
-	<node name="behavior3editor" pkg="cyborg_launch" type="start_behavior3editor.sh" />
+	<node name="behavior3editor" pkg="cyborg_launch" type="start_behavior3editor.sh" output="screen" />
 
+
+	<!-- Runs the rqt graph visualisation of the behavior tree -->
+	<node pkg="rqt_bt" name="rqt_bt" type="rqt_bt" output="screen" />
 
 </launch>
