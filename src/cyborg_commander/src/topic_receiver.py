@@ -22,13 +22,6 @@ class TopicReceiver():
         self.publisher_emotion_controller = rospy.Publisher("/cyborg_controller/emotional_controller", String, queue_size=100)
         rospy.loginfo("Cyborg Commander: receiver initialized")
 
-
-    def save_data(self, message):
-        if message != None:
-            topicString = message._connection_header["topic"]
-            topicString = topicString.replace("/","__")
-            self.__dict__[topicString] = message.data
-
     def robot_behaviour(self, message):
         if message != None:
             if message.data == True:
