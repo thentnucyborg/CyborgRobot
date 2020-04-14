@@ -82,7 +82,7 @@ class CommandForm(npyscreen.FormWithMenus):
         self.speech_publisher = rospy.Publisher("/text_from_speech", String, queue_size=100)
         self.event_publisher = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.emotion_publisher = rospy.Publisher("/cyborg_controller/set_emotional_state", String, queue_size=100)
-        self.emotion_controller_publisher = rospy.Publisher("/cyborg_controller/emotional_controler", String, queue_size=100)
+        self.emotion_controller_publisher = rospy.Publisher("/cyborg_controller/emotional_controller", String, queue_size=100)
 
         self.menu = self.new_menu(name="Menu", shortcut='^X')
         self.menu.addItem(text="Execute action and command", shortcut="^E", onSelect=self.execute)
@@ -126,7 +126,7 @@ class CommandForm(npyscreen.FormWithMenus):
             self.emotion_controller_publisher.publish(self.command.value)
         else:
             message_to_display = "Available actions are: \n event(e) \n speech(s) \n emotion(m) \n emotion_controller(c) "
-            npyscreen.notify_confirm(message_to_display, title= "Action not recognitzed! ")
+            npyscreen.notify_confirm(message_to_display, title= "Action not recognized! ")
 
 
     # Updates the current emotion when the emotion subscriber recives data

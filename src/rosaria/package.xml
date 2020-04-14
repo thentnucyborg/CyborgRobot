@@ -45,6 +45,7 @@
   <run_depend>tf</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>std_srvs</run_depend>
+  <run_depend>message_runtime</run_depend>
   <!-- <test_depend>Aria</test_depend>
   <test_depend>roscpp</test_depend>
   <test_depend>nav_msgs</test_depend>

@@ -6,7 +6,8 @@
 	<node pkg="cyborg_primary_states" name="cyborg_primary_states" type="primary_states.py" output = "screen" />
 	<node pkg="cyborg_eventscheduler" name="cyborg_eventscheduler" type="eventscheduler.py" output= "screen" />
 	<node pkg="cyborg_controller" name="cyborg_controller" type="controller.py" required="true" output="screen" />
+	<node pkg="cyborg_commander" name="cyborg_commander" type="commander.py" required="true" output="screen" />
+	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+	<include file="$(find cyborg_2dnav)/cyborg_config.launch"/>
+	<include file="$(find cyborg_2dnav)/move_base.launch"/>
 </launch>
-
-<!-- ToDo: Add all other nodes to the launch file, and rename the launchfile and move it to its own folder within catkin_ws/src/ so that its a launch for the robot and not a launch for the controller as it seems now. -->
-<!-- Note: If we add the arnl node to here will it always look for that? What if you want to use the simulator? Is all this redundant when changing out the navigation node for the ros_navigation stack ? -->
