@@ -1,0 +1,168 @@
+{
+  "version": "0.3.0",
+  "scope": "project",
+  "selectedTree": "0c57e2d0-d67d-48b4-843b-ad25bcf6f50c",
+  "trees": [
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "7daa11a8-0d63-4db4-8b7c-8b2207183ac8",
+      "title": "Patrol tree",
+      "description": "",
+      "root": "4f5cf909-d123-4d23-a71f-4692252c67d8",
+      "properties": {},
+      "nodes": {
+        "5e7a2177-fd63-46ea-9a09-7de8a9c5db59": {
+          "id": "5e7a2177-fd63-46ea-9a09-7de8a9c5db59",
+          "name": "MoveTo",
+          "title": "MoveTo <location>",
+          "description": "",
+          "properties": {
+            "radius": 0.5,
+            "location": "home"
+          },
+          "display": {
+            "x": -324,
+            "y": 132
+          }
+        },
+        "ffc47b54-f152-41df-a9ed-69c5426c9b0a": {
+          "id": "ffc47b54-f152-41df-a9ed-69c5426c9b0a",
+          "name": "Wait",
+          "title": "Wait <milliseconds>ms",
+          "description": "",
+          "properties": {
+            "milliseconds": 2000
+          },
+          "display": {
+            "x": -120,
+            "y": 132
+          }
+        },
+        "cdc6ab2b-5eee-45a7-a95d-1491f5f8d3de": {
+          "id": "cdc6ab2b-5eee-45a7-a95d-1491f5f8d3de",
+          "name": "MoveTo",
+          "title": "MoveTo <location>",
+          "description": "",
+          "properties": {
+            "radius": 0.5,
+            "location": "waitingarea"
+          },
+          "display": {
+            "x": 84,
+            "y": 132
+          }
+        },
+        "8c69fc2b-b0a9-4c78-8399-aec45638ec9d": {
+          "id": "8c69fc2b-b0a9-4c78-8399-aec45638ec9d",
+          "name": "Wait",
+          "title": "Wait <milliseconds>ms",
+          "description": "",
+          "properties": {
+            "milliseconds": 2000
+          },
+          "display": {
+            "x": 300,
+            "y": 132
+          }
+        },
+        "4f5cf909-d123-4d23-a71f-4692252c67d8": {
+          "id": "4f5cf909-d123-4d23-a71f-4692252c67d8",
+          "name": "MemSequence",
+          "title": "MemSequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -12,
+            "y": -12
+          },
+          "children": [
+            "5e7a2177-fd63-46ea-9a09-7de8a9c5db59",
+            "ffc47b54-f152-41df-a9ed-69c5426c9b0a",
+            "cdc6ab2b-5eee-45a7-a95d-1491f5f8d3de",
+            "8c69fc2b-b0a9-4c78-8399-aec45638ec9d"
+          ]
+        }
+      },
+      "display": {
+        "camera_x": 960,
+        "camera_y": 545,
+        "camera_z": 1,
+        "x": -12,
+        "y": -120
+      }
+    },
+    {
+      "version": "0.3.0",
+      "scope": "tree",
+      "id": "0c57e2d0-d67d-48b4-843b-ad25bcf6f50c",
+      "title": "Root tree",
+      "description": "",
+      "root": "852322e7-6513-4aef-a8be-9088141b7cac",
+      "properties": {},
+      "nodes": {
+        "457781f2-2079-49e6-94d9-e8f8257e241c": {
+          "id": "457781f2-2079-49e6-94d9-e8f8257e241c",
+          "name": "7daa11a8-0d63-4db4-8b7c-8b2207183ac8",
+          "title": "Patrol tree",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -144,
+            "y": 96
+          }
+        },
+        "852322e7-6513-4aef-a8be-9088141b7cac": {
+          "id": "852322e7-6513-4aef-a8be-9088141b7cac",
+          "name": "MemSequence",
+          "title": "MemSequence",
+          "description": "",
+          "properties": {},
+          "display": {
+            "x": -36,
+            "y": -36
+          },
+          "children": [
+            "457781f2-2079-49e6-94d9-e8f8257e241c",
+            "d174569b-9dac-4ce8-81d2-f6758593445d"
+          ]
+        },
+        "d174569b-9dac-4ce8-81d2-f6758593445d": {
+          "id": "d174569b-9dac-4ce8-81d2-f6758593445d",
+          "name": "MoveTo",
+          "title": "MoveTo <location>",
+          "description": "",
+          "properties": {
+            "radius": 0.5,
+            "location": "info"
+          },
+          "display": {
+            "x": 60,
+            "y": 96
+          }
+        }
+      },
+      "display": {
+        "camera_x": 960,
+        "camera_y": 531.5,
+        "camera_z": 1,
+        "x": -36,
+        "y": -156
+      }
+    }
+  ],
+  "custom_nodes": [
+    {
+      "version": "0.3.0",
+      "scope": "node",
+      "name": "MoveTo",
+      "category": "action",
+      "title": "MoveTo <location>",
+      "description": null,
+      "properties": {
+        "radius": 0.5,
+        "location": 0
+      }
+    }
+  ]
+}

@@ -76,9 +76,6 @@ echo "---------- Install Arnl and ARIA .debs ----------"
 echo "to continue press enter"
 read 
 
-echo "Check that you have downloaded the Arnl and Arnl-base, Aria and MobileSim .deb files into Downloads from Box to be able to continue"
-read 
-
 cd ~/catkin_ws/setup/installs
 sudo dpkg -i arnl-base_1.9.2+ubuntu16_amd64.deb	
 sudo dpkg -i libarnl_1.9.2a+ubuntu16_amd64.deb	

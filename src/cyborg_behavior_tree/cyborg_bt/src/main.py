@@ -39,7 +39,7 @@ class BehaviorTreeManager():
 
         names = {'MoveTo': MoveTo}
 
-        with open(homedir + '/.ros/project.json') as f:
+        with open(homedir + '/catkin_ws/src/cyborg_behavior_tree/cyborg_bt/src/project.json') as f:
             rospy.loginfo('Loading project from %s' % f.name)
             data = json.load(f, object_pairs_hook=OrderedDict)
 

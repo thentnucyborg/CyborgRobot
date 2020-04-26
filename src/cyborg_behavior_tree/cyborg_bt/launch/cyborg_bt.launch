@@ -1,12 +1,12 @@
 <launch>
     <remap from="/move_base" to="/rosarnl_node/move_base"/>
 
-    <arg name="dot_file" default="$(env HOME)/.ros/tree.dot" />
-    <arg name="tree_file" default="$(env HOME)/.ros/project.json" />
+    <!-- <arg name="dot_file" default="$(env HOME)/.ros/tree.dot" />
+    <arg name="tree_file" default="$(env HOME)/.ros/project.json" /> -->
 
     <node pkg="cyborg_bt" name="main" type="main.py" output="screen">
-        <param name="tree_file" value="$(arg tree_file)" />
+    <!--    <param name="tree_file" value="$(arg tree_file)" />
         <param name="dot_file" value="$(arg dot_file)" />
-        <param name="low_battery_threshold" value="50" />
+        <param name="low_battery_threshold" value="50" /> -->
     </node>
 </launch>
