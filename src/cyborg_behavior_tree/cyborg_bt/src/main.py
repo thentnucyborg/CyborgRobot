@@ -177,11 +177,18 @@ class BehaviorTreeManager():
             for key in nodes:
                 spec = nodes[key]
                 node = tmpnodes[key]
+                print("Key : ", key)
 
-                if node.category == b3.COMPOSITE and 'children' in spec:
+                # if node.category == b3.COMPOSITE and 'children' in spec:
+                #     for cid in spec['children']:
+                #         node.children.append(tmpnodes[cid])
+                # elif node.category == b3.DECORATOR and 'child' in spec:
+                #     node.child = tmpnodes[spec['child']]
+
+                if 'children' in spec:
                     for cid in spec['children']:
                         node.children.append(tmpnodes[cid])
-                elif node.category == b3.DECORATOR and 'child' in spec:
+                else:
                     node.child = tmpnodes[spec['child']]
 
             rospy.loginfo('Connecting root node')

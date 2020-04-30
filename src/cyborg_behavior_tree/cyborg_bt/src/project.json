@@ -8,6 +8,7 @@
       "scope": "tree",
       "id": "7daa11a8-0d63-4db4-8b7c-8b2207183ac8",
       "title": "Patrol tree",
+      "category": "composite",
       "description": "",
       "root": "4f5cf909-d123-4d23-a71f-4692252c67d8",
       "properties": {},
@@ -97,6 +98,7 @@
       "scope": "tree",
       "id": "0c57e2d0-d67d-48b4-843b-ad25bcf6f50c",
       "title": "Root tree",
+      "category": "composite",
       "description": "",
       "root": "852322e7-6513-4aef-a8be-9088141b7cac",
       "properties": {},
@@ -104,6 +106,7 @@
         "457781f2-2079-49e6-94d9-e8f8257e241c": {
           "id": "457781f2-2079-49e6-94d9-e8f8257e241c",
           "name": "7daa11a8-0d63-4db4-8b7c-8b2207183ac8",
+          "category": "composite",
           "title": "Patrol tree",
           "description": "",
           "properties": {},
