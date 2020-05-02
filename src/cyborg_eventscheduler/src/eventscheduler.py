@@ -54,7 +54,7 @@ class EventScheduler():
             self.current_location = data.data
 
     
-	# Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event, if ongoing event is an other location it publish a navigation_schedulaer event for the state machine
+	# Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event, if ongoing event is an other location it publish a navigation_schedular event for the state machine
     def scheduler(self): # Threaded
         rospy.loginfo("EventScheduler: Activated.")
         while not rospy.is_shutdown():

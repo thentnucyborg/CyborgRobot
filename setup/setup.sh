@@ -107,7 +107,6 @@ read
 ## Install SMACH
 sudo apt-get install ros-kinetic-executive-smach
 sudo apt-get install ros-kinetic-executive-smach-visualization
-
 sudo apt-get install python-pyqt5
 sudo apt-get install python-qt-binding
 
@@ -119,6 +118,7 @@ read
 ## Install for Audio node
 pip2 install -Iv pyttsx3==2.7	#-I ignores installed packages, -v prints/verbose
 pip2 install python-vlc==3.0.7110
+
 
 echo "---------- Install Command node ----------"
 echo "to continue press enter"
@@ -154,7 +154,7 @@ pip2 install pytz
 
 echo "---------- Install Behaviour Trees ----------"
 echo "to continue press enter"
-read 
+read
 
 ## Behavior Trees
 pip2 install networkx==2.2
@@ -172,9 +172,6 @@ sudo npm install --global gulp@3.9.1
 # install b3 module
 cd ~/catkin_ws/setup/installs/behavior3py
 sudo python setup.py install
-
-
-
 
 
 echo "---------- Setup UDEV Rules ----------"

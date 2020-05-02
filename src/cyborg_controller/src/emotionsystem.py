@@ -8,7 +8,7 @@ from collections import namedtuple
 import rospy
 from std_msgs.msg import String
 from cyborg_controller.msg import EmotionalFeedback, EmotionalState
-from cyborg_controller.srv import EmotionalStateService
+from cyborg_controller.srv import EmotionalStateService, EmotionalStateServiceResponse
 
 __author__ = "Thomas Rostrup Andersen"
 __copyright__ = "Copyright (C) 2016 Thomas Rostrup Andersen"
@@ -98,11 +98,7 @@ class EmotionSystem(object):
     # Called when the service requesting current emotional state is called
     # Responds with the current emotional state and values
     def get_emotional_state_callback(self, req):
-        data = EmotionalStateServiceResponse(self.current_emotion)
-        data.emotional_state = self.current_emotion
-        data.current_pleasure = self.pleasure
-        data.current_arousal = self.arousal
-        data.current_dominance = self.dominance
+        data = EmotionalStateServiceResponse(self.current_emotion, self.pleasure, self.arousal, self.dominance)
         return data
 
 
@@ -130,7 +126,7 @@ class EmotionSystem(object):
         self.pleasure = max(-1, min(1, data.delta_pleasure))
         self.arousal = max(-1, min(1, data.delta_arousal))
         self.dominance = max(-1, min(1, data.delta_dominance))
-        self.update_emotion(self, pleasure=0.00, arousal=0.00, dominance=0.00)
+        self.update_emotion(pleasure=0.00, arousal=0.00, dominance=0.00)
 
 
     # Called from message subscriber
