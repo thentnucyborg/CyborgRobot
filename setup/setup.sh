@@ -90,6 +90,10 @@ echo "---------- Installs for New Navigation ----------"
 echo "to continue press enter"
 read 
 
+# Installs for GUI
+sudo apt-get install ros-kinetic-rosauth
+sudo apt-get install ros-kinetic-rosbridge-server
+
 ## Installs for Navigation stack (may be more)
 cd  ~/catkin_ws/src
 sudo apt-get install ros-kinetic-navigation
