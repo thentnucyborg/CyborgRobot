@@ -83,6 +83,17 @@ sudo dpkg -i libaria_2.9.4+ubuntu16_amd64.deb
 sudo dpkg -i mobilesim_0.9.8+ubuntu16_amd64.deb	
 
 
+echo "---------- Install GUI ----------"
+echo "to continue press enter"
+read
+
+pip2 install pymongo==3.10.1
+sudo apt-get install ros-kinetic-rosauth
+sudo apt-get install ros-kinetic-rosbridge-server
+sudo apt-get install ros-kinetic-rospy-message-converter
+
+
+
 echo "---------- Installs for New Navigation ----------"
 echo "to continue press enter"
 read 
@@ -91,6 +102,10 @@ read
 cd  ~/catkin_ws/src
 sudo apt-get install ros-kinetic-navigation
 sudo apt-get install ros-kinetic-tf2-sensor-msgs
+sudo apt-get install ros-kinetic-tf2-geometry-msgs
+sudo apt-get install ros-kinetic-cmake-modules
+sudo apt-get install ros-kinetic-tf2-kdl
+sudo apt-get install ros-kinetic-kdl-parser
 sudo apt-get install libsdl-dev
 sudo apt-get install libsdl-image1.2-dev
 sudo apt-get install libbullet-dev
