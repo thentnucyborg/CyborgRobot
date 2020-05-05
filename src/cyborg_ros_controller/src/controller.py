@@ -89,12 +89,33 @@ def main():
 
         suspension_transitions = {"start":"idle",
                             "restart":"startup",
+                            "demo_start":"demo",
+                            "manual_start":"manual",
                             "aborted":"suspension"}
         suspension_resources = {}
         smach.StateMachine.add("suspension",
                             Module("suspension", "cyborg_behavior", suspension_transitions, suspension_resources),
                             suspension_transitions,
                             sm_remapping)
+
+
+        demo_transitions = {"succeeded":"suspension",
+                            "aborted":"suspension"}
+        demo_resources = {}
+        smach.StateMachine.add("demo",
+                            Module("demo", "cyborg_behavior", demo_transitions, demo_resources),
+                            demo_transitions,
+                            sm_remapping)
+
+
+        manual_transitions = {"succeeded":"suspension",
+                            "aborted":"suspension"}
+        manual_resources = {}
+        smach.StateMachine.add("manual",
+                            Module("manual", "cyborg_behavior", manual_transitions, manual_resources),
+                            manual_transitions,
+                            sm_remapping)
+   
 
 
         idle_transitions = {"suspend":"suspension",
@@ -114,7 +135,8 @@ def main():
                         sm_remapping)
 
 
-        show_off_mea_transitions={"aborted":"idle","succeeded":"idle"}
+        show_off_mea_transitions={"aborted":"idle",
+                                "succeeded":"idle"}
         show_off_mea_resources={}
         smach.StateMachine.add("show_off_mea",
                             Module("show_off_mea", "cyborg_behavior",show_off_mea_transitions, show_off_mea_resources),
@@ -238,12 +260,11 @@ def main():
 
 
 if __name__ == "__main__":
-    print("Cyborg Controller: Starting Program...")
+    rospy.loginfo("Cyborg Controller: Starting Program...")
 
     if sys.version_info < (2,5):
-        print("Cyborg Controller: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
+        rospy.loginfo("Cyborg Controller: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or greater is required)...")
         exit()
-
+    
     main()
-
-    print("Cyborg Controller: End of Program...")
+    rospy.loginfo("Cyborg Controller: End of Program...")

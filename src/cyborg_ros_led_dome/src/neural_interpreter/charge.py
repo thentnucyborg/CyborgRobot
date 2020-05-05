@@ -18,7 +18,7 @@ class Charge:
 
     def battery_status_callback(self, message):
         # might want to change this to the whole msg later
-        print("callback function charge")
+        rospy.loginfo("callback function charge")
         self.battery_charge = message.charge_percent
 
 

@@ -19,7 +19,7 @@ def main():
 
 
 if __name__ =="__main__":
-    print("Cyborg Behavior: Starting Program")
+    rospy.loginfo("Cyborg Behavior: Starting Program")
     main()
-    print("Cyborg Behavior: Shutting Down")
+    rospy.loginfo("Cyborg Behavior: Shutting Down")
     

@@ -33,7 +33,7 @@ class DatabaseHandler(object):
             connection.commit()
             cursor.close()
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Location table allready exist...")
+            rospy.loginfo("DatabaseHandler: Location table already exists...")
 
         try:
             connection = sqlite3.connect(self.dbfilename)
@@ -42,7 +42,7 @@ class DatabaseHandler(object):
             connection.commit()
             cursor.close()
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Event table allready exist...")
+            rospy.loginfo("DatabaseHandler: Event table already exists...")
 
         try:
             connection = sqlite3.connect(self.dbfilename)
@@ -51,7 +51,7 @@ class DatabaseHandler(object):
             connection.commit()
             cursor.close()
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Response table allready exist...")
+            rospy.loginfo("DatabaseHandler: Response table already exists...")
 
     def namedtuple_factory_location_record(self, cursor, row):
         return LocationRecord(*row)
@@ -74,7 +74,7 @@ class DatabaseHandler(object):
             cursor.close()
             return id[0][0]
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to add_response()...")
+            rospy.loginfo("DatabaseHandler: Unable to add_response()...")
 
 
     def search_for_response(self, response_type, emotion):
@@ -93,7 +93,7 @@ class DatabaseHandler(object):
                 n = random.randrange(start=0, stop=(len(records)-1))
                 return records[n]
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to search_for_response()...")
+            rospy.loginfo("DatabaseHandler: Unable to search_for_response()...")
 
 
     def search_for_location(self, location_name):
@@ -106,7 +106,7 @@ class DatabaseHandler(object):
             cursor.close()
             return records[0] if len(records) > 0 else None
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to search_for_location()...")
+            rospy.loginfo("DatabaseHandler: Unable to search_for_location()...")
 
 
     def get_all_locations(self):
@@ -119,7 +119,7 @@ class DatabaseHandler(object):
             cursor.close()
             return records
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to get_all_locations()...")
+            rospy.loginfo("DatabaseHandler: Unable to get_all_locations()...")
 
 
     def add_location(self, location_name, robot_map_name="ntnu.map", x=0, y=0, z=0, p=0, j=0, r=0, threshold=0.00, crowded=False, environment=0.00):
@@ -133,7 +133,7 @@ class DatabaseHandler(object):
             cursor.close()
             return id[0][0]
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to add_location()...")
+            rospy.loginfo("DatabaseHandler: Unable to add_location()...")
 
         
     def add_event(self, event_name, location_name, start_date=datetime.datetime.now(), end_date=datetime.datetime.now(), ignore=False):
@@ -147,7 +147,7 @@ class DatabaseHandler(object):
             cursor.close()
             return id[0][0]
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to add_event()...")
+            rospy.loginfo("DatabaseHandler: Unable to add_event()...")
 
 
     def search_ongoing_events(self, robot_map_name, current_date=datetime.datetime.now()):
@@ -163,7 +163,7 @@ class DatabaseHandler(object):
             else:
                 return records[0]
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to search_ongoing_events()...")
+            rospy.loginfo("DatabaseHandler: Unable to search_ongoing_events()...")
 
 
     def search_for_crowded_locations(self, robot_map_name, crowded=True):
@@ -182,7 +182,7 @@ class DatabaseHandler(object):
                 n = random.randrange(start=0, stop=(len(records)-1))
                 return records[n]
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to search_for_crowded_locations()...")
+            rospy.loginfo("DatabaseHandler: Unable to search_for_crowded_locations()...")
 
 
     def location_is_crowded(self, robot_map_name, location_name):
@@ -194,7 +194,7 @@ class DatabaseHandler(object):
             cursor.close()
             return True if len(records) > 0 else False
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to location_is_crowded()...")
+            rospy.loginfo("DatabaseHandler: Unable to location_is_crowded()...")
 
 
     def find_location(self, robot_map_name, location_x, location_y):
@@ -215,5 +215,5 @@ class DatabaseHandler(object):
                         best = record
                 return best
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to find_location()...")
+            rospy.loginfo("DatabaseHandler: Unable to find_location()...")
 

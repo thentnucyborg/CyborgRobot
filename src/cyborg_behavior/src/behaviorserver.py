@@ -115,7 +115,7 @@ class BehaviorServer():
             self.status_navigation_server = -1
             goal_navigation = NavigationGoal(order=self.navigation_order)
             goal_navigation.location_name = self.command_location if self.command_location != None else ""
-            print("BehaviorServer: sending navigation order '" + self.navigation_order +"' and navigation goal '" + str(goal_navigation.location_name) +"' to navigation client.")
+            rospy.loginfo("BehaviorServer: sending navigation order '" + self.navigation_order +"' and navigation goal '" + str(goal_navigation.location_name) +"' to navigation client.")
             self.client_navigation.send_goal(goal_navigation, done_cb = self.callback_navigation_done)
         
         #check and send visual command

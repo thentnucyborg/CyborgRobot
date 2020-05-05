@@ -21,6 +21,6 @@ def main():
 
 
 if __name__ =="__main__":
-    print("Cyborg Primary States: Starting Program")
+    rospy.loginfo("Cyborg Primary States: Starting Program")
     main()
-    print("Cyborg Primary States: Shutting Down")
+    rospy.loginfo("Cyborg Primary States: Shutting Down")

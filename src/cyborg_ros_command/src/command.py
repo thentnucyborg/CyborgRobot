@@ -28,12 +28,12 @@ class CommandApplication(npyscreen.NPSAppManaged):
         self.addForm("COMMAND_FORM", CommandForm)
 
 if __name__ == '__main__':
-    print("Cyborg Command: Starting Program...")
+    rospy.loginfo("Cyborg Command: Starting Program...")
 
     if sys.version_info < (2,5):
-        print("Cyborg Command: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
+        rospy.loginfo("Cyborg Command: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
         exit()
 
     main()
 
-    print("Cyborg Command: End of Program...")
+    rospy.loginfo("Cyborg Command: End of Program...")

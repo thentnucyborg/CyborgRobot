@@ -15,7 +15,7 @@ import time
 
 
 def shutdown_test():
-	print("LED - shutdown test funksjon")
+	rospy.loginfo("LED - shutdown test funksjon")
 	leds = bytearray([0] * (3 * settings.LEDS_TOTAL))
 	leds[788*3] = 100
 
@@ -46,6 +46,6 @@ def main():
     rospy.spin()
 
 if __name__ == '__main__':
-    print("Cyborg LED Dome: Starting Program...")
+    rospy.loginfo("Cyborg LED Dome: Starting Program...")
     main()
-    print("Cyborg LED Dome: End of Program...")
+    rospy.loginfo("Cyborg LED Dome: End of Program...")
