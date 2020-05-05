@@ -8,7 +8,7 @@
 	<node pkg="cyborg_primary_states" name="cyborg_primary_states" type="primary_states.py" output = "screen" />
 	<node pkg="cyborg_eventscheduler" name="cyborg_eventscheduler" type="eventscheduler.py" output= "screen" />
 	<node pkg="cyborg_controller" name="cyborg_controller" type="controller.py" required="true" output="screen" />
-	<!-- <node pkg="cyborg_commander" name="cyborg_commander" type="commander.py" required="true" output="screen" /> -->
+	<node pkg="cyborg_commander" name="cyborg_commander" type="commander.py" required="true" output="screen" />
 
 	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
 	<include file="$(find cyborg_2dnav)/cyborg_config.launch"/>
