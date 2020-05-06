@@ -42,7 +42,7 @@ class StateMachineMonitor():
 
         self.graph.clear()
         self.traverse_state_machine(self.state_machine)
-        #print(self.graph.string()) # print to screen
+        #rospy.loginfo(self.graph.string()) # print to screen
         self.graph.write(path + 'graph.dot') # write to graph.dot
         image=pygraphviz.AGraph(path + 'graph.dot') # create a new graph from file
         image.layout(prog='dot')

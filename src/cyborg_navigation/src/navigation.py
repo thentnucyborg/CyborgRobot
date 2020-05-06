@@ -48,13 +48,13 @@ def main():
     rospy.spin()
 
 if __name__ == "__main__":
-    print("Cyborg Navigation: Starting Program...")
+    rospy.loginfo("Cyborg Navigation: Starting Program...")
 
     if sys.version_info < (2,5):
-        print("Cyborg Navigation: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
+        rospy.loginfo("Cyborg Navigation: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
         exit()
 
     main()
 
-    print("Cyborg Navigation: End of Program...")
+    rospy.loginfo("Cyborg Navigation: End of Program...")
 

@@ -1,4 +1,6 @@
 /devel
 /build
+/.vscode
+robotPose
 *.pyc
 *.db

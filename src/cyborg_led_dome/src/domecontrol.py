@@ -40,7 +40,7 @@ class startup(smach.State):
 
         #execute animation
         self.loop(neuron_data)
-        print("LED-dome initiated - waiting for incoming message")
+        rospy.loginfo("LED-dome initiated - waiting for incoming message")
 
         #wait for incoming message
         while not settings.CHANGE_REQUESTED and not rospy.is_shutdown(): 
@@ -190,7 +190,7 @@ def domecontrol():
             settings.CHANGE_REQUESTED = True
         elif ("text" in data.data):
             if (len(data.data)<=5):
-                print("Received empty text")
+                rospy.loginfo("Received empty text")
             else:
                 sm.userdata.sm_text = data.data[5:]
                 if sm.userdata.sm_current_interpreter != "text":

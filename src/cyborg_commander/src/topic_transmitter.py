@@ -8,12 +8,7 @@ __all__ = []
 
 
 import rospy
-import time
-import actionlib
-
 import json
-import yaml
-
 import sys
 import binascii
 import datetime
@@ -21,100 +16,149 @@ import threading
 import time
 
 # ROS msgs
-from std_msgs.msg import String, Bool
+from std_msgs.msg import String, Bool, Int32, Int8, Float32, Float64
 from rosgraph_msgs.msg import Log
-
 from cyborg_controller.msg import StateMachineAction, StateMachineGoal, SystemState, EmotionalState, StateMachineActionResult, EmotionalFeedback, StateMachineActionGoal, StateMachineActionFeedback
 from cyborg_navigation.msg import NavigationAction, NavigationGoal, NavigationActionFeedback, NavigationActionGoal, NavigationActionResult
 from actionlib_msgs.msg import GoalStatusArray, GoalID
 from smach_msgs.msg import SmachContainerStatus,SmachContainerInitialStatusCmd,SmachContainerStructure
 from pymongo import MongoClient 
 from rospy_message_converter import json_message_converter
-from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, Pose2D, PoseStamped
+from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, Pose2D, PoseStamped, Twist, PolygonStamped, PoseArray, PointStamped
 from rosarnl.msg import BatteryStatus, BumperState, JogPositionActionFeedback, JogPositionActionGoal, JogPositionActionResult
 from sensor_msgs.msg import LaserScan, PointCloud
 from move_base_msgs.msg import MoveBaseActionFeedback, MoveBaseActionResult, MoveBaseActionGoal
+from rosbridge_msgs.msg import ConnectedClients
+from sensor_msgs.msg import JointState, PointCloud2
+from nav_msgs.msg import OccupancyGrid, MapMetaData, Path, Odometry
+from map_msgs.msg import OccupancyGridUpdate
+from tf2_msgs.msg import TFMessage
 
 client = MongoClient()
-
 class TopicTransmitter():
     """TopicTransmitter"""
 
     def __init__(self):
         rospy.loginfo("Cyborg Commander: transmitter initializing")
-        # self.subscriber_audio_feedback_playback = rospy.Subscriber("/cyborg_audio/feedback_playback", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_behaviour_cancel = rospy.Subscriber("/cyborg_behavior/cancel", GoalID, callback = self.save_data, queue_size = 10)
-        # self.subscriber_behaviour_command_location = rospy.Subscriber("/cyborg_behavior/command_location", String, callback = self.save_data, queue_size = 10)
+        # self.subscriber_amcl_parameter_descriptions = rospy.Subscriber('/amcl/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_amcl_parameter_updates = rospy.Subscriber('/amcl/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_amcl_pose = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_clicked_point = rospy.Subscriber('/clicked_point', PointStamped, callback = self.save_data, queue_size = 10)
+        self.subscriber_client_count = rospy.Subscriber('/client_count', Int32, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cmd_vel = rospy.Subscriber('/cmd_vel', Twist, callback = self.save_data, queue_size = 10)
+        # self.subscriber_connected_clients = rospy.Subscriber('/connected_clients', ConnectedClients, callback = self.save_data, queue_size = 10)
+        # self.subscriber_controller_viewer_smach_container_init = rospy.Subscriber('/controller_viewer/smach/container_init', SmachContainerInitialStatusCmd, callback = self.save_data, queue_size = 10)
+        # self.subscriber_controller_viewer_smach_container_status = rospy.Subscriber('/controller_viewer/smach/container_status', SmachContainerStatus, callback = self.save_data, queue_size = 10)
+        # self.subscriber_controller_viewer_smach_container_structure = rospy.Subscriber('/controller_viewer/smach/container_structure', SmachContainerStructure, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_audio_feedback_playback = rospy.Subscriber('/cyborg_audio/feedback_playback', String, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_audio_feedback_text_to_speech = rospy.Subscriber('/cyborg_audio/feedback_text_to_speech', String, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_audio_playback = rospy.Subscriber('/cyborg_audio/playback', String, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_audio_text_to_speech = rospy.Subscriber('/cyborg_audio/text_to_speech', String, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_behavior_cancel = rospy.Subscriber('/cyborg_behavior/cancel', GoalID, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_behavior_command_location = rospy.Subscriber('/cyborg_behavior/command_location', String, callback = self.save_data, queue_size = 10)
         # self.subscriber_behaviour_dynamic_behavior = rospy.Subscriber("/cyborg_behavior/dynamic_behavior", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_behaviour_goal = rospy.Subscriber("/cyborg_behavior/goal", StateMachineActionGoal, callback = self.save_data, queue_size = 10)
-        # self.subscriber_behaviour_result = rospy.Subscriber("/cyborg_behavior/result", StateMachineActionResult, callback = self.save_data, queue_size = 10)
-        # self.subscriber_behaviour_status = rospy.Subscriber("/cyborg_behavior/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
-
+        # self.subscriber_cyborg_behavior_feedback = rospy.Subscriber('/cyborg_behavior/feedback', StateMachineActionFeedback, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_behavior_goal = rospy.Subscriber('/cyborg_behavior/goal', StateMachineActionGoal, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_behavior_result = rospy.Subscriber('/cyborg_behavior/result', StateMachineActionResult, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_behavior_status = rospy.Subscriber('/cyborg_behavior/status', GoalStatusArray, callback = self.save_data, queue_size = 10)
         # self.subscriber_controller_emotional_controller = rospy.Subscriber("/cyborg_controller/emotional_controller", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_controller_emotional_feedback = rospy.Subscriber("/cyborg_controller/emotional_feedback", EmotionalFeedback, callback = self.save_data, queue_size = 10)
-        # self.subscriber_controller_emotional_state = rospy.Subscriber("/cyborg_controller/emotional_state", EmotionalState, callback = self.save_data, queue_size = 10)
-        # self.subscriber_controller_register_event = rospy.Subscriber("/cyborg_controller/register_event", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_controller_set_emotional_state = rospy.Subscriber("/cyborg_controller/set_emotional_state", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_controller_set_emotional_values = rospy.Subscriber("/cyborg_controller/set_emotional_values", EmotionalFeedback, callback = self.save_data, queue_size = 10)
-        # self.subscriber_controller_state_change = rospy.Subscriber("/cyborg_controller/state_change", SystemState, callback = self.save_data, queue_size = 10)
-        
+        # self.subscriber_cyborg_controller_emotional_feedback = rospy.Subscriber('/cyborg_controller/emotional_feedback', EmotionalFeedback, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_controller_emotional_state = rospy.Subscriber('/cyborg_controller/emotional_state', EmotionalState, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_controller_register_event = rospy.Subscriber('/cyborg_controller/register_event', String, callback = self.save_data, queue_size = 10)
+        self.subscriber_cyborg_controller_state_change = rospy.Subscriber('/cyborg_controller/state_change', SystemState, callback = self.save_data, queue_size = 10)
         # self.subscriber_navigation_current_location = rospy.Subscriber("/cyborg_navigation/current_location", String, callback = self.save_data, queue_size = 10)
         # self.subscriber_navigation_cancel = rospy.Subscriber("/cyborg_navigation/navigation/cancel", GoalID, callback = self.save_data, queue_size = 10)
         # self.subscriber_navigation_feedback = rospy.Subscriber("/cyborg_navigation/navigation/feedback", NavigationActionFeedback, callback = self.save_data, queue_size = 10)
         # self.subscriber_navigation_goal = rospy.Subscriber("/cyborg_navigation/navigation/goal", NavigationActionGoal, callback = self.save_data, queue_size = 10)
         # self.subscriber_navigation_result = rospy.Subscriber("/cyborg_navigation/navigation/result", NavigationActionResult, callback = self.save_data, queue_size = 10)
         # self.subscriber_navigation_status = rospy.Subscriber("/cyborg_navigation/navigation/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
-        
         # self.subscriber_primarystates_cancel = rospy.Subscriber("/cyborg_primary_states/cancel", GoalID, callback = self.save_data, queue_size = 10)
         # self.subscriber_primarystates_feedback = rospy.Subscriber("/cyborg_primary_states/feedback", StateMachineActionFeedback, callback = self.save_data, queue_size = 10)
         # self.subscriber_primarystates_goal = rospy.Subscriber("/cyborg_primary_states/goal", StateMachineActionGoal, callback = self.save_data, queue_size = 10)
         # self.subscriber_primarystates_result = rospy.Subscriber("/cyborg_primary_states/result", StateMachineActionResult, callback = self.save_data, queue_size = 10)
         # self.subscriber_primarystates_status = rospy.Subscriber("/cyborg_primary_states/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
+        # self.subscriber_cyborg_visual_domecontrol = rospy.Subscriber('/cyborg_visual/domecontrol', String, callback = self.save_data, queue_size = 10)
+        # self.subscriber_initialpose = rospy.Subscriber('/initialpose', PoseWithCovarianceStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_joint_states = rospy.Subscriber('/joint_states', JointState, callback = self.save_data, queue_size = 10)
+        # self.subscriber_map = rospy.Subscriber('/map', OccupancyGrid, callback = self.save_data, queue_size = 10)
+        # self.subscriber_map_metadata = rospy.Subscriber('/map_metadata', MapMetaData, callback = self.save_data, queue_size = 10)
+        # self.subscriber_map_updates = rospy.Subscriber('/map_updates', OccupancyGridUpdate, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_cancel = rospy.Subscriber('/move_base/cancel', PoseStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_current_goal = rospy.Subscriber('/move_base/current_goal', PoseStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_feedback = rospy.Subscriber('/move_base/feedback', MoveBaseActionFeedback, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_costmap = rospy.Subscriber('/move_base/global_costmap/costmap', OccupancyGrid, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_costmap_updates = rospy.Subscriber('/move_base/global_costmap/costmap_updates', OccupancyGridUpdate, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_footprint = rospy.Subscriber('/move_base/global_costmap/footprint', PolygonStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_inflation_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/inflation_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_inflation_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/inflation_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_obstacle_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/obstacle_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_obstacle_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/obstacle_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_parameter_updates = rospy.Subscriber('/move_base/global_costmap/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_static_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/static_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_static_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/static_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_goal = rospy.Subscriber('/move_base/goal', MoveBaseActionGoal, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_costmap = rospy.Subscriber('/move_base/local_costmap/costmap', OccupancyGrid, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_costmap_updates = rospy.Subscriber('/move_base/local_costmap/costmap_updates', OccupancyGridUpdate, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_footprint = rospy.Subscriber('/move_base/local_costmap/footprint', PolygonStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_inflation_layer_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/inflation_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_inflation_layer_parameter_updates = rospy.Subscriber('/move_base/local_costmap/inflation_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_obstacle_layer_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/obstacle_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_obstacle_layer_parameter_updates = rospy.Subscriber('/move_base/local_costmap/obstacle_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_parameter_updates = rospy.Subscriber('/move_base/local_costmap/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_NavfnROS_plan = rospy.Subscriber('/move_base/NavfnROS/plan', Path, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_parameter_descriptions = rospy.Subscriber('/move_base/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_parameter_updates = rospy.Subscriber('/move_base/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_result = rospy.Subscriber('/move_base/result', MoveBaseActionResult, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_simple_goal = rospy.Subscriber('/move_base_simple/goal', PoseStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_status = rospy.Subscriber('/move_base/status', GoalStatusArray, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_TrajectoryPlannerROS_cost_cloud = rospy.Subscriber('/move_base/TrajectoryPlannerROS/cost_cloud', PointCloud2, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_TrajectoryPlannerROS_global_plan = rospy.Subscriber('/move_base/TrajectoryPlannerROS/global_plan', Path, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_TrajectoryPlannerROS_local_plan = rospy.Subscriber('/move_base/TrajectoryPlannerROS/local_plan', Path, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_TrajectoryPlannerROS_parameter_descriptions = rospy.Subscriber('/move_base/TrajectoryPlannerROS/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_move_base_TrajectoryPlannerROS_parameter_updates = rospy.Subscriber('/move_base/TrajectoryPlannerROS/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_odom = rospy.Subscriber('/odom', Odometry, callback = self.save_data, queue_size = 10)
+        # self.subscriber_particlecloud = rospy.Subscriber('/particlecloud', PoseArray, callback = self.save_data, queue_size = 10)
+        # self.subscriber_robot_pose = rospy.Subscriber('/robot_pose', Pose, callback = self.save_data, queue_size = 10)
+        self.subscriber_RosAria_battery_recharge_state = rospy.Subscriber('/RosAria/battery_recharge_state', Int8, callback = self.save_data, queue_size = 10)
+        self.subscriber_RosAria_battery_state_of_charge = rospy.Subscriber('/RosAria/battery_state_of_charge', Float32, callback = self.save_data, queue_size = 10)
+        self.subscriber_RosAria_battery_voltage = rospy.Subscriber('/RosAria/battery_voltage', Float64, callback = self.save_data, queue_size = 10)
+        # self.subscriber_RosAria_bumper_state = rospy.Subscriber('/RosAria/bumper_state', BumperState, callback = self.save_data, queue_size = 10)
+        self.subscriber_RosAria_motors_state = rospy.Subscriber('/RosAria/motors_state', Bool, callback = self.save_data, queue_size = 10)
+        # self.subscriber_RosAria_parameter_descriptions = rospy.Subscriber('/RosAria/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
+        # self.subscriber_RosAria_parameter_updates = rospy.Subscriber('/RosAria/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
+        # self.subscriber_RosAria_sim_S3Series_1_laserscan = rospy.Subscriber('/RosAria/sim_S3Series_1_laserscan', LaserScan, callback = self.save_data, queue_size = 10)
+        # self.subscriber_RosAria_sim_S3Series_1_pointcloud = rospy.Subscriber('/RosAria/sim_S3Series_1_pointcloud', PointCloud, callback = self.save_data, queue_size = 10)
+        # self.subscriber_RosAria_sonar = rospy.Subscriber('/RosAria/sonar', PointCloud, callback = self.save_data, queue_size = 10)
+        # self.subscriber_RosAria_sonar_pointcloud2 = rospy.Subscriber('/RosAria/sonar_pointcloud2', PointCloud2, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_amcl_pose = rospy.Subscriber("/rosarnl_node/amcl_pose", PoseWithCovarianceStamped, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_batterystatus = rospy.Subscriber('/rosarnl_node/battery_status', BatteryStatus, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_motorsstate = rospy.Subscriber("/rosarnl_node/motors_state", Bool, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_node_move_base_cancel = rospy.Subscriber('/rosarnl_node/move_base/cancel', GoalID, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_node_move_base_feedback = rospy.Subscriber('/rosarnl_node/move_base/feedback', move_base_msgs/MoveBaseActionFeedback, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_node_move_base_goal = rospy.Subscriber('/rosarnl_node/move_base/goal', MoveBaseActionGoal, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_movebase_result = rospy.Subscriber("/rosarnl_node/move_base/result", MoveBaseActionResult, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosarnl_movebase_status = rospy.Subscriber("/rosarnl_node/move_base/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosout = rospy.Subscriber('/rosout', Log, callback = self.save_data, queue_size = 10)
+        # self.subscriber_rosout_agg = rospy.Subscriber('/rosout_agg', Log, callback = self.save_data, queue_size = 10)
+        # self.subscriber_tf = rospy.Subscriber('/tf', TFMessage, callback = self.save_data, queue_size = 10)
+        # self.subscriber_tf_static = rospy.Subscriber('/tf_static', TFMessage, callback = self.save_data, queue_size = 10)
+        # self.subscriber_behaviour_status = rospy.Subscriber("/cyborg_behavior/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
+        # self.subscriber_arnl_batterystatus = rospy.Subscriber('/rosarnl_node/battery_status', BatteryStatus, callback = self.save_data, queue_size = 10)
+        # self.subscriber_arnl_motorsstate = rospy.Subscriber("/rosarnl_node/motors_state", Bool, callback = self.save_data, queue_size = 10)
         
-        # self.subscriber_visual_domecontrol = rospy.Subscriber("/cyborg_visual/domecontrol", String, callback = self.save_data, queue_size = 10)
-        
-        # self.subscriber_arnl_pose = rospy.Subscriber("/rosarnl_node/amcl_pose", PoseWithCovarianceStamped, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_pathstate = rospy.Subscriber("/rosarnl_node/arnl_path_state", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_servermode = rospy.Subscriber("/rosarnl_node/arnl_server_mode", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_serverstatus = rospy.Subscriber("/rosarnl_node/arnl_server_status", String, callback = self.save_data, queue_size = 10)
-        
-        # self.subscriber_arnl_bumperstate = rospy.Subscriber("/rosarnl_node/bumper_state", BumperState, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_currentgoal = rospy.Subscriber("/rosarnl_node/current_goal", Pose, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_goalname = rospy.Subscriber("/rosarnl_node/goalname", String, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_initialpose = rospy.Subscriber("/rosarnl_node/initialpose",PoseWithCovarianceStamped, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_jogpostition_cancel = rospy.Subscriber("/rosarnl_node/jog_position/cancel", GoalID, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_jogpostition_feedback = rospy.Subscriber("/rosarnl_node/jog_position/feedback", JogPositionActionFeedback, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_jogpostition_goal = rospy.Subscriber("/rosarnl_node/jog_position/goal", JogPositionActionGoal, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_jogpostition_result = rospy.Subscriber("/rosarnl_node/jog_position/result", JogPositionActionResult, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_jogpostition_status = rospy.Subscriber("/rosarnl_node/jog_position/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_jogpostitionsimple_goal = rospy.Subscriber("/rosarnl_node/jog_position_simple/goal", Pose2D, callback = self.save_data, queue_size = 10)
-
-        # self.subscriber_arnl_movebase_cancel = rospy.Subscriber("/rosarnl_node/move_base/cancel", GoalID, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_status = rospy.Subscriber("/rosarnl_node/move_base/feedback", MoveBaseActionFeedback, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_movebase_goal = rospy.Subscriber("/rosarnl_node/move_base/goal", MoveBaseActionGoal, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_movebase_result = rospy.Subscriber("/rosarnl_node/move_base/result", MoveBaseActionResult, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_movebase_status = rospy.Subscriber("/rosarnl_node/move_base/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_movebasesimple_goal = rospy.Subscriber("/rosarnl_node/move_base_simple/goal", PoseStamped, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_laserscan = rospy.Subscriber("/rosarnl_node/sim_S3Series_1_laserscan", LaserScan, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_pointcloud = rospy.Subscriber("/rosarnl_node/sim_S3Series_1_pointcloud", PointCloud, callback = self.save_data, queue_size = 10)
-
-        self.subscriber_arnl_batterystatus = rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, callback = self.save_data, queue_size = 10)
-        self.subscriber_arnl_motorsstate = rospy.Subscriber("/rosarnl_node/motors_state", Bool, callback = self.save_data, queue_size = 10)
-
         rospy.loginfo("Cyborg Commander: transmitter initialized")
+
     def save_data(self, message):
         if message != None:
-            topicString = message._connection_header["topic"]
-
-            #/rosarnl_node/battery_status => __rosarnl_node__battery_status since dictionaries in Python doesn't like /
-            topicString = topicString.replace("/","__") 
-            
-            self.__dict__[topicString] = message
-
-            if not topicString + "_Thread" in self.__dict__:
-                self.__dict__[topicString + "_Thread"] = threading.Thread(target=self.transmit_data(10, topicString))
-                self.__dict__[topicString + "_Thread"].daemon = True # Terminates thread when main thread terminate
-                self.__dict__[topicString + "_Thread"].Start() 
+            topic = message._connection_header["topic"]
+            topic = topic.replace("/","__")
+            self.__dict__[topic] = message
+            if not topic + "_Thread" in self.__dict__:
+                self.__dict__[topic + "_Thread"] = threading.Thread(target=self.transmit_data, args=(10,topic))
+                self.__dict__[topic + "_Thread"].daemon = True # Terminates thread when main thread terminate
+                self.__dict__[topic + "_Thread"].start()
 
     
     def transmit_data(self, interval, topic):
@@ -123,9 +167,7 @@ class TopicTransmitter():
         # t0 = time.time()
         while not rospy.is_shutdown():
             if topic in self.__dict__:
-                now = datetime.datetime.utcnow()
-
-                json_str = json_message_converter.convert_ros_message_to_json(self.__dict__[topic])
+                json_data = json_message_converter.convert_ros_message_to_json(self.__dict__[topic])
 
                 client = MongoClient("mongodb+srv://cyborg:hmPHK#4.iunGKD2@cyborg-gui-mg1nk.azure.mongodb.net/test?retryWrites=true&w=majority")
                 
@@ -135,20 +177,25 @@ class TopicTransmitter():
                 # Access collection of the database
                 db_collection = mydb[topic]
                 
-                # rec = self.PrimaryStates_goal
-                rec = json.loads(json_str)
+                # Deserialize json object to Python Object
+                rec = json.loads(json_data)
+
+                # Add current time to record
+                now = datetime.datetime.utcnow()
                 rec["date"] = now
                 
-                # inserting the data in the database
-                db_collection.insert(rec)
+                # insert the data into database
+                try:
+                    db_collection.insert(rec)
 
-                # Debug
-                # print("sent topic: " + topic + " ------ \n containing data: " + str(rec) + " ------ \n to db")
-                # print("sent to mongodb")
+                    # Debug
+                    # rospy.loginfo("Commander: Sent data to mongodb for topic {0}, data: {1}".format(topic, str(self.__dict__[topic])))
+                except ValueError:
+                    rospy.logerr("Commander: Error sending to mongodb for topic: {0}, error: {1}".format(topic,ValueError))
 
             # t1 = time.time()
             # total = t1-t0
-            # print("\nTopic: " + topic + " Took: " + str(total/100) + "\n")
+            # rospy.loginfo("\nTopic: " + topic + " Took: " + str(total/100) + "\n")
             rospy.sleep(interval)
             
             

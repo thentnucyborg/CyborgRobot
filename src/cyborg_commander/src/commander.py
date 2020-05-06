@@ -17,11 +17,10 @@ def main():
     # livefeed = Livefeed()
     TopicTransmitter()
     TopicReceiver()
-    # Rosbridge()
     rospy.spin()
 
 
 if __name__ =="__main__":
-    print("Cyborg command: Starting Program")
+    rospy.loginfo("Cyborg commander: Starting Program")
     main()
-    print("Cyborg command: Shutting Down")
+    rospy.loginfo("Cyborg commander: Shutting Down")

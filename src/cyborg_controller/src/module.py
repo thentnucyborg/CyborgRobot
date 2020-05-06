@@ -25,9 +25,9 @@ class Module(smach.State):
         self.resources = resources
         self.active = False
         self.registered_events = []
-        self.publisher = rospy.Publisher( rospy.get_name() + "/state_change", SystemState, queue_size=100)
+        self.publisher = rospy.Publisher("/cyborg_controller/state_change", SystemState, queue_size=100)
         smach.State.__init__(self, self.transitions.keys(), input_keys=["input_events", "previous_state", "previous_event"], output_keys=["output_events", "current_state", "current_event"])
-        self.subscriber = rospy.Subscriber( rospy.get_name() + "/register_event", String, self.register_event, queue_size=100)
+        self.subscriber = rospy.Subscriber( "/cyborg_controller/register_event", String, self.register_event, queue_size=100)
         
     # Called once when the goal completes
     def callback_done(self, state, result):

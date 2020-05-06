@@ -42,7 +42,7 @@ class DatabaseHandler(object):
             connection.commit()
             cursor.close()
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Event table allready exist...")
+            rospy.loginfo("DatabaseHandler: Event table already exists...")
 
 
     # Functions used for transfearing sqlite records to named touples
@@ -62,7 +62,7 @@ class DatabaseHandler(object):
             cursor.close()
             return id[0][0]
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to add events to the action database...")
+            rospy.loginfo("DatabaseHandler: Unable to add events to the action database...")
 
 
     # Returns all events with maching state name
@@ -76,7 +76,7 @@ class DatabaseHandler(object):
             cursor.close()
             return records
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to get all events to the action database (state name was " + state + " )...")
+            rospy.loginfo("DatabaseHandler: Unable to get all events to the action database (state name was " + state + " )...")
 
     # Set the event_value
     def update_event_value(self, event_id, event_value):
@@ -88,7 +88,7 @@ class DatabaseHandler(object):
             connection.commit()
             cursor.close()
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to update event_value to the action database (event_id was " + event_id + " and event_value was " + event_value + " )...")
+            rospy.loginfo("DatabaseHandler: Unable to update event_value to the action database (event_id was " + event_id + " and event_value was " + event_value + " )...")
 
 
     # Add delta_event_value to all event_values
@@ -103,7 +103,7 @@ class DatabaseHandler(object):
             connection.commit()
             cursor.close()
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to update event_value to the action database (delta_event_value was " + delta_event_values + " )...")
+            rospy.loginfo("DatabaseHandler: Unable to update event_value to the action database (delta_event_value was " + delta_event_values + " )...")
 
 
     # Reset event_value
@@ -116,6 +116,6 @@ class DatabaseHandler(object):
             connection.commit()
             cursor.close()
         except sqlite3.OperationalError:
-            print("DatabaseHandler: Unable to update event_value to the action database (event_value was " + event_values + " )...")
+            rospy.loginfo("DatabaseHandler: Unable to update event_value to the action database (event_value was " + event_values + " )...")
 
 
