@@ -45,6 +45,7 @@ source ~/.bashrc
 sudo apt install python-rosinstall python-rosinstall-generator python-wstool build-essential
 # Create a workspace
 mkdir -p ~/catkin_ws/
+sudo apt-get install rosbash
 
 
 echo "---------- Clone Cyborg repo from Git ----------"
