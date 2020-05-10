@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-##!/usr/bin/python
 __author__ = "Areg Babayan"
 __version__= "0.0.2"
 

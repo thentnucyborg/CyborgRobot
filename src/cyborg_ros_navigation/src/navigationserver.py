@@ -118,7 +118,6 @@ class NavigationServer():
 			self.server_navigation.set_aborted()
 			rospy.logdebug("NavigationServer: Received event that cant be handled - " + str(goal.order) + ".")
 
-
 	
 	# This can be used by other nodes for moving the cyborg to a known location.
 	# Preemptable, ends in Succeeded, Aborted or Preempted.
