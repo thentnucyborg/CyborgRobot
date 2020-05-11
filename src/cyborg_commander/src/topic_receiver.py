@@ -24,23 +24,35 @@ class TopicReceiver():
 
 
     def start_behaviour(self):
+        self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
         self.publisher_emotion_controller.publish("ON")
-        self.publisher_register_event.publish("start")
+        self.publisher_register_event.publish("behaviour_start")
 
 
     def start_demo(self):
+        self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
+        self.publisher_emotion_controller.publish("OFF")
+        self.publisher_register_event.publish("demo_start")
         # demo program
         pass
 
 
     def start_manual(self):
-        # manual control program.
+        # manual control program
+        self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
+        self.publisher_emotion_controller.publish("OFF")
+        self.publisher_register_event.publish("manual_start")
+        
         pass
 
 
     def stop(self):
         self.publisher_emotion_controller.publish("OFF")
         self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
         self.publisher_register_event.publish("suspend")
 
 

@@ -7,8 +7,8 @@ Numbers of actionlib server(s): 1
 
 
 ## Requirements:  
-* ROS   
-* ROSARNL  
+* ROS
+* rosAria  
 * ROS Move Base Message Type:
 
 ROS move base message type can be installed:
