@@ -74,7 +74,7 @@ class EventScheduler():
     def callback_battery_state_of_charge(self, Battery_charge):
         # charge_percent [0,100]
         # charge_state [-1, 4], charging_unknown, charging_bulk, charging_overcharge, charging_float, charging_balance
-        if (Battery_charge.data < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
+        if (Battery_charge.data*100 < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
             self.publisher_event.publish("power_low")
 
 
