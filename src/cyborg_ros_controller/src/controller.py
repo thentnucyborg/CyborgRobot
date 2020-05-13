@@ -213,7 +213,7 @@ def main():
                                         sm_remapping)
 
 
-                navigation_wandering_emotional_transitions = {"navigation_wandering_complete":"succeeded",
+                navigation_wandering_emotional_transitions = {"succeeded":"succeeded",
                                                     "aborted":"aborted",
                                                     "power_low":"power_low"}
                 navigation_wandering_emotional_resources  = {}

@@ -18,7 +18,6 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from cyborg_controller.msg import StateMachineFeedback, StateMachineResult
 from cyborg_navigation.msg import NavigationAction, NavigationResult,NavigationFeedback
 from geometry_msgs.msg import PoseWithCovarianceStamped
-from rosarnl.srv import MakePlan
 from cyborg_controller.msg import StateMachineFeedback, StateMachineResult, EmotionalFeedback
 
 
@@ -43,13 +42,13 @@ class NavigationServer():
 		self.base_canceled = False
 		self.base_succeeded = False
 
-		self.location_subscriber = rospy.Subscriber("/rosarnl_node/amcl_pose", PoseWithCovarianceStamped, self.location_callback)
+		self.location_subscriber = rospy.Subscriber("/amcl_pose", PoseWithCovarianceStamped, self.location_callback)
 		self.publisher_current_location = rospy.Publisher(rospy.get_name() + "/current_location", String, queue_size= 10)
 		self.emotion_publisher = rospy.Publisher("/cyborg_controller/emotional_feedback", EmotionalFeedback, queue_size=100)
 
 		self.server_navigation = actionlib.SimpleActionServer(rospy.get_name() + "/navigation", NavigationAction, execute_cb=self.navigationserver_callback, auto_start = False)
 		self.server_navigation.start()
-		self.client_base = actionlib.SimpleActionClient("/rosarnl_node/move_base", MoveBaseAction)
+		self.client_base = actionlib.SimpleActionClient("/move_base", MoveBaseAction)
 
 		self.database_handler = DatabaseHandler(filename=database_file)
 		self.location_updater_thread = threading.Thread(target=self.location_updater)
@@ -202,86 +201,6 @@ class NavigationServer():
 			self.next_location = None
 			self.base_canceled = True
 			return
-
-
-	# The robot base starts to wander and keeps wandering until it is preempted
-	def start_wandering(self):
-		# Tell base to start wandering
-		rospy.logdebug("NavigationServer: Waiting for base wandering service.")
-		rospy.wait_for_service("/rosarnl_node/wander")
-		rospy.logdebug("NavigationServer: wandering service available.")
-		try:
-			baseStartWandering = rospy.ServiceProxy("/rosarnl_node/wander", Empty)
-			baseStartWandering()
-		except rospy.ServiceException, e:
-			rospy.logdebug("NavigationServer: wandering service error - " + str(e))
-
-		started_waiting = time.time() # Prevent eternal looping
-		feedback_timer = time.time()
-		while not rospy.is_shutdown():
-			if self.server_navigation.is_preempt_requested():
-				self.client_base.cancel_all_goals()
-				try:
-					baseStop = rospy.ServiceProxy("/rosarnl_node/stop", Empty)
-					baseStop()
-				except rospy.ServiceException, e:
-					rospy.logdebug("NavigationServer: stop service error - " + str(e))
-				self.server_navigation.set_preempted()
-				return
-			# Check wandering timeout to prevent eternal looping
-			if (time.time() - started_waiting > self.TIMEOUT_WANDERING):
-				rospy.loginfo("NavigationServer: Timed out, aborting.")
-				self.client_base.cancel_all_goals()
-				try:
-					baseStop = rospy.ServiceProxy("/rosarnl_node/stop", Empty)
-					baseStop()
-				except rospy.ServiceException, e:
-					rospy.logdebug("NavigationServer: stop service error - " + str(e))
-				self.server_navigation.set_aborted()
-				return
-			if (time.time() - feedback_timer > self.EMOTIONAL_FEEDBACK_CYCLE): # give emotional feedback every 15 seconds
-				self.send_emotion(pleasure=0.01, arousal=0.01, dominance=0.01)
-				feedback_timer = time.time()
-			self.SERVER_RATE.sleep()
-		# set terminal goal status in case of shutdown
-		self.server_navigation.set_aborted()
-
-
-
-	def navigation_dock(self): # NOT YET FINISHED
-		# Tell base to navigate to charger and dock
-		rospy.loginfo("NavigationServer: Waiting for base dock service.")
-		rospy.wait_for_service("/rosarnl_node/dock")
-		rospy.loginfo("NavigationServer: dock service available.")
-		try: 
-			baseStartDocking = rospy.ServiceProxy("/rosarnl_node/dock", Empty)
-			baseStartDocking()
-		except rospy.ServiceException, exc:
-			rospy.loginfo("NavigationServer: dock service error - " + str(exc))
-
-		# Add wait for confirmation before continue
-		###############
-		
-		started_waiting  = time.time() # Prevent eternal looping
-		while not rospy.is_shutdown():
-			if self.server_navigation.is_preempt_requested():
-				self.client_base.cancel_all_goals()
-				try:
-					baseStopDocking = rospy.ServiceProxy("/rosarnl_node/stop", Empty)
-					baseStopDocking()
-				except rospy.ServiceException, exc:
-					rospy.logdebug("NavigationServer: stop docking service error - " + str(exc))
-				self.server_navigation.set_preempted()
-				return
-
-			# Check state of docking, and act accordingly if problems
-			elif False:
-			# CHECK STATE AND RESULT!
-				return
-
-			self.SERVER_RATE.sleep()
-		# set terminal goal status in case of shutdown
-		self.server_navigation.set_aborted()
 
 
 
