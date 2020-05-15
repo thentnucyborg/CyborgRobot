@@ -7,6 +7,7 @@ import datetime
 import collections
 import random
 import math
+import rospy
 from collections import namedtuple
 
 __author__ = "Thomas Rostrup Andersen"
