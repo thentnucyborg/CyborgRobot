@@ -3,7 +3,7 @@
 import system.settings as settings
 import rospy
 import math
-from rosarnl.msg import BatteryStatus
+from std_msgs.msg import Float32
 
 class Charge:
     def __init__(self):
@@ -13,13 +13,12 @@ class Charge:
         self.leds_charged = 0
         self.red_battery = [245,246,247,281,280,279,278,277,313,317,350,346,381,385,418,414,449,450,451,452,453]
 
-
-        subscriber_battery_status = rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, self.battery_status_callback)
+        self.subscriber_battery_charge = rospy.Subscriber("/RosAria/battery_state_of_charge", Float32, self.battery_status_callback)
 
     def battery_status_callback(self, message):
         # might want to change this to the whole msg later
         rospy.loginfo("callback function charge")
-        self.battery_charge = message.charge_percent
+        self.battery_charge = message.data
 
 
     def render(self, input_data, output_data):

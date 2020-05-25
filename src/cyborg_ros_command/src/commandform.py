@@ -79,7 +79,7 @@ class CommandForm(npyscreen.FormWithMenus):
         self.emotion_subscriber = rospy.Subscriber("/cyborg_controller/emotional_state", EmotionalState, self.emotion_callback, queue_size=100)
         self.state_subscriber = rospy.Subscriber("/cyborg_controller/state_change", SystemState, self.state_callback, queue_size=100)
 
-        self.speech_publisher = rospy.Publisher("/text_from_speech", String, queue_size=100)
+        self.speech_publisher = rospy.Publisher("/cyborg_audio/text_to_speech", String, queue_size=100)
         self.event_publisher = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.emotion_publisher = rospy.Publisher("/cyborg_controller/set_emotional_state", String, queue_size=100)
         self.emotion_controller_publisher = rospy.Publisher("/cyborg_controller/emotional_controller", String, queue_size=100)

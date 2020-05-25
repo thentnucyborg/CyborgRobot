@@ -14,6 +14,8 @@ import binascii
 import datetime
 import threading
 import time
+from pymongo import MongoClient 
+from rospy_message_converter import json_message_converter
 
 # ROS msgs
 from std_msgs.msg import String, Bool, Int32, Int8, Float32, Float64
@@ -22,10 +24,7 @@ from cyborg_controller.msg import StateMachineAction, StateMachineGoal, SystemSt
 from cyborg_navigation.msg import NavigationAction, NavigationGoal, NavigationActionFeedback, NavigationActionGoal, NavigationActionResult
 from actionlib_msgs.msg import GoalStatusArray, GoalID
 from smach_msgs.msg import SmachContainerStatus,SmachContainerInitialStatusCmd,SmachContainerStructure
-from pymongo import MongoClient 
-from rospy_message_converter import json_message_converter
 from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, Pose2D, PoseStamped, Twist, PolygonStamped, PoseArray, PointStamped
-from rosarnl.msg import BatteryStatus, BumperState, JogPositionActionFeedback, JogPositionActionGoal, JogPositionActionResult
 from sensor_msgs.msg import LaserScan, PointCloud
 from move_base_msgs.msg import MoveBaseActionFeedback, MoveBaseActionResult, MoveBaseActionGoal
 from rosbridge_msgs.msg import ConnectedClients
@@ -132,22 +131,12 @@ class TopicTransmitter():
         # self.subscriber_RosAria_sim_S3Series_1_pointcloud = rospy.Subscriber('/RosAria/sim_S3Series_1_pointcloud', PointCloud, callback = self.save_data, queue_size = 10)
         # self.subscriber_RosAria_sonar = rospy.Subscriber('/RosAria/sonar', PointCloud, callback = self.save_data, queue_size = 10)
         # self.subscriber_RosAria_sonar_pointcloud2 = rospy.Subscriber('/RosAria/sonar_pointcloud2', PointCloud2, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_amcl_pose = rospy.Subscriber("/rosarnl_node/amcl_pose", PoseWithCovarianceStamped, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_batterystatus = rospy.Subscriber('/rosarnl_node/battery_status', BatteryStatus, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_motorsstate = rospy.Subscriber("/rosarnl_node/motors_state", Bool, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_node_move_base_cancel = rospy.Subscriber('/rosarnl_node/move_base/cancel', GoalID, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_node_move_base_feedback = rospy.Subscriber('/rosarnl_node/move_base/feedback', move_base_msgs/MoveBaseActionFeedback, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_node_move_base_goal = rospy.Subscriber('/rosarnl_node/move_base/goal', MoveBaseActionGoal, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_movebase_result = rospy.Subscriber("/rosarnl_node/move_base/result", MoveBaseActionResult, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosarnl_movebase_status = rospy.Subscriber("/rosarnl_node/move_base/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
-        # self.subscriber_rosout = rospy.Subscriber('/rosout', Log, callback = self.save_data, queue_size = 10)
+         # self.subscriber_rosout = rospy.Subscriber('/rosout', Log, callback = self.save_data, queue_size = 10)
         # self.subscriber_rosout_agg = rospy.Subscriber('/rosout_agg', Log, callback = self.save_data, queue_size = 10)
         # self.subscriber_tf = rospy.Subscriber('/tf', TFMessage, callback = self.save_data, queue_size = 10)
         # self.subscriber_tf_static = rospy.Subscriber('/tf_static', TFMessage, callback = self.save_data, queue_size = 10)
         # self.subscriber_behaviour_status = rospy.Subscriber("/cyborg_behavior/status", GoalStatusArray, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_batterystatus = rospy.Subscriber('/rosarnl_node/battery_status', BatteryStatus, callback = self.save_data, queue_size = 10)
-        # self.subscriber_arnl_motorsstate = rospy.Subscriber("/rosarnl_node/motors_state", Bool, callback = self.save_data, queue_size = 10)
-        
+
         rospy.loginfo("Cyborg Commander: transmitter initialized")
 
     def save_data(self, message):
@@ -169,7 +158,7 @@ class TopicTransmitter():
             if topic in self.__dict__:
                 json_data = json_message_converter.convert_ros_message_to_json(self.__dict__[topic])
 
-                client = MongoClient("mongodb+srv://cyborg:hmPHK#4.iunGKD2@cyborg-gui-mg1nk.azure.mongodb.net/test?retryWrites=true&w=majority")
+                client = MongoClient("mongodb://cyborg:FerdigKlar3@cluster0-shard-00-00-hmfl4.azure.mongodb.net:27017,cluster0-shard-00-01-hmfl4.azure.mongodb.net:27017,cluster0-shard-00-02-hmfl4.azure.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority")
                 
                 # Access database
                 mydb = client['cyborg_data']

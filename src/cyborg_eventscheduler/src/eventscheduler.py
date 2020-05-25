@@ -17,8 +17,7 @@ from databasehandler import DatabaseHandler
 
 import datetime
 import threading
-from std_msgs.msg import String
-from rosarnl.msg import BatteryStatus
+from std_msgs.msg import String, Float32
 from cyborg_controller.msg import SystemState
 from geometry_msgs.msg import PoseWithCovarianceStamped
 
@@ -41,8 +40,7 @@ class EventScheduler():
         self.publisher_event = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.subscriber_current_location = rospy.Subscriber("cyborg_navigation/current_location", String, self.callback_current_location)
         self.subscriber_state = rospy.Subscriber( "/cyborg_controller/state_change", SystemState, self.callback_subscriber_state, queue_size=100)
-        self.subscriber_battery_status = rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, callback = self.callback_battery_status, queue_size = 10)
-
+        self.subscriber_battery_state_of_charge = rospy.Subscriber("/RosAria/battery_state_of_charge", Float32, self.callback_battery_state_of_charge)
         self.database_handler = DatabaseHandler(filename=self.PATH)
         self.scheduler_thread = threading.Thread(target=self.scheduler)
         self.scheduler_thread.daemon = True # Thread terminates when main thread terminates
@@ -73,10 +71,10 @@ class EventScheduler():
 
     
     # Monitor battery percentage and publish power_low event when triggered
-    def callback_battery_status(self, BatteryStatus):
+    def callback_battery_state_of_charge(self, Battery_charge):
         # charge_percent [0,100]
         # charge_state [-1, 4], charging_unknown, charging_bulk, charging_overcharge, charging_float, charging_balance
-        if (BatteryStatus.charge_percent < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
+        if (Battery_charge.data*100 < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
             self.publisher_event.publish("power_low")
 
 
