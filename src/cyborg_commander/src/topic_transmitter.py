@@ -14,6 +14,8 @@ import binascii
 import datetime
 import threading
 import time
+from pymongo import MongoClient 
+from rospy_message_converter import json_message_converter
 
 # ROS msgs
 from std_msgs.msg import String, Bool, Int32, Int8, Float32, Float64
@@ -22,8 +24,6 @@ from cyborg_controller.msg import StateMachineAction, StateMachineGoal, SystemSt
 from cyborg_navigation.msg import NavigationAction, NavigationGoal, NavigationActionFeedback, NavigationActionGoal, NavigationActionResult
 from actionlib_msgs.msg import GoalStatusArray, GoalID
 from smach_msgs.msg import SmachContainerStatus,SmachContainerInitialStatusCmd,SmachContainerStructure
-from pymongo import MongoClient 
-from rospy_message_converter import json_message_converter
 from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, Pose2D, PoseStamped, Twist, PolygonStamped, PoseArray, PointStamped
 from sensor_msgs.msg import LaserScan, PointCloud
 from move_base_msgs.msg import MoveBaseActionFeedback, MoveBaseActionResult, MoveBaseActionGoal
@@ -158,7 +158,7 @@ class TopicTransmitter():
             if topic in self.__dict__:
                 json_data = json_message_converter.convert_ros_message_to_json(self.__dict__[topic])
 
-                client = MongoClient("mongodb+srv://cyborg:hmPHK#4.iunGKD2@cyborg-gui-mg1nk.azure.mongodb.net/test?retryWrites=true&w=majority")
+                client = MongoClient("mongodb://cyborg:FerdigKlar3@cluster0-shard-00-00-hmfl4.azure.mongodb.net:27017,cluster0-shard-00-01-hmfl4.azure.mongodb.net:27017,cluster0-shard-00-02-hmfl4.azure.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority")
                 
                 # Access database
                 mydb = client['cyborg_data']

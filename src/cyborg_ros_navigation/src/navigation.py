@@ -20,11 +20,12 @@ __all__ = []
 def main():
 
     homedir = os.path.expanduser("~")
-    path = homedir + "/catkin_ws/src/cyborg_ros_navigation/navigation.db"
+    path = homedir + "/navigation.db"
 
     if (os.path.exists(path) == False):
         database_handler = DatabaseHandler(filename=path)
         database_handler.create()
+        database_handler.add_location(location_name="test_location", robot_map_name="map", x=6, y=8, z=0, p=0, j=0, r=2, threshold=3, crowded=False,environment=-0.10)
         database_handler.add_location(location_name="entrance", robot_map_name="glassgarden.map", x=-18.440, y=6.500, z=0, p=0, j=0, r=2, threshold=3, crowded=False,environment=-0.10)
         database_handler.add_location(location_name="home", robot_map_name="glassgarden.map", x=-29.500, y=8.700, z=0, p=0, j=0, r=2, threshold=3, crowded=False, environment=0.20)
         database_handler.add_location(location_name="waiting area", robot_map_name="glassgarden.map", x=-33.600, y=10.600, z=0, p=0, j=0, r=2, threshold=3, crowded=False, environment=-0.10)
@@ -48,13 +49,13 @@ def main():
     rospy.spin()
 
 if __name__ == "__main__":
-    rospy.loginfo("Cyborg Navigation: Starting Program...")
+    print("Cyborg Navigation: Starting Program...")
 
     if sys.version_info < (2,5):
-        rospy.loginfo("Cyborg Navigation: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
+        print("Cyborg Navigation: Running Python version " + str(sys.version_info.major) + "." + str(sys.version_info.minor) + "." + str(sys.version_info.micro) + " (Python version 2.5 or grater is required)...")
         exit()
 
     main()
 
-    rospy.loginfo("Cyborg Navigation: End of Program...")
+    print("Cyborg Navigation: End of Program...")
 
