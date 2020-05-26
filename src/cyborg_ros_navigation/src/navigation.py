@@ -20,22 +20,22 @@ __all__ = []
 def main():
 
     homedir = os.path.expanduser("~")
-    path = homedir + "/navigation.db"
+    path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/navigation.db"
 
     if (os.path.exists(path) == False):
         database_handler = DatabaseHandler(filename=path)
         database_handler.create()
         database_handler.add_location(location_name="test_location", robot_map_name="map", x=6, y=8, z=0, p=0, j=0, r=2, threshold=3, crowded=False,environment=-0.10)
-        database_handler.add_location(location_name="entrance", robot_map_name="glassgarden.map", x=-18.440, y=6.500, z=0, p=0, j=0, r=2, threshold=3, crowded=False,environment=-0.10)
-        database_handler.add_location(location_name="home", robot_map_name="glassgarden.map", x=-29.500, y=8.700, z=0, p=0, j=0, r=2, threshold=3, crowded=False, environment=0.20)
-        database_handler.add_location(location_name="waiting area", robot_map_name="glassgarden.map", x=-33.600, y=10.600, z=0, p=0, j=0, r=2, threshold=3, crowded=False, environment=-0.10)
-        database_handler.add_location(location_name="cafeteria", robot_map_name="glassgarden.map", x=-33.090, y=-55.700, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.20)
-        database_handler.add_location(location_name="elevator", robot_map_name="glassgarden.map", x=-29.500, y=-50.200, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=-0.02)
-        database_handler.add_location(location_name="entrance 2", robot_map_name="glassgarden.map", x=-18.300, y=-66.000, z=0, p=0, j=0, r=33, threshold=3, crowded=True, environment=0.05)
-        database_handler.add_location(location_name="information", robot_map_name="glassgarden.map", x=-33.490, y=1.160, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.05)
-        database_handler.add_location(location_name="el5", robot_map_name="glassgarden.map", x=-33.720, y=-32.500, z=0, p=0, j=0, r=-2, threshold=3, crowded=True, environment=0.00)
-        database_handler.add_location(location_name="el6", robot_map_name="glassgarden.map", x=-30.300, y=-12.840, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.00)
-        database_handler.add_location(location_name="bridge", robot_map_name="glassgarden.map", x=-28.090, y=-63.500, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.00)
+        database_handler.add_location(location_name="entrance", robot_map_name="map", x=-18.440, y=6.500, z=0, p=0, j=0, r=2, threshold=3, crowded=False,environment=-0.10)
+        database_handler.add_location(location_name="home", robot_map_name="map", x=-29.500, y=8.700, z=0, p=0, j=0, r=2, threshold=3, crowded=False, environment=0.20)
+        database_handler.add_location(location_name="waiting area", robot_map_name="map", x=-33.600, y=10.600, z=0, p=0, j=0, r=2, threshold=3, crowded=False, environment=-0.10)
+        database_handler.add_location(location_name="cafeteria", robot_map_name="map", x=-33.090, y=-55.700, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.20)
+        database_handler.add_location(location_name="elevator", robot_map_name="map", x=-29.500, y=-50.200, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=-0.02)
+        database_handler.add_location(location_name="entrance 2", robot_map_name="map", x=-18.300, y=-66.000, z=0, p=0, j=0, r=33, threshold=3, crowded=True, environment=0.05)
+        database_handler.add_location(location_name="information", robot_map_name="map", x=-33.490, y=1.160, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.05)
+        database_handler.add_location(location_name="el5", robot_map_name="map", x=-33.720, y=-32.500, z=0, p=0, j=0, r=-2, threshold=3, crowded=True, environment=0.00)
+        database_handler.add_location(location_name="el6", robot_map_name="map", x=-30.300, y=-12.840, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.00)
+        database_handler.add_location(location_name="bridge", robot_map_name="map", x=-28.090, y=-63.500, z=0, p=0, j=0, r=2, threshold=3, crowded=True, environment=0.00)
         
 
         database_handler.add_event(event_name="welcome_time", location_name="entrance", start_date=datetime.datetime(2018, 1, 18, 11, 0, 0, 1), end_date=datetime.datetime(2018, 1, 18, 11, 4, 0, 1), ignore=False)

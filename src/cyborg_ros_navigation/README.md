@@ -21,7 +21,7 @@ $ sudo apt-get install ros-kinetic-move-base
 * Publishes current location on topic cyborg_navigation/current_location.
 
 
-Database location is at ~/catkin_ws/src/cyborg_ros_navigation/navigation.db  
+Database location is at ~/catkin_ws/src/cyborg_ros_navigation/src/navigation.db  
 
 ## Usage:
 $ rosrun cyborg_navigation navigation.py

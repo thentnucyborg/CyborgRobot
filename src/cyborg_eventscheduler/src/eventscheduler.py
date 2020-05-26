@@ -33,15 +33,16 @@ class EventScheduler():
         self.SCHEDULER_RATE = rospy.Rate(0.05) #(Hz)
         self.LOW_POWER_THRESHOLD = 20
         self.HOMEDIR = os.path.expanduser("~")
-        self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_ros_navigation/navigation.db"
-        self.MAP_NAME = "glassgarden.map"
+        self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_ros_navigation/src/navigation.db"
+        self.MAP_NAME = "map"
         self.current_state = "idle"
+
+        self.database_handler = DatabaseHandler(filename=self.PATH)
 
         self.publisher_event = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.subscriber_current_location = rospy.Subscriber("cyborg_navigation/current_location", String, self.callback_current_location)
         self.subscriber_state = rospy.Subscriber( "/cyborg_controller/state_change", SystemState, self.callback_subscriber_state, queue_size=100)
         self.subscriber_battery_state_of_charge = rospy.Subscriber("/RosAria/battery_state_of_charge", Float32, self.callback_battery_state_of_charge)
-        self.database_handler = DatabaseHandler(filename=self.PATH)
         self.scheduler_thread = threading.Thread(target=self.scheduler)
         self.scheduler_thread.daemon = True # Thread terminates when main thread terminates
         self.scheduler_thread.start()
