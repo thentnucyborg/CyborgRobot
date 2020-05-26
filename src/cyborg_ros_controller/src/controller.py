@@ -19,8 +19,7 @@ import threading
 import rospy
 import smach
 import smach_ros
-from smach import Sequence
-from smach import StateMachine
+from smach import Sequence, StateMachine
 
 import statemachines
 
@@ -45,7 +44,7 @@ def main():
     emotion_system.add_emotion(name="unconcerned", pleasure=-0.13, arousal=-0.41, dominance=0.08)
 
     homedir = os.path.expanduser("~")
-    path = homedir + "/catkin_ws/src/cyborg_ros_controller/controller.db"
+    path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/controller.db"
 
     # Fill database with default values
     if (os.path.exists(path) == False):
