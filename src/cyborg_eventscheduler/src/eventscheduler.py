@@ -17,10 +17,10 @@ from databasehandler import DatabaseHandler
 
 import datetime
 import threading
-from std_msgs.msg import String
-from rosarnl.msg import BatteryStatus
+from std_msgs.msg import String, Float32
 from cyborg_controller.msg import SystemState
 from geometry_msgs.msg import PoseWithCovarianceStamped
+
 
 
 class EventScheduler():
@@ -41,8 +41,7 @@ class EventScheduler():
         self.publisher_event = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.subscriber_current_location = rospy.Subscriber("cyborg_navigation/current_location", String, self.callback_current_location)
         self.subscriber_state = rospy.Subscriber( "/cyborg_controller/state_change", SystemState, self.callback_subscriber_state, queue_size=100)
-        self.subscriber_battery_status = rospy.Subscriber("/rosarnl_node/battery_status", BatteryStatus, callback = self.callback_battery_status, queue_size = 10)
-
+        self.subscriber_battery_state_of_charge = rospy.Subscriber("/RosAria/battery_state_of_charge", Float32, self.callback_battery_state_of_charge)
         self.database_handler = DatabaseHandler(filename=self.PATH)
         self.scheduler_thread = threading.Thread(target=self.scheduler)
         self.scheduler_thread.daemon = True # Thread terminates when main thread terminates
@@ -54,17 +53,15 @@ class EventScheduler():
             self.current_location = data.data
 
     
-	# Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event, if ongoing event is an other location it publish a navigation_schedular event for the state machine
+	# Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event, if ongoing event is an other location it publish a navigation_scheduler event for the state machine
     def scheduler(self): # Threaded
         rospy.loginfo("EventScheduler: Activated.")
         while not rospy.is_shutdown():
             event = self.database_handler.search_ongoing_events(robot_map_name=self.MAP_NAME, current_date=datetime.datetime.now())
             if event != None:
                 if event.location_name != self.current_location:
-                    self.publisher_event.publish("navigation_schedular")
+                    self.publisher_event.publish("navigation_scheduler")
             self.SCHEDULER_RATE.sleep()
-
-
 
     # Updates the current system state when the system state subscriber receives data
     def callback_subscriber_state(self, data):
@@ -73,10 +70,11 @@ class EventScheduler():
 
     
     # Monitor battery percentage and publish power_low event when triggered
-    def callback_battery_status(self, BatteryStatus):
-        # charge_percent [0,100]
+    def callback_battery_state_of_charge(self, Battery_charge):
+        # charge_percent [0, 1]  
         # charge_state [-1, 4], charging_unknown, charging_bulk, charging_overcharge, charging_float, charging_balance
-        if (BatteryStatus.charge_percent < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
+
+        if (Battery_charge.data*100 < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
             self.publisher_event.publish("power_low")
 
 

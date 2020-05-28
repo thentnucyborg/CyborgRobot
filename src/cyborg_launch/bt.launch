@@ -19,8 +19,6 @@
 
 	<node pkg="rosarnl" name="rosarnl" type="rosarnl_node" output="screen" />
 
-
-
 	<!-- Runs the rqt graph visualisation of the behavior tree -->
 	<!-- <node pkg="rqt_bt" name="rqt_bt" type="rqt_bt" output="screen" /> -->
 

@@ -32,7 +32,6 @@ def startup_test():
 
 def main():
     rospy.init_node("cyborg_led_dome")
-    rospy.logwarn("Charge animation not avaliable with new navigation stack. Update charge.py to subscribe to the correct topic!")
 
     #print("for startup_test")
     #startup_test()

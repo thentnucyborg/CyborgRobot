@@ -25,7 +25,7 @@ from smach_msgs.msg import SmachContainerStatus,SmachContainerInitialStatusCmd,S
 from pymongo import MongoClient 
 from rospy_message_converter import json_message_converter
 from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, Pose2D, PoseStamped, Twist, PolygonStamped, PoseArray, PointStamped
-from rosarnl.msg import BatteryStatus, BumperState, JogPositionActionFeedback, JogPositionActionGoal, JogPositionActionResult
+# from rosarnl.msg import BatteryStatus, BumperState, JogPositionActionFeedback, JogPositionActionGoal, JogPositionActionResult
 from sensor_msgs.msg import LaserScan, PointCloud
 from move_base_msgs.msg import MoveBaseActionFeedback, MoveBaseActionResult, MoveBaseActionGoal
 from rosbridge_msgs.msg import ConnectedClients

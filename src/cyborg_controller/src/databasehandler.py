@@ -7,6 +7,7 @@ import datetime
 import collections
 import random
 import math
+import rospy
 from collections import namedtuple
 
 __author__ = "Thomas Rostrup Andersen"
@@ -21,7 +22,6 @@ EventRecord = collections.namedtuple('EventRecord', 'event_id state event reward
 
 class DatabaseHandler(object):
     """DatabaseHandler for the Motivator.
-
     Usage:
         database_handler = DatabaseHandler(filename="path")
         
@@ -117,5 +117,3 @@ class DatabaseHandler(object):
             cursor.close()
         except sqlite3.OperationalError:
             rospy.loginfo("DatabaseHandler: Unable to update event_value to the action database (event_value was " + event_values + " )...")
-
-

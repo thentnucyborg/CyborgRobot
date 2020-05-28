@@ -25,3 +25,7 @@ Database location is at ~/catkin_ws/src/cyborg_navigation/navigation.db
 
 ## Usage:
 $ rosrun cyborg_navigation navigation.py
+
+
+## Tips and Tricks
+* If it seems that the sensor output from the cyborg is mirriored/flipped in rviz (meaning it doesn't match with the map after setting a pose estimate), go to /usr/local/Aria/params/pinoeer-lx.p and change the variable 'LaserFlipped' to false (from true). This should flipp the sensor output back the right way.

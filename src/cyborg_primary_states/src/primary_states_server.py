@@ -18,7 +18,6 @@ import datetime
 import actionlib
 from std_msgs.msg import String
 from cyborg_controller.msg import StateMachineAction, StateMachineGoal, EmotionalState, EmotionalFeedback
-from rosarnl.msg import BatteryStatus
 
 
 class PrimaryStatesServer():

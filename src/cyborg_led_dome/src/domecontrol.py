@@ -21,6 +21,8 @@ from neural_interpreter.individual_moving_average import IndividualMovingAverage
 from neural_interpreter.snake import Snake
 from neural_interpreter.charge import Charge
 from neural_interpreter.roadwork import Roadwork
+from neural_interpreter.startup import Startup
+from neural_interpreter.suspension import Suspension
 
 
     
@@ -35,8 +37,8 @@ class startup(smach.State):
         #initialize pipeline
         neuron_data = [0] * settings.NEURAL_ELECTRODES_TOTAL
         userdata.led_colors_out = bytearray([0] * (3 * settings.LEDS_TOTAL))
-        userdata.interpreter_out = Eyes()
-        userdata.current_interpreter_out = "eyes" 
+        userdata.interpreter_out = Suspension()
+        userdata.current_interpreter_out = "suspension" 
 
         #execute animation
         self.loop(neuron_data)
@@ -161,6 +163,10 @@ def domecontrol():
             return Snake()
         elif "roadwork" in interpreter:
             return Roadwork()
+        elif "startup" in interpreter:
+            return Startup()
+        elif "suspension" in interpreter:
+            return Suspension()
         else:
             pass
 
@@ -169,7 +175,7 @@ def domecontrol():
         sm.userdata.sm_led_colors = bytearray([0] * (3 * settings.LEDS_TOTAL))
 
         #return next state
-        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake","charge","roadwork"):
+        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake","charge","roadwork","startup","suspension"):
             sm.userdata.sm_mode = "nonmea"
                       
         elif sm.userdata.sm_next_interpreter in ("moving-average","individual-moving-average"):
@@ -185,7 +191,7 @@ def domecontrol():
         return sm.userdata.sm_mode
         
     def set_visualization_mode_callback(data):
-        if (data.data in ("siren","eyes","snake","charge","roadwork","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
+        if (data.data in ("siren","eyes","snake","charge","roadwork","startup","suspension","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
             sm.userdata.sm_next_interpreter = data.data
             settings.CHANGE_REQUESTED = True
         elif ("text" in data.data):
@@ -241,13 +247,20 @@ def domecontrol():
                   remapping={"text":"sm_text",
                             "presenter":"sm_presenter"})
 
-    sis = IntrospectionServer('behaviour_viewer', sm, '/behaviour_viewer')
+    sis = smach_ros.IntrospectionServer('behaviour_viewer', sm, '/behaviour_viewer')
     sis.start()
 
     #execute state machine
     smach_thread = threading.Thread(target=sm.execute)
     smach_thread.daemon = True
     smach_thread.start()
+
+    rospy.loginfo("Domecontrol: Activated...")
+    rospy.spin()
+    sis.stop()
+    rospy.loginfo("Domecontrol: Terminated...")
+
+
 
 if __name__=="__domecontrol__":
     domecontrol()
