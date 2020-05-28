@@ -240,12 +240,20 @@ def domecontrol():
                              "meafromfile":"MEAFromFile"},
                   remapping={"text":"sm_text",
                             "presenter":"sm_presenter"})
-                
+               
+    sis = smach_ros.IntrospectionServer('behaviour_viewer', sm, '/behaviour_viewer')
+    sis.start()
+
     #execute state machine
-    #outcome = sm.execute()
     smach_thread = threading.Thread(target=sm.execute)
     smach_thread.daemon = True
     smach_thread.start()
+
+    rospy.loginfo("Domecontrol: Activated...")
+    rospy.spin()
+    sis.stop()
+    rospy.loginfo("Domecontrol: Terminated...")
+    
 
 if __name__=="__domecontrol__":
     domecontrol()
