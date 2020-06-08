@@ -122,9 +122,9 @@ class text(smach.State):
             if userdata.text != None:
                 if ("vertical" in userdata.text):
                     userdata.text = userdata.text[9:]
-                    data = bytearray([253]) + bytearray([252]) + bytearray(userdata.text,"ascii") #utf-8
+                    data = bytearray([253]) + bytearray([252]) + bytearray(userdata.text, "ascii") #utf-8
                 else:
-                    data = bytearray([253]) + bytearray([0]) + bytearray(userdata.text,"ascii") #utf-8   
+                    data = bytearray([253]) + bytearray([0]) + bytearray(userdata.text, "ascii") #utf-8   
 
                 userdata.presenter.refresh(data)
                 userdata.text = None
@@ -143,10 +143,10 @@ def domecontrol():
     sm.userdata.sm_text = None 
 
     def loop(data):
-        sm.userdata.sm_interpreter.render(data,sm.userdata.sm_led_colors)
-        for index in range(len(sm.userdata.sm_led_colors)):
-            sm.userdata.sm_led_colors[index] = min(sm.userdata.sm_led_colors[index],251)
-        sm.userdata.sm_presenter.refresh(sm.userdata.sm_led_colors)
+        sm.userdata.sm_interpreter.render( data,sm.userdata.sm_led_colors )
+        for index in range( len(sm.userdata.sm_led_colors )):
+            sm.userdata.sm_led_colors[index] = min( sm.userdata.sm_led_colors[index], 251 )
+        sm.userdata.sm_presenter.refresh( sm.userdata.sm_led_colors )
 
     def return_interpreter(interpreter):
         if "moving-average" in interpreter:

@@ -3,14 +3,12 @@
 import system.settings as settings
 import numpy as np
 import rospy
-from std_msgs.msg import ColorRGBA, String
-
 
 class Startup:
 	def __init__(self):
 		self.rate = rospy.Rate(5)
 		self.isStatic = False
-		self.colour_array = np.array([	[80,0,0],		# red - turned down because it was overpowering
+		self.colour_array = np.array([	[80,0,0],		# red
 										[128,64,0],		# orange
 										[128,128,0],	# yellow
 										[64,128,0],		# light green

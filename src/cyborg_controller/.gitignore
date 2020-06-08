@@ -96,6 +96,8 @@ ENV/
 # Ignore dot files
 *.dot
 
+# Visual Studio metadata
+.vscode
 
 # Database
 *.db

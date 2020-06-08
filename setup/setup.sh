@@ -2,9 +2,9 @@
 
 echo "Setup script running..."
 echo "WARN - Specific versions of packages are needed in this project and when installing warnings about deprecated or old software may show up. This is expected."
+echo "This script was tested and worked in may 2020, with new updates to libraries or changes to any of the nodes this may not be the case any longer."
 read 
 
-# This may not be complete, and may be missing some libraries or install commands 
 # All commands should also be updated to include versions. 
 
 echo "---------- General installs and setup ----------"
@@ -61,6 +61,7 @@ if [ "$branchname" == "yes" ]
 then
 	echo "Using the master branch"
 else 
+	echo "Using the "$branchname" branch"
 	git checkout $branchname
 fi
 
@@ -175,7 +176,7 @@ read
 ## Install for Led Dome node
 pip2 install colour==0.1.5
 pip2 install numpy==1.16.6
-pip install pandas==0.24.2
+pip2 install pandas==0.24.2
 pip2 install pyserial==3.0.1
 pip2 install pyopengl
 pip2 install pyopengl-accelerate
@@ -222,6 +223,7 @@ read
 
 ## Other
 sudo apt-get install sqlitebrowser	#tool for editing databases
+pip install -r requirements.txt
 
 # Make  python  and  bash  scripts  executable
 find ~/catkin_ws/src/ -name '*.py' -exec  chmod +x {} \;

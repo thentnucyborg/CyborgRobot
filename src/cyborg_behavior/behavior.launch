@@ -19,7 +19,7 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
     <node pkg="cyborg_behavior" name="cyborg_behavior" type="behavior.py" output="screen">
         <rosparam param="startup">
             visual_mode: "startup"
-            playback: "here_we_go"
+            playback: "hello_there"
             completion_trigger: "time 15"
         </rosparam>
         <rosparam param="suspension">
@@ -37,6 +37,7 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
         </rosparam>
         <rosparam param="idle">
             visual_mode: "eyes"
+            playback: "here_we_go"
             dynamic: True
             emotional_feedback: { p: -0.05, a: -0.05, d: -0.05, continuous: True }
         </rosparam>
@@ -151,7 +152,7 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
             utterance: "I am humbled by your presence."
             completion_trigger: "utterance"
         </rosparam>
-        <rosparam param="conveying_emotional_state_borred">
+        <rosparam param="conveying_emotional_state_bored">
             utterance: "I am booooored."
             completion_trigger: "utterance"
         </rosparam>
