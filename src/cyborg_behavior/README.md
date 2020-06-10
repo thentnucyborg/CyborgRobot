@@ -17,3 +17,7 @@ Language: Python
 
 ## Usage:
 $ rosrun cyborg_behavior behavior.py
+
+
+## Help:
+* See master thesis Thomas Andersen (2016) and Johanne Kalland (2020) for help to define PAD values.

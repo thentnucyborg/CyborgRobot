@@ -23,6 +23,7 @@ from neural_interpreter.charge import Charge
 from neural_interpreter.roadwork import Roadwork
 from neural_interpreter.startup import Startup
 from neural_interpreter.suspension import Suspension
+from neural_interpreter.race_stripes import RaceStripes
 
 
     
@@ -167,6 +168,8 @@ def domecontrol():
             return Startup()
         elif "suspension" in interpreter:
             return Suspension()
+        elif "race-stripes" in interpreter:
+            return RaceStripes()
         else:
             pass
 
@@ -175,7 +178,7 @@ def domecontrol():
         sm.userdata.sm_led_colors = bytearray([0] * (3 * settings.LEDS_TOTAL))
 
         #return next state
-        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake","charge","roadwork","startup","suspension"):
+        if sm.userdata.sm_next_interpreter in ("siren","eyes","snake","charge","roadwork","race-stripes","startup","suspension"):
             sm.userdata.sm_mode = "nonmea"
                       
         elif sm.userdata.sm_next_interpreter in ("moving-average","individual-moving-average"):
@@ -191,7 +194,7 @@ def domecontrol():
         return sm.userdata.sm_mode
         
     def set_visualization_mode_callback(data):
-        if (data.data in ("siren","eyes","snake","charge","roadwork","startup","suspension","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
+        if (data.data in ("siren","eyes","snake","charge","roadwork","race-stripes","startup","suspension","moving-average","individual-moving-average") and sm.userdata.sm_current_interpreter != data.data):
             sm.userdata.sm_next_interpreter = data.data
             settings.CHANGE_REQUESTED = True
         elif ("text" in data.data):

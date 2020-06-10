@@ -40,10 +40,12 @@ def main():
     emotion_system.add_emotion(name="dignified", pleasure=0.55, arousal=0.22, dominance=0.61)
     emotion_system.add_emotion(name="elated", pleasure=0.50, arousal=0.42, dominance=0.23) # Happy
     emotion_system.add_emotion(name="inhibited", pleasure=-0.54, arousal=-0.04, dominance=-0.41) # Sadness
-    emotion_system.add_emotion(name="puzzled", pleasure=-0.41, arousal=0.48, dominance=-0.33) # Surprized
+    emotion_system.add_emotion(name="puzzled", pleasure=-0.41, arousal=0.48, dominance=-0.33) # Surprised
     emotion_system.add_emotion(name="loved", pleasure=0.89, arousal=0.54, dominance=-0.18)
     emotion_system.add_emotion(name="unconcerned", pleasure=-0.13, arousal=-0.41, dominance=0.08)
-
+    emotion_system.add_emotion(name="hungry", pleasure=-0.44, arousal=0.14, dominance=-0.21)
+    emotion_system.add_emotion(name="sleepy", pleasure=0.2, arousal=-0.7, dominance=-0.44)
+    
     homedir = os.path.expanduser("~")
     path = homedir + "/catkin_ws/src/cyborg_ros_controller/controller.db"
 
@@ -189,7 +191,7 @@ def main():
         sm_nav = smach.StateMachine(outcomes=["succeeded","aborted","power_low"])
 
         with sm_nav:
-            navigation_planning_transitions = {"navigation_start_moving_schedular":"navigation_go_to_schedular",
+            navigation_planning_transitions = {"navigation_start_moving_schedular":"navigation_go_to_scheduler",
                                                 "navigation_start_moving_emotional":"navigation_go_to_emotional",
                                                 "navigation_start_wandering":"wandering_emotional",
                                                 "aborted":"aborted"}
@@ -201,12 +203,12 @@ def main():
 
 
             navigation_go_to_transitions = {"succeeded":"succeeded", "aborted":"aborted", "preempted":"aborted"}
-            navigation_go_to_schedular_resources = {}
+            navigation_go_to_scheduler_resources = {}
             smach.StateMachine.add("navigation_go_to_emotional", statemachines.sequence_navigation_go_to_emotional,
                 transitions = navigation_go_to_transitions,
                 remapping = sm_remapping)
-            smach.StateMachine.add("navigation_go_to_schedular",
-                                    Module("navigation_go_to_schedular", "cyborg_behavior", navigation_go_to_transitions, navigation_go_to_schedular_resources),
+            smach.StateMachine.add("navigation_go_to_scheduler",
+                                    Module("navigation_go_to_scheduler", "cyborg_behavior", navigation_go_to_transitions, navigation_go_to_scheduler_resources),
                                     navigation_go_to_transitions,
                                     sm_remapping)
 
