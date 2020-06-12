@@ -202,6 +202,7 @@ sudo chown -R $USER:$GROUP ~/.config
 npm install
 bower install
 sudo npm install --global gulp@3.9.1
+sudo apt-get install python-scipy
 # install b3 module
 cd ~/catkin_ws/setup/installs/behavior3py
 sudo python setup.py install

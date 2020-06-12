@@ -23,3 +23,8 @@ Database location is at ~/catkin_ws/src/cyborg_controller/controller.db
 
 ## Usage:
 $ rosrun cyborg_controller controller.py
+
+## Quick information about Behaviour Trees
+* https://www.youtube.com/watch?v=uq8hnnkAxsw
+* https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
+

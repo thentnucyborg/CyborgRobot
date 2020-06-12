@@ -55,7 +55,7 @@ class BehaviorTreeManager():
         self._prev_open_nodes = list()
 
         # Set known locations
-        locations = {
+        locations = { # may need updating after updated navigation stack (2020)
                 'el5':         [-33.768, -33.545, 0],
                 'waitingarea': [-33.581,  10.627, 0],
                 'info':        [-33.505,  1.139, 0],

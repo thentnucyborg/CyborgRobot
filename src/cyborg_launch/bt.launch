@@ -1,4 +1,5 @@
 <launch>
+	<node pkg="rosarnl" name="rosarnl" type="rosarnl_node" output="screen" />
 	<!-- <node pkg="cyborg_audio" name="cyborg_audio" type="audio.py" output="screen"/> -->
 	<!-- <include file="$(find cyborg_behavior)/behavior.launch"/> -->
 	<!-- <node pkg="cyborg_eventscheduler" name="cyborg_eventscheduler" type="eventscheduler.py" output= "screen" /> -->
@@ -17,9 +18,7 @@
 	<!-- Runs the behavior3 editor -->
 	<!-- <node name="behavior3editor" pkg="cyborg_launch" type="start_behavior3editor.sh" output="screen" /> -->
 
-	<node pkg="rosarnl" name="rosarnl" type="rosarnl_node" output="screen" />
-
 	<!-- Runs the rqt graph visualisation of the behavior tree -->
-	<!-- <node pkg="rqt_bt" name="rqt_bt" type="rqt_bt" output="screen" /> -->
+	<node pkg="rqt_bt" name="rqt_bt" type="rqt_bt" output="screen" />
 
 </launch>
