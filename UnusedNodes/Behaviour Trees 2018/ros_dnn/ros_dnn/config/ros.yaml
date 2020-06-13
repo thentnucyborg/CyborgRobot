@@ -1,0 +1,24 @@
+subscribers:
+  camera:
+    name: /camera/rgb/test
+    queue_size: 1
+
+actions:
+  camera:
+    name: /ros_dnn/detect
+
+publishers:
+  predictions:
+    name: /ros_dnn/predictions
+    queue_size: 1
+    latch: false
+
+  detection_image:
+    name: /ros_dnn/detection_image
+    queue_size: 1
+    latch: true
+
+image_view:
+  enable_opencv: true
+  wait_key_delay: 1
+  enable_console_output: true

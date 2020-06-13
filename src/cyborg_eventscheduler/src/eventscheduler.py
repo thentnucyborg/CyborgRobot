@@ -11,7 +11,7 @@ import os
 import time
 
 homedir = os.path.expanduser("~")
-path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
+path = homedir + "/catkin_ws/src/cyborg_navigation/src/"
 sys.path.append(path)
 from databasehandler import DatabaseHandler
 
@@ -33,7 +33,7 @@ class EventScheduler():
         self.SCHEDULER_RATE = rospy.Rate(0.05) #(Hz)
         self.LOW_POWER_THRESHOLD = 20
         self.HOMEDIR = os.path.expanduser("~")
-        self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_ros_navigation/src/navigation.db"
+        self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_navigation/src/navigation.db"
         self.MAP_NAME = "map"
         self.current_state = "idle"
 
@@ -53,7 +53,7 @@ class EventScheduler():
             self.current_location = data.data
 
     
-	# Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event, if ongoing event is an other location it publish a navigation_schedular event for the state machine
+    # Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event, if ongoing event is an other location it publish a navigation_schedular event for the state machine
     def scheduler(self): # Threaded
         rospy.loginfo("EventScheduler: Activated.")
         while not rospy.is_shutdown():
@@ -73,7 +73,7 @@ class EventScheduler():
     
     # Monitor battery percentage and publish power_low event when triggered
     def callback_battery_state_of_charge(self, Battery_charge):
-        # charge_percent [0,100]
+        # charge_percent [0,1]
         # charge_state [-1, 4], charging_unknown, charging_bulk, charging_overcharge, charging_float, charging_balance
         if (Battery_charge.data*100 < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
             self.publisher_event.publish("power_low")

@@ -14,3 +14,7 @@ Language: Python
 
 ## Usage:
 $ rosrun cyborg_audio audio.py
+
+
+## Tips
+* more sounds: https://www.soundboard.com/sb/starwarsfx

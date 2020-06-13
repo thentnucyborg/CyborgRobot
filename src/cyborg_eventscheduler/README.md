@@ -6,7 +6,7 @@ Language: Python
 
 
 ## Requirements:
-* Path for databasehandler in navigaiton module, sys.path.append('~/catkin_ws/src/cyborg_ros_navigation/src/')
+* Path for databasehandler in navigaiton module, sys.path.append('~/catkin_ws/src/cyborg_navigation/src/')
 * Map Name
 
 ## Features: 

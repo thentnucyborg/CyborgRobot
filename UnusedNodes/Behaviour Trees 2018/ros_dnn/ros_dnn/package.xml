@@ -1,0 +1,35 @@
+<?xml version="1.2"?>
+<package>
+  <name>ros_dnn</name>
+  <version>0.1.0</version>
+  <description>ROS frontend to OpenCV DNN</description>
+  <maintainer email="morten.mjelva@gmail.com">Morten Mjelva</maintainer>
+  <license>MIT</license>
+  <author email="morten.mjelva@gmail.com">Morten Mjelva</author>
+
+  <!-- Dependencies which this packages needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>ros_dnn_msgs</build_depend>
+  <build_depend>opencv</build_depend>
+  <build_depend>image_transport</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>nodelet</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>ros_dnn_msgs</run_depend>
+  <run_depend>opencv</run_depend>
+  <run_depend>image_transport</run_depend>
+  <run_depend>dynamic_reconfigure</run_depend>
+  <run_depend>nodelet</run_depend>
+  <export>
+    <nodelet plugin="${prefix}/nodelet_plugins.xml" />
+  </export>
+</package>

@@ -11,7 +11,7 @@ import os
 import sys
 
 homedir = os.path.expanduser("~")
-path = homedir + "/catkin_ws/src/cyborg_ros_navigation/src/"
+path = homedir + "/catkin_ws/src/cyborg_navigation/src/"
 sys.path.append(path)
 from databasehandler import DatabaseHandler
 import datetime
@@ -46,7 +46,6 @@ class PrimaryStatesServer():
 
     def callback_server_primary_states(self, goal):
         self.state_goal = goal
-        #ADDED FROM THE CODE ON THE ROBOT (only the first if-sentence)
         if self.state_goal.current_state == "idle":
             self.idle_state()
         elif self.state_goal.current_state == "wandering_emotional":
@@ -97,7 +96,6 @@ class PrimaryStatesServer():
                 return True
 
 
-    #ADDED FROM THE CODE ON THE ROBOT (the whole function)
     def idle_state(self):
         rospy.loginfo("PrimaryStatesServer: Executing Idle state...")
         self.create_and_send_behavior_goal(behavior = "idle")

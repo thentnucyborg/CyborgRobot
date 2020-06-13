@@ -10,4 +10,5 @@
 	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
 	<include file="$(find cyborg_2dnav)/cyborg_config.launch"/>
 	<include file="$(find cyborg_2dnav)/move_base.launch"/>
+	<!-- <node pkg="smach_viewer" name="smach_viewer" type="smach_viewer.py" output="screen" /> -->
 </launch>
