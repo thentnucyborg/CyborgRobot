@@ -6,7 +6,7 @@ For more information, check out:
 - [overview wiki at ntnu.no](https://www.ntnu.no/wiki/display/cyborg/)
 
 ## Setup and install
-The /setup/setup.sh script will run everything, including cloning from this repository and creating a catkin workspace. Meaning you can skip the steps 1-4 below. If you hav already created a workspace and cloned this repo, comment out those parts of the script if you want to use it. Everything needed should be in the script [last updated May 2020].
+The /setup/setup.sh script will run everything, including cloning from this repository and creating a catkin workspace. Meaning you can skip the steps 1-4 and the rest below. If you hav already created a workspace and cloned this repo, comment out those parts of the script if you want to use it. Everything needed should be in the script [last updated May 2020].
 
 ### Starting with the repo
 1. create a catkin workspace 
