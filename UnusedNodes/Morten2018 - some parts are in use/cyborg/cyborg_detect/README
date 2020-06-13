@@ -1,2 +1,0 @@
-1. Download yolov2.weights from https://pjreddie.com/media/files/yolov2.weights and place in data/
-2. Check that the correct topic names are used in launch/detect.launch

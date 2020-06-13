@@ -1,4 +1,0 @@
-# Get the named goal closest to the current position
----
-string name
-float64 distance
