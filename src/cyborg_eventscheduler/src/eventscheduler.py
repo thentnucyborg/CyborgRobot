@@ -34,15 +34,18 @@ class EventScheduler():
         self.SCHEDULER_RATE = rospy.Rate(0.05) #(Hz)
         self.LOW_POWER_THRESHOLD = 20
         self.HOMEDIR = os.path.expanduser("~")
-        self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_navigation/navigation.db"
-        self.MAP_NAME = "glassgarden.map"
+
+        self.PATH = self.HOMEDIR + "/catkin_ws/src/cyborg_navigation/src/navigation.db"
+        self.MAP_NAME = "map"
         self.current_state = "idle"
+
+        self.database_handler = DatabaseHandler(filename=self.PATH)
 
         self.publisher_event = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.subscriber_current_location = rospy.Subscriber("cyborg_navigation/current_location", String, self.callback_current_location)
         self.subscriber_state = rospy.Subscriber( "/cyborg_controller/state_change", SystemState, self.callback_subscriber_state, queue_size=100)
         self.subscriber_battery_state_of_charge = rospy.Subscriber("/RosAria/battery_state_of_charge", Float32, self.callback_battery_state_of_charge)
-        self.database_handler = DatabaseHandler(filename=self.PATH)
+
         self.scheduler_thread = threading.Thread(target=self.scheduler)
         self.scheduler_thread.daemon = True # Thread terminates when main thread terminates
         self.scheduler_thread.start()
@@ -53,8 +56,7 @@ class EventScheduler():
             self.current_location = data.data
 
     
-	# Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event 
-    # if ongoing event is an other location it publishes a navigation_scheduler event for the state machine
+    # Thread, updating current location name based on current position, checks for ongoing events and current position compared to the event, if ongoing event is an other location it publish a navigation_schedular event for the state machine
     def scheduler(self): # Threaded
         rospy.loginfo("EventScheduler: Activated.")
         while not rospy.is_shutdown():
@@ -72,9 +74,9 @@ class EventScheduler():
     
     # Monitor battery percentage and publish power_low event when triggered
     def callback_battery_state_of_charge(self, Battery_charge):
-        # charge_percent [0, 1]  
+        # charge_percent [0,1]
         # charge_state [-1, 4], charging_unknown, charging_bulk, charging_overcharge, charging_float, charging_balance
-
+        
         if (Battery_charge.data*100 < self.LOW_POWER_THRESHOLD) and (self.current_state not in ["exhausted", "sleepy", "sleeping"]):
             self.publisher_event.publish("power_low")
 

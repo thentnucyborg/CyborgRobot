@@ -208,6 +208,7 @@ cd ~/catkin_ws/setup/installs/behavior3py
 sudo python setup.py install
 
 
+
 echo "---------- Setup UDEV Rules ----------"
 echo "to continue press enter"
 read 

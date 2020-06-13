@@ -15,6 +15,7 @@ import threading
 class TopicReceiver():
     """TopicReceiver"""
     def __init__(self):
+
         rospy.loginfo("Cyborg Commander: receiver initializing")
 
         self.subscriber_robot_mode = rospy.Subscriber("/cyborg_commander/robot_mode", String, callback = self.robot_behaviour, queue_size=10)
@@ -24,23 +25,34 @@ class TopicReceiver():
 
 
     def start_behaviour(self):
+        self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
         self.publisher_emotion_controller.publish("ON")
-        self.publisher_register_event.publish("start")
+        self.publisher_register_event.publish("behaviour_start")
 
 
     def start_demo(self):
+        self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
+        self.publisher_emotion_controller.publish("OFF")
+        self.publisher_register_event.publish("demo_start")
+        
         # demo program
-        pass
 
 
     def start_manual(self):
-        # manual control program.
-        pass
+        self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
+        self.publisher_emotion_controller.publish("OFF")
+        self.publisher_register_event.publish("manual_start")
+        
+        # manual control program
 
 
     def stop(self):
         self.publisher_emotion_controller.publish("OFF")
         self.publisher_register_event.publish("aborted")
+        rospy.sleep(0.5)
         self.publisher_register_event.publish("suspend")
 
 

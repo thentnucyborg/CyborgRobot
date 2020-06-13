@@ -23,9 +23,9 @@ from cyborg_controller.msg import StateMachineAction, StateMachineGoal, Emotiona
 class PrimaryStatesServer():
     """Primary States Server"""
 
-    def __init__(self, database_file =""):
+    def __init__(self, database_file):
         self.action_name = rospy.get_name()
-        self.MAP_NAME = "glassgarden.map"
+        self.MAP_NAME = "map"
         self.PLANNING_TIMEOUT = 10
         self.RATE_ACTIONLOOP = rospy.Rate(4) # Hz
 
@@ -38,7 +38,6 @@ class PrimaryStatesServer():
         self.subscriber_emotional_state = rospy.Subscriber("/cyborg_controller/emotional_state", EmotionalState, self.emotional_callback, queue_size= 10)
         self.publisher_event = rospy.Publisher("/cyborg_controller/register_event", String, queue_size=100)
         self.publisher_location_command = rospy.Publisher("/cyborg_behavior/command_location", String, queue_size= 10)
-
         self.client_behavior = actionlib.SimpleActionClient("/cyborg_behavior", StateMachineAction)
         self.server_primary_states = actionlib.SimpleActionServer(self.action_name, StateMachineAction, execute_cb = self.callback_server_primary_states, auto_start = False)
         self.server_primary_states.start()

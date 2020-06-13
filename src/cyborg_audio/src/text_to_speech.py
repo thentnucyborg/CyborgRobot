@@ -28,6 +28,7 @@ class TextToSpeech():
     def text_to_speech(self):
         global engine
         engine = pyttsx3.init()
+        engine.setProperty('rate', 125)
         engine.startLoop(False)
         engine.connect('finished-utterance', self.on_end_tts)
         rospy.loginfo("Cyborg Audio: Text to Speech Activated.")

@@ -117,3 +117,4 @@ class DatabaseHandler(object):
             cursor.close()
         except sqlite3.OperationalError:
             rospy.loginfo("DatabaseHandler: Unable to update event_value to the action database (event_value was " + event_values + " )...")
+

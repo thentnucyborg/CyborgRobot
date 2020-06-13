@@ -6,7 +6,7 @@ import math
 import sys
 from collections import namedtuple
 import rospy
-from std_msgs.msg import String
+from std_msgs.msg import String, Bool
 from cyborg_controller.msg import EmotionalFeedback, EmotionalState
 from cyborg_controller.srv import EmotionalStateService, EmotionalStateServiceResponse
 
@@ -46,12 +46,13 @@ class EmotionSystem(object):
         self.arousal = arousal
         self.dominance = dominance
         self.radius = radius
-        self.feedback_subscriber = rospy.Subscriber( rospy.get_name() + "/emotional_feedback", EmotionalFeedback, self.emotional_feedback_callback, queue_size=100)
-        self.set_emotional_state_subscriber = rospy.Subscriber( rospy.get_name() + "/set_emotional_state", String, self.set_emotional_state_callback, queue_size=100)
-        self.set_emotional_values_subscriber = rospy.Subscriber( rospy.get_name() + "/set_emotional_values", EmotionalFeedback, self.set_emotional_value_callback, queue_size=100)
-        self.emotion_publisher = rospy.Publisher( rospy.get_name() + "/emotional_state", EmotionalState, queue_size=100)
-        self.emotion_service = rospy.Service( rospy.get_name() + "/get_emotional_state", EmotionalStateService, self.get_emotional_state_callback)
-        self.controller_subscriber = rospy.Subscriber( rospy.get_name() + "/emotional_controller", String, self.controller_callback, queue_size=100)
+        self.feedback_subscriber = rospy.Subscriber("/cyborg_controller/emotional_feedback", EmotionalFeedback, self.emotional_feedback_callback, queue_size=100)
+        self.set_emotional_state_subscriber = rospy.Subscriber("/cyborg_controller/set_emotional_state", String, self.set_emotional_state_callback, queue_size=100)
+        self.set_emotional_values_subscriber = rospy.Subscriber("/cyborg_controller/set_emotional_values", EmotionalFeedback, self.set_emotional_value_callback, queue_size=100)
+        self.emotion_publisher = rospy.Publisher("/cyborg_controller/emotional_state", EmotionalState, queue_size=100)
+        self.emotion_service = rospy.Service("/get_emotional_state", EmotionalStateService, self.get_emotional_state_callback)
+        self.controller_subscriber = rospy.Subscriber("/cyborg_controller/emotional_controller", String, self.controller_callback, queue_size=100)
+        self.controller_publisher = rospy.Publisher("/cyborg_controller/emotional_controller_status", Bool, queue_size=100)
         rospy.loginfo("EmotionSystem: Activated...")
 
 
@@ -66,6 +67,7 @@ class EmotionSystem(object):
     # Called once emotional feedback is received
     # Updates the emotional values and state if the emotion system is on (self.is_on) and publishes the changes to cyborg_controller/emotional_state
     def emotional_feedback_callback(self, data):
+        self.controller_publisher.publish(self.is_on)
         if self.is_on:
             self.update_emotion(pleasure=data.delta_pleasure, arousal=data.delta_arousal, dominance=data.delta_dominance)
 
@@ -117,7 +119,7 @@ class EmotionSystem(object):
             data.current_arousal = self.arousal
             data.current_dominance = self.dominance
             self.emotion_publisher.publish(data)
-            self.current_emotion = emotion
+            self.current_emotion = emotion.name
 
 
     # Called from message subscriber
@@ -132,4 +134,8 @@ class EmotionSystem(object):
     # Called from message subscriber
     # Turns on/off the emotional system
     def controller_callback(self, data):
-        self.is_on = True if data.data == "on" else False
+        if data.data in {"on","ON"}:
+            self.is_on = True
+        elif data.data in {"off","OFF"}:
+            self.is_on = False
+        self.controller_publisher.publish(self.is_on)

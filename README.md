@@ -6,6 +6,7 @@ For more information, check out:
 - [overview wiki at ntnu.no](https://www.ntnu.no/wiki/display/cyborg/)
 
 ## Setup and install
+The /setup/setup.sh script will run everything, including cloning from this repository and creating a catkin workspace. Meaning you can skip the steps 1-4 and the rest below. If you hav already created a workspace and cloned this repo, comment out those parts of the script if you want to use it. Everything needed should be in the script [last updated May 2020].
 
 ### Starting with the repo
 1. create a catkin workspace 
@@ -23,12 +24,3 @@ Run:
 find <path-to-catkin_ws/src/> -name '*.py' -exec chmod +x {} \;
 ```
 to make all python files executable to be able to run them. Might need to do it with .sh files too (also catkin_ws/src/rosaria/cfg/RosAria.cfg)
-
-### Installs for navigation
-- sudo apt-get install ros-kinetic-navigation
-- sudo apt-get install ros-kinetic-tf2-sensor-msgs
-- sudo apt-get install libsdl-dev
-- sudo apt-get install libsdl-image1.2-dev
-- sudo apt-get install libbullet-dev
-- git clone https://github.com/ros-visualization/rviz.git -b kinetic-devel
-- git clone https://github.com/ros-planning/navigation.git -b kinetic-devel

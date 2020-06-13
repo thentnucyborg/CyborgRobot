@@ -4,8 +4,8 @@ At the end of the script, there are some information about other installations n
 
 ## Requirements
 To include:
-- [ ] System requirements
-- [ ] Python libraries requirements.txt
+- [x] System requirements
+- [x] Python libraries requirements.txt
 
 ## setup.sh
 

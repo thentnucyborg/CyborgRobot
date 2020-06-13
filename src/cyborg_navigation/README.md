@@ -7,8 +7,8 @@ Numbers of actionlib server(s): 1
 
 
 ## Requirements:  
-* ROS   
-* ROSARNL  
+* ROS
+* rosAria  
 * ROS Move Base Message Type:
 
 ROS move base message type can be installed:
@@ -21,7 +21,7 @@ $ sudo apt-get install ros-kinetic-move-base
 * Publishes current location on topic cyborg_navigation/current_location.
 
 
-Database location is at ~/catkin_ws/src/cyborg_navigation/navigation.db  
+Database location is at ~/catkin_ws/src/cyborg_navigation/src/navigation.db  
 
 ## Usage:
 $ rosrun cyborg_navigation navigation.py

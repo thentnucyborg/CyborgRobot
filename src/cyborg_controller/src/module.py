@@ -10,6 +10,8 @@ import actionlib
 import smach
 import smach_ros
 import time
+import json
+from rospy_message_converter import message_converter
 
 from std_msgs.msg import String
 from cyborg_controller.msg import StateMachineAction, StateMachineGoal, SystemState
@@ -26,6 +28,7 @@ class Module(smach.State):
         self.active = False
         self.registered_events = []
         self.publisher = rospy.Publisher("/cyborg_controller/state_change", SystemState, queue_size=100)
+        self.transitions_publisher = rospy.Publisher("/cyborg_controller/state_transitions", String, queue_size=100)
         smach.State.__init__(self, self.transitions.keys(), input_keys=["input_events", "previous_state", "previous_event"], output_keys=["output_events", "current_state", "current_event"])
         self.subscriber = rospy.Subscriber( "/cyborg_controller/register_event", String, self.register_event, queue_size=100)
         
@@ -101,6 +104,13 @@ class Module(smach.State):
         goal.event = self.previous_event
         goal.current_state = self.state_name
         client.send_goal(goal, self.callback_done, self.callback_active, self.callback_feedback)
+        
+        #convert state transitions dict to ros message and publish for use in GUI
+        transitions = self.transitions
+        transitionsStringed = json.dumps(transitions)
+        dict_message = {'data': transitionsStringed}
+        transitions_msg = message_converter.convert_dictionary_to_ros_message("std_msgs/String", dict_message)
+        self.transitions_publisher.publish(transitions_msg)
 
         # State is blocking until it completes or a valid event trigger a state change
         while (True):
