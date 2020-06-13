@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- Console launch prefix -->
+  <arg name="launch_prefix" default=""/>
+
+  <!-- Config and weights folder. -->
+  <!-- <arg name="dnn_model"          default="$(find ros_dnn)/net/model"/> -->
+  <!-- <arg name="dnn_config"         default="$(find ros_dnn)/net/config"/> -->
+  <arg name="dnn_model"          default="/home/mortenmj/catkin_ws/src/cyborg/cyborg_detect/data/yolov3.weights"/>
+  <arg name="dnn_config"         default="/home/mortenmj/catkin_ws/src/cyborg/cyborg_detect/data/cfg/yolov3-tiny.cfg"/>
+  <arg name="dnn_framework"      default="darknet"/>
+  <arg name="dnn_frame_height"   default="608"/>
+  <arg name="dnn_frame_width"    default="608"/>
+
+  <node pkg="nodelet" type="nodelet" name="standalone_nodelet" args="manager"/>
+
+  <!-- Start CV Camera nodelet to export webcam image -->
+  <node pkg="nodelet" type="nodelet" name="cv_camera" args="load cv_camera/CvCameraNodelet standalone_nodelet"/>
+
+  <!-- Start OpenCV DNN and ROS wrapper -->
+  <node pkg="nodelet" type="nodelet" name="object_detector" args="load ros_dnn/ObjectDetectorNodelet standalone_nodelet">
+      <param name="camera_topic_name"  value="/cv_camera/image_raw" />
+      <param name="camera_topic_qsize" value="1" />
+
+      <param name="predictions_topic_name"  value="predictions" />
+      <param name="predictions_topic_qsize" value="1" />
+      <param name="predictions_topic_latch" value="true" />
+
+      <param name="detection_image_topic_name"  value="detection_image" />
+      <param name="detection_image_topic_qsize" value="1" />
+      <param name="detection_image_topic_latch" value="true" />
+
+      <param name="model_path"   value="$(arg dnn_model)" />
+      <param name="config_path"  value="$(arg dnn_config)" />
+      <param name="framework"    value="$(arg dnn_framework)" />
+      <param name="frame_height" value="$(arg dnn_frame_height)" />
+      <param name="frame_width"  value="$(arg dnn_frame_width)" />
+
+      <rosparam command="load" file="$(find ros_dnn)/config/classes.yaml"/>
+  </node>
+</launch>

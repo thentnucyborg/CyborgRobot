@@ -1,0 +1,7 @@
+<library path="lib/libObjectDetector">
+  <class name="ros_dnn/ObjectDetectorNodelet"
+         type="ros_dnn::ObjectDetectorNodelet"
+         base_class_type="nodelet::Nodelet">
+    <description>Nodelet for detecting objects in images using OpenCV DNN.</description>
+  </class>
+</library>
