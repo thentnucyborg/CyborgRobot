@@ -72,13 +72,11 @@ rm -rf ~/catkin_ws/CyborgRobot 	#delete the now empty folder
 
 
 
-echo "---------- Install Arnl and ARIA .debs ----------"
+echo "---------- Install MobileSim & ARIA .debs ----------"
 echo "to continue press enter"
 read 
 
 cd ~/catkin_ws/setup/installs
-sudo dpkg -i arnl-base_1.9.2+ubuntu16_amd64.deb	
-sudo dpkg -i libarnl_1.9.2a+ubuntu16_amd64.deb	
 sudo dpkg -i libaria_2.9.4+ubuntu16_amd64.deb	
 sudo dpkg -i mobilesim_0.9.8+ubuntu16_amd64.deb	
 
