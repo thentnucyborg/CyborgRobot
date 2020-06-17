@@ -36,7 +36,6 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
         </rosparam>
         <rosparam param="idle">
             visual_mode: "eyes"
-            playback: "here_we_go"
             dynamic: True
             emotional_feedback: { p: -0.05, a: -0.05, d: -0.05, continuous: True }
         </rosparam>
