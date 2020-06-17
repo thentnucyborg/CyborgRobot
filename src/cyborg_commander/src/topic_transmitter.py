@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 __author__ = "Casper Nilsen"
-__copyright__ = "Copyright (C) 2019 Casper Nilsen"
+__copyright__ = "Copyright (C) 2020 Casper Nilsen"
 __license__ = "BSD"
-__version__ = "0.0.4"
+__version__ = "0.1.1"
 __all__ = []
 
 
@@ -33,12 +33,12 @@ from nav_msgs.msg import OccupancyGrid, MapMetaData, Path, Odometry
 from map_msgs.msg import OccupancyGridUpdate
 from tf2_msgs.msg import TFMessage
 
-client = MongoClient()
 class TopicTransmitter():
     """TopicTransmitter"""
 
     def __init__(self):
         rospy.loginfo("Cyborg Commander: transmitter initializing")
+        
         # self.subscriber_amcl_parameter_descriptions = rospy.Subscriber('/amcl/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
         # self.subscriber_amcl_parameter_updates = rospy.Subscriber('/amcl/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
         # self.subscriber_amcl_pose = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, callback = self.save_data, queue_size = 10)
@@ -142,10 +142,17 @@ class TopicTransmitter():
     def save_data(self, message):
         if message != None:
             topic = message._connection_header["topic"]
+
+            # MongoDB does not like storing topics with "/" in them.
             topic = topic.replace("/","__")
+
+            # Rate of transmission
+            interval = 10
+
+            # Store topic data in 
             self.__dict__[topic] = message
             if not topic + "_Thread" in self.__dict__:
-                self.__dict__[topic + "_Thread"] = threading.Thread(target=self.transmit_data, args=(10,topic))
+                self.__dict__[topic + "_Thread"] = threading.Thread(target=self.transmit_data, args=(interval,topic))
                 self.__dict__[topic + "_Thread"].daemon = True # Terminates thread when main thread terminate
                 self.__dict__[topic + "_Thread"].start()
 
@@ -154,6 +161,7 @@ class TopicTransmitter():
         # total = 0
         # for i in range(100):
         # t0 = time.time()
+        topic_name = topic.replace("__","/")
         while not rospy.is_shutdown():
             if topic in self.__dict__:
                 json_data = json_message_converter.convert_ros_message_to_json(self.__dict__[topic])
@@ -185,8 +193,21 @@ class TopicTransmitter():
             # t1 = time.time()
             # total = t1-t0
             # rospy.loginfo("\nTopic: " + topic + " Took: " + str(total/100) + "\n")
+
+            if rospy.has_param("/cyborg_commander/transmitter_interval"):
+                all_topic_interval = rospy.get_param("/cyborg_commander/transmitter_interval")
+                if interval != all_topic_interval:
+                    # Change transmission interval for all threads.
+                    interval = all_topic_interval
+                    rospy.loginfo("Commander: interval for all topics set to: {0}. I am transmitter for topic: {1}".format(interval, topic_name))
+            
+            elif rospy.has_param(topic_name + "/transmission_interval"):
+                topic_interval = rospy.get_param(topic_name + "/transmission_interval")
+                if interval != topic_interval:
+                    # Change transmission interval for this thread.
+                    interval = topic_interval
+                    rospy.loginfo("Commander: interval for topic: {0} set to: {1}".format(topic_name, interval))
+            
+            # Sleep for rate of transmission.
             rospy.sleep(interval)
-            
-            
-            
             
