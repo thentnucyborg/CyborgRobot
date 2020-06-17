@@ -23,7 +23,6 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
             completion_trigger: "time 15"
         </rosparam>
         <rosparam param="suspension">
-            playback: "star_wars_cantina_band"
             visual_mode: "suspension"
             dynamic: True
         </rosparam>
