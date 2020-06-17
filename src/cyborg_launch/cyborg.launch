@@ -13,7 +13,6 @@
 		<arg name="ssl" default="true" />
 		<arg name="authenticate" default="false" />
 	</include>
-	<node name="web_video_server" pkg="web_video_server" type="web_video_server" />
 	<include file="$(find cyborg_2dnav)/cyborg_config.launch"/>
 	<include file="$(find cyborg_2dnav)/move_base.launch"/>
 	<!-- web video server not needed if ZED camera isn't connected. -->
