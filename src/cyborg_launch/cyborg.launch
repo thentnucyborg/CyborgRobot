@@ -7,7 +7,14 @@
 	<node pkg="cyborg_eventscheduler" name="cyborg_eventscheduler" type="eventscheduler.py" output= "screen" />
 	<node pkg="cyborg_controller" name="cyborg_controller" type="controller.py" required="true" output="screen" />
 	<node pkg="cyborg_commander" name="cyborg_commander" type="commander.py" required="true" output="screen" />
-	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+		<arg name="certfile" default="$(find cyborg_commander)/cyborg_sytes_net_ee.crt" />
+		<arg name="keyfile" default="$(find cyborg_commander)/cyborg_sytes_net.key" />
+		<arg name="ssl" default="true" />
+		<arg name="authenticate" default="false" />
+	</include>
+	<node name="web_video_server" pkg="web_video_server" type="web_video_server" />
 	<include file="$(find cyborg_2dnav)/cyborg_config.launch"/>
 	<include file="$(find cyborg_2dnav)/move_base.launch"/>
+	<!-- web video server not needed if ZED camera isn't connected. -->
 </launch>

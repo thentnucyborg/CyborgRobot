@@ -30,7 +30,7 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
             completion_trigger: "time 5"
         </rosparam>
         <!-- manual control currently not doing anything -->
-        <rosparam param="manual"> 
+        <rosparam param="manual">
         </rosparam>
         <rosparam param="idle">
             visual_mode: "eyes"
@@ -242,10 +242,10 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
             completion_trigger: "navigation"
             location: "home"
         </rosparam>
-        <rosparam param="sleeping">
+        <!-- <rosparam param="sleeping">
             visual_mode: "sleeping"
             timeout: False
-        </rosparam>
+        </rosparam> -->
         <rosparam param="waking_up_happy">
             visual_mode: "happy" 
             utterance: "Ahh, good morning fellow comrades, what a glorious day to be alive!"
