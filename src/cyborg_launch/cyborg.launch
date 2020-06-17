@@ -16,13 +16,6 @@
 	<node name="web_video_server" pkg="web_video_server" type="web_video_server" />
 	<include file="$(find cyborg_2dnav)/cyborg_config.launch"/>
 	<include file="$(find cyborg_2dnav)/move_base.launch"/>
-<<<<<<< HEAD
-<<<<<<< HEAD
-	<!-- <node pkg="smach_viewer" name="smach_viewer" type="smach_viewer.py" output="screen" /> -->
-=======
 	<!-- web video server not needed if ZED camera isn't connected. -->
->>>>>>> c22231b... https certificates and code cleanup
-=======
-	<!-- web video server not needed if ZED camera isn't connected. -->
->>>>>>> f4a97df7336f3a3cc04fb44365ab37a59f62f3d3
+	<node name="web_video_server" pkg="web_video_server" type="web_video_server" />
 </launch>
