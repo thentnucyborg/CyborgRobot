@@ -38,9 +38,6 @@ class TopicTransmitter():
 
     def __init__(self):
         rospy.loginfo("Cyborg Commander: transmitter initializing")
-
-        # # Allows attribute access and item access of self dict.
-        # self.__dict__ = self
         
         # self.subscriber_amcl_parameter_descriptions = rospy.Subscriber('/amcl/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.save_data, queue_size = 10)
         # self.subscriber_amcl_parameter_updates = rospy.Subscriber('/amcl/parameter_updates', dynamic_reconfigure/Config, callback = self.save_data, queue_size = 10)
