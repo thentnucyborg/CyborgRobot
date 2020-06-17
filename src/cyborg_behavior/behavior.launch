@@ -152,7 +152,7 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
         <rosparam param="conveying_emotional_state_inhibited">
             utterance: "I am sad, oh so sad."
             completion_trigger: "utterance"
-            emotional_feedback: { p: -0.05, a: 0, d:-0.04 }
+            emotional_feedback: { p: -0.05, a: 0, d: -0.04}
         </rosparam>
         <rosparam param="conveying_emotional_state_puzzled">
             utterance: "Wow, how did she get all the way up there?"
