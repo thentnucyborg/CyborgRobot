@@ -152,7 +152,6 @@ class TopicTransmitter():
             self.__dict__[topic] = message
 
             if not topic + "/Thread" in self.__dict__:
-                print(self)
                 self.__dict__[topic + "/Thread"] = threading.Thread(target=self.transmit_loop, args=(topic,))
                 self.__dict__[topic + "/Thread"].daemon = True # Terminates thread when main thread terminate
                 self.__dict__[topic + "/Thread"].start()
