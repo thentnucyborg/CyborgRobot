@@ -32,15 +32,16 @@ from sensor_msgs.msg import JointState, PointCloud2
 from nav_msgs.msg import OccupancyGrid, MapMetaData, Path, Odometry
 from map_msgs.msg import OccupancyGridUpdate
 from tf2_msgs.msg import TFMessage
-
+from dynamic_reconfigure.msg import ConfigDescription, Config
+from rosaria.msg import BumperState
 class TopicTransmitter():
     """TopicTransmitter"""
 
     def __init__(self):
         rospy.loginfo("Cyborg Commander: transmitter initializing")
         
-        # self.subscriber_amcl_parameter_descriptions = rospy.Subscriber('/amcl/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_amcl_parameter_updates = rospy.Subscriber('/amcl/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_amcl_parameter_descriptions = rospy.Subscriber('/amcl/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_amcl_parameter_updates = rospy.Subscriber('/amcl/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_amcl_pose = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_clicked_point = rospy.Subscriber('/clicked_point', PointStamped, callback = self.callback_send_periodic, queue_size = 10)
         self.subscriber_client_count = rospy.Subscriber('/client_count', Int32, callback = self.callback_send_periodic, queue_size = 10)
@@ -82,41 +83,41 @@ class TopicTransmitter():
         # self.subscriber_map = rospy.Subscriber('/map', OccupancyGrid, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_map_metadata = rospy.Subscriber('/map_metadata', MapMetaData, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_map_updates = rospy.Subscriber('/map_updates', OccupancyGridUpdate, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_cancel = rospy.Subscriber('/move_base/cancel', PoseStamped, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_cancel = rospy.Subscriber('/move_base/cancel', GoalID, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_current_goal = rospy.Subscriber('/move_base/current_goal', PoseStamped, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_feedback = rospy.Subscriber('/move_base/feedback', MoveBaseActionFeedback, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_global_costmap_costmap = rospy.Subscriber('/move_base/global_costmap/costmap', OccupancyGrid, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_global_costmap_costmap_updates = rospy.Subscriber('/move_base/global_costmap/costmap_updates', OccupancyGridUpdate, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_global_costmap_footprint = rospy.Subscriber('/move_base/global_costmap/footprint', PolygonStamped, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_inflation_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/inflation_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_inflation_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/inflation_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_obstacle_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/obstacle_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_obstacle_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/obstacle_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_parameter_updates = rospy.Subscriber('/move_base/global_costmap/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_static_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/static_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_global_costmap_static_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/static_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_inflation_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/inflation_layer/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_inflation_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/inflation_layer/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_obstacle_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/obstacle_layer/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_obstacle_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/obstacle_layer/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_parameter_updates = rospy.Subscriber('/move_base/global_costmap/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_static_layer_parameter_descriptions = rospy.Subscriber('/move_base/global_costmap/static_layer/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_global_costmap_static_layer_parameter_updates = rospy.Subscriber('/move_base/global_costmap/static_layer/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_goal = rospy.Subscriber('/move_base/goal', MoveBaseActionGoal, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_local_costmap_costmap = rospy.Subscriber('/move_base/local_costmap/costmap', OccupancyGrid, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_local_costmap_costmap_updates = rospy.Subscriber('/move_base/local_costmap/costmap_updates', OccupancyGridUpdate, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_local_costmap_footprint = rospy.Subscriber('/move_base/local_costmap/footprint', PolygonStamped, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_local_costmap_inflation_layer_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/inflation_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_local_costmap_inflation_layer_parameter_updates = rospy.Subscriber('/move_base/local_costmap/inflation_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_local_costmap_obstacle_layer_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/obstacle_layer/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_local_costmap_obstacle_layer_parameter_updates = rospy.Subscriber('/move_base/local_costmap/obstacle_layer/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_local_costmap_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_local_costmap_parameter_updates = rospy.Subscriber('/move_base/local_costmap/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_inflation_layer_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/inflation_layer/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_inflation_layer_parameter_updates = rospy.Subscriber('/move_base/local_costmap/inflation_layer/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_obstacle_layer_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/obstacle_layer/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_obstacle_layer_parameter_updates = rospy.Subscriber('/move_base/local_costmap/obstacle_layer/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_parameter_descriptions = rospy.Subscriber('/move_base/local_costmap/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_local_costmap_parameter_updates = rospy.Subscriber('/move_base/local_costmap/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_NavfnROS_plan = rospy.Subscriber('/move_base/NavfnROS/plan', Path, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_parameter_descriptions = rospy.Subscriber('/move_base/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_parameter_updates = rospy.Subscriber('/move_base/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_parameter_descriptions = rospy.Subscriber('/move_base/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_parameter_updates = rospy.Subscriber('/move_base/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_result = rospy.Subscriber('/move_base/result', MoveBaseActionResult, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_simple_goal = rospy.Subscriber('/move_base_simple/goal', PoseStamped, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_status = rospy.Subscriber('/move_base/status', GoalStatusArray, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_TrajectoryPlannerROS_cost_cloud = rospy.Subscriber('/move_base/TrajectoryPlannerROS/cost_cloud', PointCloud2, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_TrajectoryPlannerROS_global_plan = rospy.Subscriber('/move_base/TrajectoryPlannerROS/global_plan', Path, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_move_base_TrajectoryPlannerROS_local_plan = rospy.Subscriber('/move_base/TrajectoryPlannerROS/local_plan', Path, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_TrajectoryPlannerROS_parameter_descriptions = rospy.Subscriber('/move_base/TrajectoryPlannerROS/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_move_base_TrajectoryPlannerROS_parameter_updates = rospy.Subscriber('/move_base/TrajectoryPlannerROS/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_TrajectoryPlannerROS_parameter_descriptions = rospy.Subscriber('/move_base/TrajectoryPlannerROS/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_move_base_TrajectoryPlannerROS_parameter_updates = rospy.Subscriber('/move_base/TrajectoryPlannerROS/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_odom = rospy.Subscriber('/odom', Odometry, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_particlecloud = rospy.Subscriber('/particlecloud', PoseArray, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_robot_pose = rospy.Subscriber('/robot_pose', Pose, callback = self.callback_send_periodic, queue_size = 10)
@@ -125,13 +126,13 @@ class TopicTransmitter():
         self.subscriber_RosAria_battery_voltage = rospy.Subscriber('/RosAria/battery_voltage', Float64, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_RosAria_bumper_state = rospy.Subscriber('/RosAria/bumper_state', BumperState, callback = self.callback_send_periodic, queue_size = 10)
         self.subscriber_RosAria_motors_state = rospy.Subscriber('/RosAria/motors_state', Bool, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_RosAria_parameter_descriptions = rospy.Subscriber('/RosAria/parameter_descriptions', dynamic_reconfigure/ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
-        # self.subscriber_RosAria_parameter_updates = rospy.Subscriber('/RosAria/parameter_updates', dynamic_reconfigure/Config, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_RosAria_parameter_descriptions = rospy.Subscriber('/RosAria/parameter_descriptions', ConfigDescription, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_RosAria_parameter_updates = rospy.Subscriber('/RosAria/parameter_updates', Config, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_RosAria_sim_S3Series_1_laserscan = rospy.Subscriber('/RosAria/sim_S3Series_1_laserscan', LaserScan, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_RosAria_sim_S3Series_1_pointcloud = rospy.Subscriber('/RosAria/sim_S3Series_1_pointcloud', PointCloud, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_RosAria_sonar = rospy.Subscriber('/RosAria/sonar', PointCloud, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_RosAria_sonar_pointcloud2 = rospy.Subscriber('/RosAria/sonar_pointcloud2', PointCloud2, callback = self.callback_send_periodic, queue_size = 10)
-         # self.subscriber_rosout = rospy.Subscriber('/rosout', Log, callback = self.callback_send_periodic, queue_size = 10)
+        # self.subscriber_rosout = rospy.Subscriber('/rosout', Log, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_rosout_agg = rospy.Subscriber('/rosout_agg', Log, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_tf = rospy.Subscriber('/tf', TFMessage, callback = self.callback_send_periodic, queue_size = 10)
         # self.subscriber_tf_static = rospy.Subscriber('/tf_static', TFMessage, callback = self.callback_send_periodic, queue_size = 10)
@@ -158,7 +159,7 @@ class TopicTransmitter():
     
     def transmit_loop(self, topic):
         # Rate of transmission, rosparam: /cyborg_commander/transmitter_interval
-        interval = 10
+        interval = 20
 
         while not rospy.is_shutdown():
             self.transmit_data(topic)
