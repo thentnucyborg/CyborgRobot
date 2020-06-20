@@ -159,7 +159,7 @@ class TopicTransmitter():
     
     def transmit_loop(self, topic):
         # Rate of transmission, rosparam: /cyborg_commander/transmitter_interval
-        interval = 20
+        interval = 10
 
         while not rospy.is_shutdown():
             self.transmit_data(topic)
