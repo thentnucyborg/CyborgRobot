@@ -92,7 +92,8 @@ def main():
                             "restart":"startup",
                             "demo_start":"demo",
                             "manual_start":"manual",
-                            "aborted":"suspension"}
+                            "aborted":"suspension",
+                            "succeeded":"suspension"}
         suspension_resources = {}
         smach.StateMachine.add("suspension",
                             Module("suspension", "cyborg_behavior", suspension_transitions, suspension_resources),
