@@ -18,4 +18,5 @@
 	<!-- <node pkg="smach_viewer" name="smach_viewer" type="smach_viewer.py" output="screen" /> -->
 	<!-- smach_viewer creates a funny error which it continuously writes to terminal, therefore it might be a good idea to run it in its own terminal window -->
 
+	<!-- to run mobilesim use: "MobileSim -m ~/catkin_ws/src/maps/maps/glassgarden.map -r pioneer-lx --start -29500,8000,0" -->
 </launch> 

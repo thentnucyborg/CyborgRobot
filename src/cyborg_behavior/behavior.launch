@@ -19,7 +19,7 @@ group tag is equivalent to top-level launch-tag, can use any tag inside as norma
     <node pkg="cyborg_behavior" name="cyborg_behavior" type="behavior.py" output="screen">
         <rosparam param="startup">
             visual_mode: "startup"
-            playback: "hello_there"
+            playback: "showtime"
             completion_trigger: "time 15"
         </rosparam>
         <rosparam param="suspension">
