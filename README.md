@@ -1,3 +1,6 @@
+
+### This branch contains work with behaviour trees described in Morten Mjelva's thesis from 2018 and Johanne Kalland's thesis from 2020 which has not been included in the master. Because of this the branch has not been deleted as this only exsists here
+
 # CyborgRobot
 This repo contains code for running NTNU Cyborgs Robot based on the Pioneer LX mobile robot. The project utilizes ROS.
 
